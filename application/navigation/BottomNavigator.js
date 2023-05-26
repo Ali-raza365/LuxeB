@@ -7,7 +7,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {COLORS, FONT_BOLD, WP, isIOS} from '../theme/config';
-import {Home} from '../screens/Home/Home';
+import { Home } from '../screens';
+// import {Home} from '../screens/Home/Home';
 
 const Tab = createBottomTabNavigator();
 

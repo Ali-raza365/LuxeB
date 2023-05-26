@@ -7,7 +7,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import { AppBar, CardBox } from '../../components';
 import { COLORS, HP, RADIUS, SPACING_PERCENT, TEXT_SIZES, WP, isIOS } from '../../theme/config';
 
-export const Home = ({ navigation }) => {
+ const Home = ({ navigation }) => {
 
     const data = ["Massage", "Hair", "Make up", "Nails", "Eyebrow", "Waxing", "Hair Extension", "Lashes"]
 
@@ -49,7 +49,7 @@ export const Home = ({ navigation }) => {
                             pagingEnabled
                             scrollEventThrottle={16}
                             decelerationRate={'fast'}
-                            snapToInterval={WP('100%')}
+                            snapToInterval={WP(100)}
                             renderItem={renderSlider}
                         />
                     </View>
@@ -64,13 +64,13 @@ export const Home = ({ navigation }) => {
                             <View style={styles.infoContainer}>
                                 <View style={styles.infoDetails}>
                                     <View style={styles._circleView}>
-                                        <AntDesign name="heart" size={WP(4.5)} color={COLORS.whiteColor} />
+                                        <AntDesign name="heart" size={WP(3.5)} color={COLORS.whiteColor} />
                                     </View>
                                     <Text style={styles.infoTitle}>  Prime Label  </Text>
                                 </View>
                                 <View style={styles.infoIcons}>
                                     <View style={styles._circleView}>
-                                        <Fontisto name="clock" size={WP(4.5)} color={COLORS.whiteColor} />
+                                        <Fontisto name="clock" size={WP(3.5)} color={COLORS.whiteColor} />
                                     </View>
                                     <Text style={styles.infoTime}>  15:00</Text>
                                 </View>
@@ -107,6 +107,7 @@ export const Home = ({ navigation }) => {
     )
 }
 
+export default Home
 
 const styles = StyleSheet.create({
     container: {
@@ -150,8 +151,8 @@ const styles = StyleSheet.create({
 
     },
     _circleView: {
-        width: WP(8),
-        height: WP(8),
+        width: WP(7),
+        height: WP(7),
         backgroundColor: COLORS.blackColor,
         borderRadius: WP(5),
         alignItems: 'center',
@@ -181,7 +182,8 @@ const styles = StyleSheet.create({
     },
     infoDetails: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingBottom:WP(1)
     },
     infoTitle: {
         color: COLORS.lightGrey,

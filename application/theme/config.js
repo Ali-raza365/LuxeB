@@ -4,14 +4,21 @@ import {
      Dimensions,
      useWindowDimensions,
 } from 'react-native';
-import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
-
+// import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
+import {
+     responsiveHeight,
+     responsiveWidth,
+     responsiveFontSize
+   } from "react-native-responsive-dimensions";
+import { IMAGES } from '../constants/ImagePath';
+   
 //CONSTANTS USED IN APP
 export const APP_NAME = 'luxeB';
 export const PLATFORM = Platform.OS;
 export const isIOS = Platform.OS =='ios' ?true:false;
-export const WP = widthPercentageToDP;
-export const HP = heightPercentageToDP;
+export const WP = responsiveWidth;
+export const HP = responsiveHeight;
+export const FS = responsiveFontSize;
 export const MOBILE_WIDTH = Dimensions.get('window').width;
 export const MOBILE_HEIGHT = Dimensions.get('window').height;
 export const RADIUS = 3;
@@ -92,6 +99,25 @@ export const MONTHS = [
 
 export const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+
+export const ONBOARD_DATA = [
+     {
+       key: 1,
+       title: "Men’s grooming & shaving, make it count.",
+       text: "Buy products from truly green brands. Let’s help our planet to become beautiful again.",
+       image:  IMAGES.onboard1,
+       backgroundColor: "#febe29",
+     },
+     {
+       key: 2,
+       title: "Men’s grooming & shaving, make it count.",
+       text: "Write blogs or post status online. Share Slate has everything you need to expand your reach.",
+       image:  IMAGES.onboard2,
+       backgroundColor: "#febe29",
+       size: true,
+     },
+    
+];
 
 
 
