@@ -8,7 +8,7 @@ import { IMAGES } from '../../constants/ImagePath';
 
 export default function AskForLocation({ navigation }) {
     const onPress = () => {
-        navigation.navigate('verifyotp');
+        navigation.navigate('gender');
     };
 
     return (
@@ -34,10 +34,12 @@ export default function AskForLocation({ navigation }) {
                     <Button
                         title="Sure, Let’s do it"
                         onPress={onPress}
+                        textStyle={{ color: COLORS.whiteColor }}
                         buttonStyle={{ marginBottom: HP(1) }}
                     />
                     <Button
                         title="May be Later"
+                        textStyle={{ color: COLORS.blackColor }}
                         onPress={onPress}
                         buttonStyle={styles.buttonStyle}
                     />
@@ -90,10 +92,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     buttonStyle: {
-        backgroundColor:COLORS.whiteColor,
-        color:COLORS.blackColor,
-        borderWidth:0.8,
-        borderColor:COLORS.blackColor,
+        backgroundColor: COLORS.whiteColor,
+        color: COLORS.blackColor,
+        borderWidth: 0.8,
+        borderColor: COLORS.blackColor,
     },
     imageStyle: {
         width: WP(50),

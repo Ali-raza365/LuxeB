@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { AskForLocation, CreateAccount, PhoneNumber, VerifyOtp } from '../../screens';
+import { AskForLocation, CreateAccount, Gender, PhoneNumber, VerifyOtp } from '../../screens';
 import { COLORS } from '../../theme/config';
 
 const Stack = createStackNavigator();
@@ -38,14 +38,22 @@ const AuthStack = () => {
                 name='verifyotp'
                 component={VerifyOtp}
             />
-              <Stack.Screen
+            <Stack.Screen
                 options={{
                     headerShown: false,
                 }}
                 name='askForLocation'
                 component={AskForLocation}
             />
-            
+
+            <Stack.Screen
+                options={{
+                    headerShown: false,
+                }}
+                name='gender'
+                component={Gender}
+            />
+
 
         </Stack.Navigator>
     );

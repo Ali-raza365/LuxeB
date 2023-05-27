@@ -10,16 +10,20 @@ import CreateAccount from "./Register/CreateAccount";
 import PhoneNumber from "./Register/PhoneNumber";
 import VerifyOtp from "./Register/VerifyOtp";
 import AskForLocation from "./Register/AskForLocation";
+import Gender from "./Register/Gender";
 
 
 // Home Screens 
 import Home from "./Home/Home";
-
-
+import Services from "./Home/Services";
+import ServiceDetail from "./Home/ServiceDetail";
 
 export {
     Home,
-    
+    Services,
+    ServiceDetail,
+
+
     Splash,
     Onboard,
     Welcome,
@@ -28,6 +32,7 @@ export {
     PhoneNumber,
     VerifyOtp,
     AskForLocation,
+    Gender,
 
 };
 

@@ -7,18 +7,20 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import { AppBar, CardBox } from '../../components';
 import { COLORS, HP, RADIUS, SPACING_PERCENT, TEXT_SIZES, WP, isIOS } from '../../theme/config';
 
- const Home = ({ navigation }) => {
+const Home = ({ navigation }) => {
 
     const data = ["Massage", "Hair", "Make up", "Nails", "Eyebrow", "Waxing", "Hair Extension", "Lashes"]
-
+    const onServiceClick = () => {
+        navigation.navigate('services')
+    }
 
     const renderItem = ({ item, index }) => {
         return (
-            <View style={styles.CardBoxConatiner}>
+            <Pressable onPress={() => onServiceClick(item)} style={styles.CardBoxConatiner}>
                 <View style={styles.cardBox}>
                     <Text style={styles.cardText}>{item}</Text>
                 </View>
-            </View>
+            </Pressable>
         )
     }
 
@@ -43,7 +45,7 @@ import { COLORS, HP, RADIUS, SPACING_PERCENT, TEXT_SIZES, WP, isIOS } from '../.
                 <ScrollView>
                     <View style={[styles._sectionOne, { paddingBottom: 0 }]}>
                         <FlatList
-                            data={[{},{},{}]}
+                            data={[{}, {}, {}]}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             pagingEnabled
@@ -124,7 +126,7 @@ const styles = StyleSheet.create({
 
 
     },
-    headerText:{ fontSize: WP(8), fontWeight: '300', letterSpacing: 3, color: "#000" },
+    headerText: { fontSize: WP(8), fontWeight: '300', letterSpacing: 3, color: "#000" },
     _sectionTwo: {
         marginVertical: WP(4),
         width: '90%',
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
     infoDetails: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingBottom:WP(1)
+        paddingBottom: WP(1)
     },
     infoTitle: {
         color: COLORS.lightGrey,

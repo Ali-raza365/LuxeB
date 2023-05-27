@@ -8,6 +8,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {COLORS, FONT_BOLD, WP, isIOS} from '../theme/config';
 import { Home } from '../screens';
+import HomeStack from './home-stack/HomeStack';
 // import {Home} from '../screens/Home/Home';
 
 const Tab = createBottomTabNavigator();
@@ -41,8 +42,8 @@ export default function BottomNavigator() {
         tabBarInactiveTintColor: COLORS.lightGrey,
       })}>
       <Tab.Screen
-        name="home"
-        component={Home}
+        name="homestack"
+        component={HomeStack}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({color}) => (
