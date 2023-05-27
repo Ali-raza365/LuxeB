@@ -28,3 +28,7 @@ export const _gotoCreateAccount = (navigation) => {
 export const _gotophoneNumber = (navigation) => {
     navigation.navigate('auth',{screen:'phoneNumber'})
 }
+
+export const _gotoAskForLocation = (navigation) => {
+    navigation.navigate('auth',{screen:'askForLocation'})
+}

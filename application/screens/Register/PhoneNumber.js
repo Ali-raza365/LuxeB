@@ -5,6 +5,7 @@ import { AppBar, Button } from '../../components';
 import { _gotoBottomTabs } from '../../navigation/navigationServcies';
 import { COLORS, FS, HP, WP } from '../../theme/config';
 import PhoneInput from "react-native-phone-number-input";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function PhoneNumber({ navigation }) {
 
@@ -19,9 +20,12 @@ export default function PhoneNumber({ navigation }) {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+            <KeyboardAwareScrollView>
+            <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
+
             <View style={styles.container}>
-                <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
-                <View style={styles.backgroundImage}>
+                <View style={{flex:0.8}}>
+                <View style={styles.mainStyle}>
                     <View style={styles.innerContainer}>
                         <View style={styles.headingContainer}>
                             <Text style={styles.heading}>What’s your phone number?</Text>
@@ -52,14 +56,18 @@ export default function PhoneNumber({ navigation }) {
                         </View>
 
 
-                        <Button
+                      
+                    </View>
+                    <Button
                             title="Continue"
                             onPress={onPress}
                             buttonStyle={styles.buttonStyle}
                         />
-                    </View>
                 </View>
+                </View>
+             
             </View>
+            </KeyboardAwareScrollView>
         </SafeAreaView>
     );
 }
@@ -67,12 +75,12 @@ export default function PhoneNumber({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height:HP(100),
         backgroundColor: "#f5f5f5"
     },
-    backgroundImage: {
+    mainStyle: {
         display: 'flex',
         width: WP(100),
-        flex: 1,
     },
     innerContainer: {
         display: 'flex',
@@ -80,7 +88,6 @@ const styles = StyleSheet.create({
         height: '100%',
         flexDirection: 'column',
         alignItems:'center',
-        // justifyContent: 'space-between',
     },
     headingContainer: {
         display: 'flex',
@@ -107,7 +114,6 @@ const styles = StyleSheet.create({
     },
     buttonStyle: {
         bottom: HP(4),
-        position:'absolute',
     },
 
 });

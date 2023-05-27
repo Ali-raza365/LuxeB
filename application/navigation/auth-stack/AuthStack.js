@@ -1,11 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-
-
-
-
-import { COLORS, SPACING_PERCENT, WP } from '../../theme/config';
-import { CreateAccount, PhoneNumber, VerifyOtp } from '../../screens';
+import { AskForLocation, CreateAccount, PhoneNumber, VerifyOtp } from '../../screens';
+import { COLORS } from '../../theme/config';
 
 const Stack = createStackNavigator();
 
@@ -42,6 +38,14 @@ const AuthStack = () => {
                 name='verifyotp'
                 component={VerifyOtp}
             />
+              <Stack.Screen
+                options={{
+                    headerShown: false,
+                }}
+                name='askForLocation'
+                component={AskForLocation}
+            />
+            
 
         </Stack.Navigator>
     );
