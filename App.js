@@ -8,13 +8,13 @@ export default function App() {
 
 
 
-  return (
-      <NavigationContainer>
-        <AppBar
-          backgroundColor={COLORS.primaryColor}
-          type={"light"}
-        />
-        <Root />
-      </NavigationContainer>
-  )
+    return (
+        <NavigationContainer>
+            <AppBar
+                backgroundColor={COLORS.primaryColor}
+                type={"light"}
+            />
+            <Root />
+        </NavigationContainer>
+    )
 }

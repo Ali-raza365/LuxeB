@@ -5,7 +5,7 @@ import React from 'react';
 
 
 import { COLORS, SPACING_PERCENT, WP } from '../../theme/config';
-import { CreateAccount, PhoneNumber } from '../../screens';
+import { CreateAccount, PhoneNumber, VerifyOtp } from '../../screens';
 
 const Stack = createStackNavigator();
 
@@ -22,20 +22,27 @@ const AuthStack = () => {
             }}
         >
             <Stack.Screen
-            options={{
-                headerShown: false,
-              }}
+                options={{
+                    headerShown: false,
+                }}
                 name='createAccount'
                 component={CreateAccount}
             />
-             <Stack.Screen
-            options={{
-                headerShown: false,
-              }}
+            <Stack.Screen
+                options={{
+                    headerShown: false,
+                }}
                 name='phoneNumber'
                 component={PhoneNumber}
             />
-          
+            <Stack.Screen
+                options={{
+                    headerShown: false,
+                }}
+                name='verifyotp'
+                component={VerifyOtp}
+            />
+
         </Stack.Navigator>
     );
 }
