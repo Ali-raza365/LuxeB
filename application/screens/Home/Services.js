@@ -32,6 +32,7 @@ const Services = ({ navigation }) => {
                 <FlatList
                     data={servicesData}
                     renderItem={renderItem}
+                    keyExtractor={(_, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
                 />
             </View>

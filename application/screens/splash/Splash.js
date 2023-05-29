@@ -1,36 +1,38 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { COLORS, FS, HP, WP } from '../../theme/config'
-import { _gotoOnboard } from '../../navigation/navigationServcies'
+import { _gotoBottomTabs, _gotoOnboard } from '../../navigation/navigationServcies'
 
 export default function Splash({ navigation }) {
 
-    useEffect(()=>{
-        setTimeout(()=>{
+    useEffect(() => {
+        setTimeout(() => {
             _gotoOnboard(navigation)
-        },1000)
-    },[])
-  return (
-    <View style={styles.container}>
-        <Text style={styles.headerText} >U B E A U T Y</Text>
-    </View>
-  )
+            // _gotoBottomTabs(navigation);
+
+        }, 1000)
+    }, [])
+    return (
+        <View style={styles.container}>
+            <Text style={styles.headerText} >U B E A U T Y</Text>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
-    container:{
-        width:WP(100),
-        height:HP(100),
-        display:'flex',
-        justifyContent:"center",
-        alignContent:"center",
-        backgroundColor:COLORS.primaryColor
+    container: {
+        width: WP(100),
+        height: HP(100),
+        display: 'flex',
+        justifyContent: "center",
+        alignContent: "center",
+        backgroundColor: COLORS.primaryColor
     },
-    headerText:{
-        textAlign:"center",
+    headerText: {
+        textAlign: "center",
         fontSize: FS(4),
-         fontWeight: '300', 
-         letterSpacing: 3,
-          color: "#000"
+        fontWeight: '300',
+        letterSpacing: 3,
+        color: "#000"
     }
 })

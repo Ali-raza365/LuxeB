@@ -17,11 +17,13 @@ import Gender from "./Register/Gender";
 import Home from "./Home/Home";
 import Services from "./Home/Services";
 import ServiceDetail from "./Home/ServiceDetail";
-
+import Speciallist from "./Home/Speciallist";
 export {
     Home,
     Services,
     ServiceDetail,
+    Speciallist,
+
 
 
     Splash,

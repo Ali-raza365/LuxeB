@@ -1,8 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Home, ServiceDetail, Services } from '../../screens';
+import { Home, ServiceDetail, Services, Speciallist } from '../../screens';
 import { COLORS, WP } from '../../theme/config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,22 @@ const HomeStack = () => {
                 }}
                 name='servicedetail'
                 component={ServiceDetail}
+            />
+            <Stack.Screen
+                options={{
+                    headerShown: true,
+                    headerBackTitleVisible: false,
+                    headerTintColor: COLORS.blackColor,
+                    headerTitle: 'Specialist',
+                    headerRightContainerStyle: { paddingRight: WP(4) },
+                    headerLeftContainerStyle: { paddingLeft: WP(4) },
+                    headerRight: () => (<AntDesign name="hearto" size={WP(7)} color={COLORS.blackColor} />),
+                    headerStyle: {
+                        backgroundColor: COLORS.whiteColor,
+                    }
+                }}
+                name='speciallist'
+                component={Speciallist}
             />
         </Stack.Navigator>
     );
