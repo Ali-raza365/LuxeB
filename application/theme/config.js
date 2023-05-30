@@ -45,6 +45,7 @@ export const COLORS = {
     secondaryColor2: '#BC2E65',
     territoryColor2: '#D34D80',
     lightGrey: '#757575',
+    gary300:'#555555',
     gray500: "#ABABAB", // gray text color
     darkGrey: '#7E7E7E',
     grey: 'rgba(192, 192, 192, 0.3)',

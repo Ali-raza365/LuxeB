@@ -30,12 +30,12 @@ export default function AskForLocation({ navigation }) {
                     </View>
 
                 </View>
-                <View style={{ justifyContent: "flex-end", flex: 0.2 }}>
+                <View style={{ justifyContent: "flex-end", flex: 0.4}}>
                     <Button
                         title="Sure, Let’s do it"
                         onPress={onPress}
                         textStyle={{ color: COLORS.whiteColor }}
-                        buttonStyle={{ marginBottom: HP(1) }}
+                        buttonStyle={{ marginBottom: HP(4.5) }}
                     />
                     <Button
                         title="May be Later"
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     mainStyle: {
         display: 'flex',
         width: WP(100),
-        flex: 0.8
+        flex: 0.6
     },
     innerContainer: {
         display: 'flex',
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
         color: COLORS.blackColor,
         borderWidth: 0.8,
         borderColor: COLORS.blackColor,
+        bottom:HP(3),
     },
     imageStyle: {
         width: WP(50),

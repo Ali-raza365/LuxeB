@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { Home, ServiceDetail, Services, Speciallist } from '../../screens';
-import { COLORS, WP } from '../../theme/config';
+import { COLORS, FS, WP } from '../../theme/config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -35,7 +35,7 @@ const HomeStack = () => {
                     headerTitle: 'Choose Services',
                     headerRightContainerStyle: { paddingRight: WP(4) },
                     headerLeftContainerStyle: { paddingLeft: WP(4) },
-                    headerRight: () => (<Ionicons name="ios-location-outline" size={WP(7)} color={COLORS.whiteColor} />),
+                    headerRight: () => (<Ionicons name="ios-location-outline" size={FS(3)} color={COLORS.whiteColor} />),
                     headerStyle: {
                         backgroundColor: COLORS.blackColor,
                     }
@@ -52,7 +52,7 @@ const HomeStack = () => {
                     headerTitle: 'Select specialist',
                     headerRightContainerStyle: { paddingRight: WP(4) },
                     headerLeftContainerStyle: { paddingLeft: WP(4) },
-                    headerRight: () => (<Ionicons name="ios-location-outline" size={WP(7)} color={COLORS.whiteColor} />),
+                    headerRight: () => (<Ionicons name="ios-location-outline" size={FS(3)} color={COLORS.whiteColor} />),
                     headerStyle: {
                         backgroundColor: COLORS.blackColor,
                     }
@@ -68,7 +68,7 @@ const HomeStack = () => {
                     headerTitle: 'Specialist',
                     headerRightContainerStyle: { paddingRight: WP(4) },
                     headerLeftContainerStyle: { paddingLeft: WP(4) },
-                    headerRight: () => (<AntDesign name="hearto" size={WP(7)} color={COLORS.blackColor} />),
+                    headerRight: () => (<AntDesign name="hearto" size={FS(3)} color={COLORS.blackColor} />),
                     headerStyle: {
                         backgroundColor: COLORS.whiteColor,
                     }
