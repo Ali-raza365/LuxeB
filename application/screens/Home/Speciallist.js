@@ -7,6 +7,7 @@ import StarRating from 'react-native-star-rating';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import { Button } from '../../components';
+import DateTimeModal from './components/DateTimeModal';
 
 
 
@@ -15,6 +16,12 @@ const Speciallist = () => {
     const [selectedTab, setSelectedTab] = useState("Services");
     const TabArry = ["Services", "Review", "About", "Products"];
     const data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,];
+    const [selected, setSelected] = useState(false);
+
+    const [showDateTimeModal, setShowDateTimeModal] = useState(false);
+    const toggleDateTimeModal = () => {
+        setShowDateTimeModal(!showDateTimeModal)
+    }
 
 
     const CollapsibleViewHeader = ({ item }) => {
@@ -32,6 +39,13 @@ const Speciallist = () => {
 
     return (
         <View style={styles.container}>
+
+            <DateTimeModal 
+            onBackButtonPress={toggleDateTimeModal}
+            onBackdropPress={toggleDateTimeModal}
+            isVisible={showDateTimeModal}
+             />
+
             <View style={styles.listTopView}>
                 <View style={styles.listLeftView}>
                     <View style={styles.listHeaderContainer}>
@@ -81,7 +95,7 @@ const Speciallist = () => {
                     return (
                         <CollapsibleView
                             noArrow={true}
-                            style={styles.CollapsibleView}
+                            style={[styles.CollapsibleView, { backgroundColor: selected ? COLORS.grey : COLORS.whiteColor }]}
                             title={<CollapsibleViewHeader item={item} />} >
                             <View style={styles.CollapsibleViewContentContainer}>
                                 <Text style={styles.CollapsibleViewContent}>Acupuncture is a form of Chinese and Japanese medicine that involves using tiny needles to stimulate the sensory nerves under the skin to relieve pain.</Text>
@@ -95,13 +109,25 @@ const Speciallist = () => {
                                     <Text style={styles.headingText}>Price:</Text>
                                     <Text style={styles.price}>$80</Text>
                                 </View>
-                                <Button buttonStyle={styles.buttonStyle} title={'Select'} />
+                                <Button
+                                    onPress={() => setSelected(!selected)}
+                                    buttonStyle={[styles.buttonStyle, { backgroundColor: selected ? COLORS.whiteColor : COLORS.blackColor }]}
+                                    textStyle={{ color: selected ? COLORS.blackColor : COLORS.whiteColor }}
+                                    title={selected ? "Unselect" : 'Select'} />
                             </View>
                         </CollapsibleView>
 
                     )
                 }}
             />
+            {
+                selected &&
+                <Button
+                    onPress={toggleDateTimeModal}
+                    buttonStyle={[styles.buttonStyle]}
+                    title={"Next"} />
+            }
+
 
         </View>
     )
@@ -177,7 +203,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         padding: WP(4),
         paddingLeft: 0,
-        backgroundColor: COLORS.whiteColor,
+        // backgroundColor: COLORS.whiteColor,
         flexDirection: 'row',
         alignItems: 'center',
     },

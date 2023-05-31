@@ -24,6 +24,7 @@
     "react-native-gesture-handler": "^2.10.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-linear-gradient": "^2.6.2",
+    "react-native-modal": "^13.0.1",
     "react-native-otp-textinput": "^1.0.1",
     "react-native-phone-number-input": "^2.1.0",
     "react-native-responsive-dimensions": "^3.1.1",

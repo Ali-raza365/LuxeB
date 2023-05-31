@@ -12,18 +12,19 @@ import VerifyOtp from "./Register/VerifyOtp";
 import AskForLocation from "./Register/AskForLocation";
 import Gender from "./Register/Gender";
 
-
 // Home Screens 
 import Home from "./Home/Home";
 import Services from "./Home/Services";
 import ServiceDetail from "./Home/ServiceDetail";
 import Speciallist from "./Home/Speciallist";
+import Checkout from "./Home/Checkout";
+
 export {
     Home,
     Services,
     ServiceDetail,
     Speciallist,
-
+    Checkout,
 
 
     Splash,

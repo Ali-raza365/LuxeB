@@ -156,3 +156,23 @@ export const _formatMonthString = (date) => {
     today = mm
     return today
 };
+
+export function getFullMonthName(date) {
+    const options = { month: 'long' };
+    return date.toLocaleString('en-US', options);
+}
+
+export function isCurrentDate(d) {
+    const currentDate = new Date(); // Create a date instance for the current date
+    const date = new Date(d)
+    // Compare the year, month, and day of the dates
+    if (
+        date.getFullYear() > currentDate.getFullYear() ||
+        (date.getFullYear() === currentDate.getFullYear() && date.getMonth() > currentDate.getMonth()) ||
+        (date.getFullYear() === currentDate.getFullYear() && date.getMonth() === currentDate.getMonth() && date.getDate() >= currentDate.getDate())
+    ) {
+        return true; // The date is the current date or a future date
+    }
+
+    return false; // The date is in the past
+}

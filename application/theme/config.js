@@ -128,5 +128,3 @@ export const ONBOARD_DATA = [
 
 
 
-
-
