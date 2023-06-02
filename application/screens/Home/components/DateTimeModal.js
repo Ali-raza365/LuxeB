@@ -8,12 +8,14 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { Button } from '../../../components'
+import { useNavigation } from '@react-navigation/native'
 
 export default function DateTimeModal({ isVisible, onBackButtonPress, onBackdropPress }) {
 
+    const navigation = useNavigation()
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [dates, setDates] = useState([]);
-    const timeArr = ["7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00"]
+    const timeArr = ["7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00"];
 
     function getMonthDates(d) {
 
@@ -140,7 +142,7 @@ export default function DateTimeModal({ isVisible, onBackButtonPress, onBackdrop
 
 
                     <Button
-                        // onPress={toggleDateTimeModal}
+                        onPress={() => { onBackButtonPress(); navigation.push('checkout') }}
                         buttonStyle={{ alignSelf: 'center' }}
                         title={"Next"} />
                 </View>

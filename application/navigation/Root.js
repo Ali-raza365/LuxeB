@@ -1,8 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import BottomNavigator from './BottomNavigator';
+import BottomNavigator from './bottom-stack/BottomNavigator';
 import { Onboard, Splash, Welcome } from '../screens';
 import AuthStack from './auth-stack/AuthStack';
+import BottomStack from './bottom-stack/BottomStack';
 
 
 export default function Root() {
@@ -46,7 +47,7 @@ export default function Root() {
 
             <Stack.Screen
                 name='homenavigator'
-                component={BottomNavigator}
+                component={BottomStack}
                 options={{
                     headerShown: false
                 }}

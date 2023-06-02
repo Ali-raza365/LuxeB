@@ -5,5 +5,6 @@ export const IMAGES = {
     compass:require('../assets/images/compass.png'),
     male:require('../assets/images/male.png'),
     female:require('../assets/images/female.png'),
-
+    visa:require('../assets/images/visa.png'),
+    
 }

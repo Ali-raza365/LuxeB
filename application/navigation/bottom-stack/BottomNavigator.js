@@ -6,9 +6,9 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-import { COLORS, FONT_BOLD, WP, isIOS } from '../theme/config';
-import { Home } from '../screens';
-import HomeStack from './home-stack/HomeStack';
+import { COLORS, FONT_BOLD, WP, isIOS } from '../../theme/config';
+import { Home } from '../../screens';
+import HomeStack from '../home-stack/HomeStack';
 // import {Home} from '../screens/Home/Home';
 
 const Tab = createBottomTabNavigator();
