@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Checkout, Home, ServiceDetail, Services, Speciallist } from '../../screens';
+import { AddPaymentMethod, Checkout, Home, ServiceDetail, Services, Speciallist } from '../../screens';
 import { COLORS, FS, WP } from '../../theme/config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -34,7 +34,7 @@ const BottomStack = () => {
                     headerBackTitleVisible: false,
                     headerTintColor: COLORS.whiteColor,
                     headerTitle: 'Checkout',
-                    headerTitleStyle: { textTransform: 'uppercase', letterSpacing:1, },
+                    headerTitleStyle: { textTransform: 'uppercase', letterSpacing: 1, },
                     headerRightContainerStyle: { paddingRight: WP(4) },
                     headerLeftContainerStyle: { paddingLeft: WP(4) },
                     headerRight: () => (<Ionicons name="close" size={FS(3)} color={COLORS.whiteColor} />),
@@ -44,6 +44,23 @@ const BottomStack = () => {
                 }}
                 name='checkout'
                 component={Checkout}
+            />
+            <Stack.Screen
+                options={{
+                    headerShown: true,
+                    headerBackTitleVisible: false,
+                    headerTintColor: COLORS.whiteColor,
+                    headerTitle: 'PAYMENT',
+                    headerTitleStyle: { textTransform: 'uppercase', letterSpacing: 1, },
+                    headerRightContainerStyle: { paddingRight: WP(4) },
+                    headerLeftContainerStyle: { paddingLeft: WP(4) },
+                    headerRight: () => (<Ionicons name="close" size={FS(3)} color={COLORS.whiteColor} />),
+                    headerStyle: {
+                        backgroundColor: COLORS.blackColor,
+                    }
+                }}
+                name='addPaymentMethod'
+                component={AddPaymentMethod}
             />
 
             <Stack.Screen

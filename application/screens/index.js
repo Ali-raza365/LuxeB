@@ -18,6 +18,8 @@ import Services from "./Home/Services";
 import ServiceDetail from "./Home/ServiceDetail";
 import Speciallist from "./Home/Speciallist";
 import Checkout from "./Home/Checkout";
+import AddPaymentMethod from "./Home/AddPaymentMethod";
+
 
 export {
     Home,
@@ -25,6 +27,7 @@ export {
     ServiceDetail,
     Speciallist,
     Checkout,
+    AddPaymentMethod,
 
 
     Splash,

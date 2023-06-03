@@ -7,7 +7,7 @@ import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PaymentCard from './components/PaymentCard';
 import { Button } from '../../components';
 
-const Checkout = () => {
+const Checkout = ({navigation}) => {
     return (
         <View style={styles.container}>
             <ScrollView
@@ -98,6 +98,7 @@ const Checkout = () => {
                     <PaymentCard />
                     <Text style={{ textAlign: 'center', fontSize: WP(4.5), marginVertical: WP(5) }} >or</Text>
                     <Button
+                    onPress={()=>{navigation.push('addPaymentMethod')}}
                         title={'Add New Payment Method'}
                     />
                 </View>
