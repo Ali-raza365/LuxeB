@@ -17,9 +17,9 @@ export default function CreateAccount({ navigation }) {
     const AccountTypes = [{ name: "Client" }, { name: "Therapist" }]
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+        <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
             <View style={styles.container}>
-                <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
+                <AppBar type={'dark'} backgroundColor={COLORS.offWhiteColor} />
                 <View style={styles.backgroundImage}>
                     <View style={styles.innerContainer}>
                         <View style={styles.headingContainer}>
@@ -48,7 +48,7 @@ export default function CreateAccount({ navigation }) {
                     </View>
                 </View>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         padding: WP(7),
-        paddingTop: HP(6),
+        paddingTop: HP(12),
     },
     heading: {
         fontWeight: '600',

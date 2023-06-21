@@ -13,7 +13,7 @@ export default function AskForLocation({ navigation }) {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
-            <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
+            <AppBar type={'dark'} backgroundColor={COLORS.offWhiteColor} />
 
             <View style={styles.container}>
                 <View style={styles.mainStyle}>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         padding: WP(7),
-        paddingTop: HP(6),
+        paddingTop: HP(12),
         marginBottom: HP(1.5),
     },
     heading: {

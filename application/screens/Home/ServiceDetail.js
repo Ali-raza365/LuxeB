@@ -12,8 +12,8 @@ const ServiceDetail = ({ navigation }) => {
     const servicesData = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,];
     const [filterValue, setFilterValue] = useState("Classic")
     const filterArray = [
-        { name: "Classic", icon: (<AntDesign name="heart" size={WP(4)} color={COLORS.whiteColor} />) },
-        { name: "Elite", icon: (<AntDesign name="star" size={WP(4)} color={COLORS.whiteColor} />) },
+        { name: "Silver", icon: (<AntDesign name="heart" size={WP(4)} color={COLORS.whiteColor} />) },
+        { name: "Gold", icon: (<AntDesign name="star" size={WP(4)} color={COLORS.whiteColor} />) },
         { name: "Diamond", icon: (<MatComIcons name="diamond" size={WP(4)} color={COLORS.whiteColor} />) },
     ];
     const timeArr = ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM"]
@@ -23,15 +23,196 @@ const ServiceDetail = ({ navigation }) => {
         navigation.navigate("speciallist")
     }
 
+    let SpeciallistArr = [
+        {
+            "id": 8,
+            "username": "faraz",
+            "therapist_info": [
+                {
+                    "type": "silver",
+                    "about": "lorem ipusm dolor dummy text"
+                }
+            ],
+            "profile_image": "/media/profile_images/Original-9.png",
+            "is_therapist": true,
+            "services": [
+                {
+                    "services-1": "Facial"
+                },
+                {
+                    "services-2": "Tanning"
+                }
+            ],
+            "reviews": {
+                "average_rating": 4.5,
+                "total_ratings": 2
+            },
+            "availability": [
+                {
+                    "date": "2023-06-17",
+                    "time_slots": [
+
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "username": "tariq",
+            "therapist_info": [
+                {
+                    "type": "silver",
+                    "about": "lorem"
+                }
+            ],
+            "profile_image": "/media/profile_images/Original-9_w6C5Emo.png",
+            "is_therapist": true,
+            "services": [
+                {
+                    "services-1": "Facial"
+                }
+            ],
+            "reviews": {
+                "average_rating": null,
+                "total_ratings": 0
+            },
+            "availability": [
+                {
+                    "date": "2023-06-17",
+                    "time_slots": [
+                        {
+                            "id": 9,
+                            "time_slot": "09:00"
+                        },
+                        {
+                            "id": 10,
+                            "time_slot": "10:00"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "username": "faisal",
+            "therapist_info": [
+                {
+                    "type": "gold",
+                    "about": "lorem ipusm dolor dummy text"
+                }
+            ],
+            "profile_image": "/media/profile_images/Original-6.png",
+            "is_therapist": true,
+            "services": [
+                {
+                    "services-1": "Facial"
+                }
+            ],
+            "reviews": {
+                "average_rating": 3.0,
+                "total_ratings": 1
+            },
+            "availability": [
+                {
+                    "date": "2023-06-17",
+                    "time_slots": [
+                        {
+                            "id": 7,
+                            "time_slot": "09:00"
+                        },
+                        {
+                            "id": 8,
+                            "time_slot": "10:00"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "username": "faraz",
+            "therapist_info": [
+                {
+                    "type": "silver",
+                    "about": "lorem ipusm dolor dummy text"
+                }
+            ],
+            "profile_image": "/media/profile_images/Original-9.png",
+            "is_therapist": true,
+            "services": [
+                {
+                    "services-1": "Facial"
+                },
+                {
+                    "services-2": "Tanning"
+                }
+            ],
+            "reviews": {
+                "average_rating": 4.5,
+                "total_ratings": 2
+            },
+            "availability": [
+                {
+                    "date": "2023-06-17",
+                    "time_slots": [
+
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "username": "tariq",
+            "therapist_info": [
+                {
+                    "type": "silver",
+                    "about": "lorem"
+                }
+            ],
+            "profile_image": "/media/profile_images/Original-9_w6C5Emo.png",
+            "is_therapist": true,
+            "services": [
+                {
+                    "services-1": "Facial"
+                }
+            ],
+            "reviews": {
+                "average_rating": null,
+                "total_ratings": 0
+            },
+            "availability": [
+                {
+                    "date": "2023-06-17",
+                    "time_slots": [
+                        {
+                            "id": 9,
+                            "time_slot": "09:00"
+                        },
+                        {
+                            "id": 10,
+                            "time_slot": "10:00"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+
     const renderItem = ({ item, index }) => {
         return (
             <Pressable onPress={onServiceClick} style={styles.listContainer}>
                 <View style={styles.listTopView}>
                     <View style={styles.listLeftView}>
                         <View style={styles.listHeaderContainer}>
-                            <Text style={styles.listHeading}>Suzie</Text>
+                            <Text style={styles.listHeading}>{item?.username || ''}</Text>
                             <View style={styles._circleView}>
-                                <AntDesign name="star" size={WP(4)} color={COLORS.whiteColor} />
+                                {
+                                    item?.therapist_info?.[0]?.type == 'silver' ?
+                                        <AntDesign name="heart" size={WP(4)} color={COLORS.whiteColor} />
+                                        : item?.therapist_info?.[0]?.type == 'gold' ?
+                                            <AntDesign name="star" size={WP(4)} color={COLORS.whiteColor} />
+                                            : <MatComIcons name="diamond" size={WP(4)} color={COLORS.whiteColor} />
+                                }
                             </View>
                         </View>
                         <Text style={styles.listText} >Makeup • Facial • Hair</Text>
@@ -39,12 +220,12 @@ const ServiceDetail = ({ navigation }) => {
                             <StarRating
                                 disabled={false}
                                 maxStars={5}
-                                rating={4.5}
+                                rating={item?.reviews?.average_rating||0}
                                 starSize={WP(5)}
                                 containerStyle={{ width: '50%' }}
                             />
-                            <Text style={{ paddingHorizontal: WP(1.5) }}>4.5</Text>
-                            <Text>(2.8)</Text>
+                            <Text style={{ paddingHorizontal: WP(1.5) }}>{item?.reviews?.average_rating||0}</Text>
+                            <Text>({item?.reviews?.total_ratings||0})</Text>
                         </View>
                     </View>
                     <View style={styles.listRightView}>
@@ -53,13 +234,13 @@ const ServiceDetail = ({ navigation }) => {
                 </View>
                 <View style={styles.listBottomView}>
                     {
-                        timeArr.map((item, index) => {
+                        item?.availability?.[0]?.time_slots.map((item, index) => {
                             return (
                                 <Pressable key={index}
                                     // onPress={() => setFilterValue(item.name)}
-                                    style={[styles.TimeView, { backgroundColor: filterValue == item?.name ? COLORS.primaryColor : COLORS.whiteColor }]}
+                                    style={[styles.TimeView, { backgroundColor: filterValue == item?.time_slot ? COLORS.primaryColor : COLORS.whiteColor }]}
                                 >
-                                    <Text style={styles.TimeTextSty}>{item}</Text>
+                                    <Text style={styles.TimeTextSty}>{item.time_slot}</Text>
                                 </Pressable>
                             )
                         })
@@ -71,7 +252,7 @@ const ServiceDetail = ({ navigation }) => {
 
     return (
         <View style={styles._container}>
-            <AppBar type='light' />
+            <AppBar type='light' backgroundColor={COLORS.blackColor} />
 
             {/* filter */}
             <View style={styles.filterContainer}>
@@ -94,7 +275,7 @@ const ServiceDetail = ({ navigation }) => {
 
             <View >
                 <FlatList
-                    data={servicesData}
+                    data={SpeciallistArr}
                     renderItem={renderItem}
                     keyExtractor={(_, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
@@ -201,7 +382,7 @@ const styles = StyleSheet.create({
     },
     TimeTextSty: {
         fontSize: WP(3.3),
-        paddingLeft: WP(2),
+        paddingHorizontal: WP(2),
         color: COLORS.blackColor
     }
 })

@@ -5,11 +5,13 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PaymentCard from './components/PaymentCard';
-import { Button } from '../../components';
+import { AppBar, Button } from '../../components';
 
 const Checkout = ({navigation}) => {
     return (
         <View style={styles.container}>
+            <AppBar type='light' backgroundColor={COLORS.blackColor} />
+
             <ScrollView
                 contentContainerStyle={{ margin: WP(5), paddingBottom: WP(40) }}
             >
@@ -89,13 +91,13 @@ const Checkout = ({navigation}) => {
                 <View style={styles._boxContainer}>
                     <View style={[styles.headerView, { justifyContent: 'space-between' }]}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <MaterialIcons name="payments" size={WP(7.5)} color={COLORS.gary300} />
+                            <MaterialIcons  name="payments" size={WP(7.5)} color={COLORS.gary300} />
                             <Text style={styles.headerText}>Payment Methods</Text>
                         </View>
-                        <MatComIcon name="pencil-outline" size={WP(7.5)} color={COLORS.gary300} />
+                        <MatComIcon onPress={()=>navigation.navigate("selectpaymentmethod")} name="pencil-outline" size={WP(7.5)} color={COLORS.gary300} />
                     </View>
                     <Text style={styles.paymentHeading}>Default Payment Methods</Text>
-                    <PaymentCard />
+                    <PaymentCard select={true} />
                     <Text style={{ textAlign: 'center', fontSize: WP(4.5), marginVertical: WP(5) }} >or</Text>
                     <Button
                     onPress={()=>{navigation.push('addPaymentMethod')}}

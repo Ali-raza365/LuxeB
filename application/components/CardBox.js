@@ -5,14 +5,14 @@ import { COLORS, HP, WP } from '../theme/config'
 
 export default function CardBox({ data, onPress }) {
     return (
-        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}}  colors={['#000000',  COLORS.primaryColor]} style={Styles._mainContainer}>
+        <View style={Styles._mainContainer}>
             <Text style={Styles._subHeading} >It’s time to bloom!</Text>
             <Text style={Styles._heading} >Art of make up</Text>
             <Text style={Styles._detail} >Valentine’s Week only</Text>
             <View style={Styles._chip}>
                 <Text style={Styles._discount}>50%</Text>
             </View>
-        </LinearGradient>
+        </View>
     )
 }
 
@@ -20,13 +20,12 @@ const Styles = StyleSheet.create({
     _mainContainer: {
         width: WP(90),
         height: HP(23),
-        backgroundColor: COLORS.whiteColor,
         overflow: "hidden",
-        margin: WP(1),
-        borderWidth: 1,
-        marginHorizontal: 10,
+        backgroundColor:'rgba(0,0,0,0.2)',
+        // margin: WP(1),
+        // borderWidth: 1,
+        // marginHorizontal: 10,
         padding: WP(7),
-        backgroundColor: "red",
     },
     _subHeading: {
         fontWeight: "300",
@@ -63,7 +62,7 @@ const Styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         fontWeight: '500',
-        lineHeight: 18,
+        lineHeight: 20,
     },
 
 

@@ -26,7 +26,7 @@ const Services = ({ navigation }) => {
 
     return (
         <View style={styles._container}>
-            <AppBar type='light' />
+            <AppBar type='light' backgroundColor={COLORS.blackColor} />
 
             <View >
                 <FlatList

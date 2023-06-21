@@ -3,9 +3,9 @@ import React from 'react'
 import { COLORS, WP } from '../../../theme/config'
 import { IMAGES } from '../../../constants/ImagePath'
 
-const PaymentCard = () => {
+const PaymentCard = ({select = false}) => {
     return (
-        <View style={styles.paymentCardContainer}>
+        <View style={[styles.paymentCardContainer, { borderWidth: select ? 1 : 0 }]}>
             <Image source={IMAGES.visa} style={{ width: WP(10), height: WP(10) }} resizeMode='contain' />
             <View style={styles.row}>
                 <Text style={{ fontSize: WP(4), fontWeight: '500' }}>Visa</Text>
@@ -13,7 +13,10 @@ const PaymentCard = () => {
             </View>
 
             <View style={styles.circleView}>
-                <View style={styles.dot} />
+                {
+                    select && <View style={styles.dot} />
+                }
+
             </View>
         </View>
     )

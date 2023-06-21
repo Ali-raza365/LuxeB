@@ -16,11 +16,11 @@ export default function VerifyOtp({ navigation }) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+        <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
             <KeyboardAwareScrollView>
                 <View style={styles.container}>
-                    <View style={{ flex: 0.8 }}>
-                        <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
+                    <View style={{ height:'88%'}}>
+                        <AppBar type={'dark'} backgroundColor={COLORS.offWhiteColor} />
                         <View style={styles.mainStyle}>
                             <View style={styles.innerContainer}>
                                 <View style={styles.headingContainer}>
@@ -58,7 +58,7 @@ export default function VerifyOtp({ navigation }) {
                 </View>
             </KeyboardAwareScrollView>
 
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         padding: WP(7),
-        paddingTop: HP(6),
+        paddingTop: HP(12),
     },
     heading: {
         fontWeight: '600',
@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
         width: WP(18),
         height: WP(18),
         borderRadius: 5,
-        borderWidth: 1,
-        borderBottomWidth: 1,
+        borderWidth: 0,
+        borderBottomWidth: 0,
         backgroundColor: COLORS.whiteColor
     },
 });

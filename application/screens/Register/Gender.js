@@ -18,15 +18,15 @@ export default function Gender({ navigation }) {
     const Data = [{ name: "female", image: IMAGES.female }, { name: "male", image: IMAGES.male }]
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+        <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
             <View style={styles.container}>
-                <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
+                <AppBar type={'dark'} backgroundColor={COLORS.offWhiteColor} />
                 <View style={styles.backgroundImage}>
                     <View style={styles.innerContainer}>
                         <View style={styles.headingContainer}>
                             <Text style={styles.heading}>Which Service would you like it for?</Text>
                             <Text style={styles.desc}>
-                                We will need your location to give {"\n"} you better experience.
+                            Information and recommendations will be built / collected based on your gender.
                             </Text>
 
 
@@ -48,7 +48,7 @@ export default function Gender({ navigation }) {
                     </View>
                 </View>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         padding: WP(7),
-        paddingTop: HP(6),
+        paddingTop: HP(12),
     },
     heading: {
         fontWeight: '600',
@@ -85,19 +85,20 @@ const styles = StyleSheet.create({
     },
     desc: {
         paddingTop: HP(1),
-        fontSize: FS(2.2),
-        fontWeight: '500',
-        // width: WP(55),
+        fontSize: FS(2),
+        fontWeight: '400',
+        width:'80%',
         alignSelf: "center",
         lineHeight: 20,
         color: COLORS.blackColor,
         textAlign: 'center',
+        // backgroundColor:'cyan'
     },
     buttonStyle: {
         bottom: HP(4),
     },
     outerContainer: {
-        marginTop: HP(7),
+        marginTop: HP(4),
         display: "flex",
         alignSelf: "center",
         flexDirection: "row",

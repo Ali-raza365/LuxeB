@@ -6,7 +6,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import StarRating from 'react-native-star-rating';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
-import { Button } from '../../components';
+import { AppBar, Button } from '../../components';
 import DateTimeModal from './components/DateTimeModal';
 
 
@@ -15,12 +15,93 @@ const Speciallist = () => {
 
     const [selectedTab, setSelectedTab] = useState("Services");
     const TabArry = ["Services", "Review", "About", "Products"];
-    const data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,];
     const [selected, setSelected] = useState(false);
+    const [serviceQuanity, setServiceQuanity] = useState(1);
+    const [data, setdata] = useState(speciallistData)
 
     const [showDateTimeModal, setShowDateTimeModal] = useState(false);
     const toggleDateTimeModal = () => {
         setShowDateTimeModal(!showDateTimeModal)
+    }
+
+    const incrementQuantity = (subServiceId) => {
+        speciallistData.services.forEach(service => {
+            service.sub_services.forEach(subService => {
+                if (subService.sub_service.id === subServiceId) {
+                    subService.quantity += 1;
+                }
+            });
+        });
+    };
+
+    const decrementQuantity = (subServiceId) => {
+        speciallistData.services.forEach(service => {
+            service.sub_services.forEach(subService => {
+                if (subService.sub_service.id === subServiceId && subService.quantity > 0) {
+                    subService.quantity -= 1;
+                }
+            });
+        });
+    };
+
+    let speciallistData = {
+        "id": 9,
+        "username": "faisal",
+        "therapist_info": [
+            {
+                "type": "gold",
+                "about": "lorem ipusm dolor dummy text"
+            }
+        ],
+        "profile_image": "/media/profile_images/Original-6.png",
+        "is_therapist": true,
+        "services": [
+            {
+                "service": {
+                    "id": 4,
+                    "service_name": "Facial",
+                    "service_image": "/media/service_images/Original-9.png"
+                },
+                "sub_services": [
+                    {
+                        "sub_service": {
+                            "id": 2,
+                            "sub_service_name": "full face facial",
+                            "description": "lorem ipsum"
+                        },
+                        "price": "12.00",
+                        "duration": 45,
+                        "user": 9,
+                        "quantity": 1,
+                        "isSelected": false
+
+                    },
+                    {
+                        "sub_service": {
+                            "id": 4,
+                            "sub_service_name": "full face facial",
+                            "description": "lorem ipsum"
+                        },
+                        "price": "12.00",
+                        "duration": 45,
+                        "user": 9,
+                        "quantity": 1,
+                        "isSelected": false
+                    }
+                ]
+            }
+        ],
+        "reviews": {
+            "all_reviews": [
+                {
+                    "rating": 3,
+                    "review_text": "very professional and polite, recommended 100%",
+                    "created_at": "2023-06-11T15:35:41.171767Z"
+                }
+            ],
+            "average_rating": 3.0,
+            "total_ratings": 1
+        }
     }
 
 
@@ -28,8 +109,8 @@ const Speciallist = () => {
         return (
             <View style={styles.listContainer}>
                 <View style={styles.listView}>
-                    <Text style={styles.listTitle} >Bespoke blowdry (Long Hair)</Text>
-                    <Text style={styles.timeAndDate}>45 min | $80</Text>
+                    <Text style={styles.listTitle} >{item?.sub_service?.sub_service_name || ''}</Text>
+                    <Text style={styles.timeAndDate}>{item?.duration} min | ${item?.price || ''}</Text>
                 </View>
                 <Entypo name="chevron-small-down" size={WP(7)} color={COLORS.blackColor} />
             </View>
@@ -40,32 +121,48 @@ const Speciallist = () => {
     return (
         <View style={styles.container}>
 
-            <DateTimeModal 
-            onBackButtonPress={toggleDateTimeModal}
-            onBackdropPress={toggleDateTimeModal}
-            isVisible={showDateTimeModal}
-             />
+            <AppBar type='dark' backgroundColor={COLORS.whiteColor} />
+
+
+            <DateTimeModal
+                onBackButtonPress={toggleDateTimeModal}
+                onBackdropPress={toggleDateTimeModal}
+                isVisible={showDateTimeModal}
+            />
 
             <View style={styles.listTopView}>
                 <View style={styles.listLeftView}>
                     <View style={styles.listHeaderContainer}>
-                        <Text style={styles.listHeading}>Laura</Text>
-                        <Text style={styles.listHeading}>CHoutta</Text>
+                        <Text style={styles.listHeading}>{speciallistData?.username || ''}</Text>
                     </View>
-                    <Text style={styles.listText} >Makeup, Facial, Hair</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        {
+                            speciallistData.services.map((service, index) => {
+                                return <Text style={styles.listText} >{service?.service?.service_name || ''}{speciallistData?.services.length != index + 1 ? ',' : ''} </Text>
+                            })
+                        }
+                    </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View style={styles._circleView}>
-                            <AntDesign name="star" size={WP(5)} color={COLORS.whiteColor} />
+                            {
+                                speciallistData?.therapist_info?.[0]?.type == 'silver' ?
+                                    <AntDesign name="heart" size={WP(4.5)} color={COLORS.whiteColor} />
+                                    : speciallistData?.therapist_info?.[0]?.type == 'gold' ?
+                                        <AntDesign name="star" size={WP(4.5)} color={COLORS.whiteColor} />
+                                        : speciallistData?.therapist_info?.[0]?.type == 'diamond' ?
+                                            <MatComIcons name="diamond" size={WP(4.5)} color={COLORS.whiteColor} />
+                                            : null
+                            }
                         </View>
                         <StarRating
                             disabled={false}
                             maxStars={5}
-                            rating={4.5}
+                            rating={speciallistData?.reviews?.average_rating || 0}
                             starSize={FS(2.2)}
                             containerStyle={{ width: '48%', marginLeft: WP(2) }}
                         />
-                        <Text style={{ paddingHorizontal: WP(1.5) }}>4.5</Text>
-                        <Text>(2.8)</Text>
+                        <Text style={{ paddingHorizontal: WP(1.5) }}>{speciallistData?.reviews?.average_rating || 0}</Text>
+                        <Text>({speciallistData?.reviews?.total_ratings || 0})</Text>
                     </View>
                 </View>
                 <View style={styles.listRightView}>
@@ -85,41 +182,54 @@ const Speciallist = () => {
                     })
                 }
             </View>
+            {
+                selectedTab == 'Services' ?
+                    <FlatList
+                        data={speciallistData?.services[0]?.sub_services || []}
+                        keyExtractor={(_, index) => index.toString()}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ padding: WP(2), }}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <CollapsibleView
+                                    noArrow={true}
+                                    style={[styles.CollapsibleView, { backgroundColor: selected ? COLORS.grey : COLORS.whiteColor }]}
+                                    title={<CollapsibleViewHeader item={item} />} >
+                                    <View style={styles.CollapsibleViewContentContainer}>
+                                        <Text style={styles.CollapsibleViewContent}>{item?.sub_service?.description || ''}</Text>
+                                        <View style={styles.QuantityStyle}>
+                                            <Text style={styles.headingText}>Quantity:</Text>
+                                            <TouchableOpacity onPress={() => decrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>-</Text></TouchableOpacity>
+                                            <Text style={styles.Qty}>{item?.quantity}</Text>
+                                            <TouchableOpacity onPress={() => incrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>+</Text></TouchableOpacity>
+                                        </View>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <Text style={styles.headingText}>Price:</Text>
+                                            <Text style={styles.price}>${Number(item?.price * serviceQuanity)}</Text>
+                                        </View>
+                                        <Button
+                                            onPress={() => setSelected(!selected)}
+                                            buttonStyle={[styles.buttonStyle, { backgroundColor: selected ? COLORS.whiteColor : COLORS.blackColor }]}
+                                            textStyle={{ color: selected ? COLORS.blackColor : COLORS.whiteColor }}
+                                            title={selected ? "Unselect" : 'Select'} />
+                                    </View>
+                                </CollapsibleView>
 
-            <FlatList
-                data={data}
-                keyExtractor={(_, index) => index.toString()}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ padding: WP(2), }}
-                renderItem={({ item, index }) => {
-                    return (
-                        <CollapsibleView
-                            noArrow={true}
-                            style={[styles.CollapsibleView, { backgroundColor: selected ? COLORS.grey : COLORS.whiteColor }]}
-                            title={<CollapsibleViewHeader item={item} />} >
-                            <View style={styles.CollapsibleViewContentContainer}>
-                                <Text style={styles.CollapsibleViewContent}>Acupuncture is a form of Chinese and Japanese medicine that involves using tiny needles to stimulate the sensory nerves under the skin to relieve pain.</Text>
-                                <View style={styles.QuantityStyle}>
-                                    <Text style={styles.headingText}>Quantity:</Text>
-                                    <TouchableOpacity activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>-</Text></TouchableOpacity>
-                                    <Text style={styles.Qty}>2</Text>
-                                    <TouchableOpacity activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>+</Text></TouchableOpacity>
-                                </View>
-                                <View style={{ flexDirection: "row" }}>
-                                    <Text style={styles.headingText}>Price:</Text>
-                                    <Text style={styles.price}>$80</Text>
-                                </View>
-                                <Button
-                                    onPress={() => setSelected(!selected)}
-                                    buttonStyle={[styles.buttonStyle, { backgroundColor: selected ? COLORS.whiteColor : COLORS.blackColor }]}
-                                    textStyle={{ color: selected ? COLORS.blackColor : COLORS.whiteColor }}
-                                    title={selected ? "Unselect" : 'Select'} />
+                            )
+                        }}
+                    /> :
+                    selectedTab == 'Review' ?
+                        <View />
+                        : selectedTab == 'About' ?
+                            <View style={styles.CollapsibleView}>
+                                <Text>{speciallistData?.therapist_info?.[0]?.about || ''}</Text>
                             </View>
-                        </CollapsibleView>
+                            : selectedTab == 'Products' ?
+                                <View />
+                                : null
+            }
 
-                    )
-                }}
-            />
+
             {
                 selected &&
                 <Button

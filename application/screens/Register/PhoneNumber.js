@@ -19,63 +19,71 @@ export default function PhoneNumber({ navigation }) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+        <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
             <KeyboardAwareScrollView>
-            <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
+                <AppBar type={'dark'} backgroundColor={COLORS.offWhiteColor} />
 
-            <View style={styles.container}>
-                <View style={{flex:0.8}}>
-                <View style={styles.mainStyle}>
-                    <View style={styles.innerContainer}>
-                        <View style={styles.headingContainer}>
-                            <Text style={styles.heading}>What’s your phone number?</Text>
-                            <Text style={styles.desc}>
-                                Create An account and start browsing
-                            </Text>
-                        </View>
-                        <View>
-                            <PhoneInput
-                                ref={phoneInput}
-                                defaultValue={phoneValue}
-                                placeholder='Enter phone number'
-                                defaultCode="PK"
-                                layout="second"
-                                onChangeText={(text) => {
-                                    setphoneValue(text);
-                                }}
-                                flagButtonStyle={{
-                                    borderRightWidth:1,
-                                    borderColor:COLORS.blackColor
-                                }}
-                                containerStyle={{
-                                    borderWidth:1,
-                                    borderColor:COLORS.blackColor
-                                }}
-                                withDarkTheme
+                <View style={styles.container}>
+                    <View style={{ height:'88%' ,}}>
+                        <View style={styles.mainStyle}>
+                            <View style={styles.innerContainer}>
+                                <View style={styles.headingContainer}>
+                                    <Text style={styles.heading}>What’s your phone number?</Text>
+                                    <Text style={styles.desc}>
+                                        Create An account and start browsing
+                                    </Text>
+                                </View>
+                                <View>
+                                    <PhoneInput
+                                        ref={phoneInput}
+                                        defaultValue={phoneValue}
+                                        textInputProps={{
+                                            placeholderTextColor: COLORS.darkGrey
+                                        }}
+                                        placeholderTextColor={COLORS.darkGrey}
+                                        placeholder='Enter phone number'
+                                        countryPickerProps={{disableNativeModal: true}}
+                                        defaultCode="TH"
+                                        layout="second"
+                                        onChangeText={(text) => {
+                                            setphoneValue(text);
+                                        }}
+                                        flagButtonStyle={{
+                                            borderRightWidth: 1,
+                                            borderColor: COLORS.blackColor
+                                        }}
+                                        containerStyle={{
+                                            borderWidth: 1,
+                                            borderColor: COLORS.blackColor,
+                                        }}
+                                        textInputStyle={{
+                                            padding: 0,
+                                        }}
+                                        withDarkTheme
+                                    />
+                                </View>
+
+
+
+                            </View>
+                            <Button
+                                title="Continue"
+                                onPress={onPress}
+                                buttonStyle={styles.buttonStyle}
                             />
                         </View>
-
-
-                      
                     </View>
-                    <Button
-                            title="Continue"
-                            onPress={onPress}
-                            buttonStyle={styles.buttonStyle}
-                        />
+
                 </View>
-                </View>
-             
-            </View>
             </KeyboardAwareScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height:HP(100),
+        height: HP(100),
         backgroundColor: "#f5f5f5"
     },
     mainStyle: {
@@ -87,14 +95,14 @@ const styles = StyleSheet.create({
         width: WP(100),
         height: '100%',
         flexDirection: 'column',
-        alignItems:'center',
+        alignItems: 'center',
     },
     headingContainer: {
         display: 'flex',
         alignItems: 'center',
         textAlign: 'center',
         padding: WP(7),
-        paddingTop: HP(6),
+        paddingTop: HP(12),
     },
     heading: {
         fontWeight: '600',

@@ -3,23 +3,21 @@ import {
     ImageBackground,
     StyleSheet,
     Text,
-    TouchableOpacity,
-    View,
+    View
 } from 'react-native';
-import { COLORS, FS, HP, WP } from '../../theme/config';
-import { IMAGES } from '../../constants/ImagePath';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppBar, Button } from '../../components';
-import { _gotoBottomTabs, _gotoCreateAccount } from '../../navigation/navigationServcies';
+import { IMAGES } from '../../constants/ImagePath';
+import { _gotophoneNumber } from '../../navigation/navigationServcies';
+import { COLORS, FS, HP, WP } from '../../theme/config';
 export default function Welcome({ navigation }) {
     const onPress = () => {
-        _gotoCreateAccount(navigation);
+        _gotophoneNumber(navigation);
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
             <View style={styles.container}>
-                <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
+                <AppBar type={'dark'} backgroundColor={'#E7E1DE'} />
                 <ImageBackground
                     source={IMAGES.welcome}
                     style={styles.backgroundImage}
@@ -30,7 +28,7 @@ export default function Welcome({ navigation }) {
                             <Text style={styles.desc}>
                                 {' '}
                                 Find a new stylist, book last-minute nails, or teat yourself to
-                                a relaxing massage.
+                                a relaxing {'\n'} massage.
                             </Text>
                         </View>
                         <Button
@@ -41,7 +39,7 @@ export default function Welcome({ navigation }) {
                     </View>
                 </ImageBackground>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -66,7 +64,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         padding: WP(7),
-        paddingTop: HP(6),
+        paddingTop: HP(12),
     },
     heading: {
         fontWeight: '600',
@@ -74,7 +72,7 @@ const styles = StyleSheet.create({
         fontSize: FS(3.5),
     },
     desc: {
-        paddingTop: HP(1),
+        paddingTop: HP(2),
         fontSize: FS(2.2),
         fontWeight: '500',
         lineHeight: 20,
