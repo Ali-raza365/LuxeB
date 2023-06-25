@@ -121,7 +121,7 @@ export default function DateTimeModal({ isVisible, onBackButtonPress, onBackdrop
                                         </TouchableOpacity>
                                     )
                                 } else {
-                                    return <View style={Styles.emptyView} />
+                                    return <View key={index} style={Styles.emptyView} />
                                 }
                             })
                         }
@@ -135,7 +135,7 @@ export default function DateTimeModal({ isVisible, onBackButtonPress, onBackdrop
                     >
                         {
                             timeArr.map((item, index) => {
-                                return <Text style={{ padding: WP(3), paddingHorizontal: WP(4), marginLeft: WP(2), borderWidth: 1, fontSize: WP(4), letterSpacing: 1, borderColor: COLORS.blackColor }}>{item}</Text>
+                                return <Text key={index} style={{ padding: WP(3), paddingHorizontal: WP(4), marginLeft: WP(2), borderWidth: 1, fontSize: WP(4), letterSpacing: 1, borderColor: COLORS.blackColor }}>{item}</Text>
                             })
                         }
                     </ScrollView>

@@ -59,8 +59,6 @@ export const _formatTime = (date) => {
 }
 
 export const _formatDate = (d) => {
-
-
     const timestamp = Date.parse(d);
     console.log(timestamp)
     if (!isNaN(timestamp)) {
@@ -68,7 +66,7 @@ export const _formatDate = (d) => {
         const yyyy = date.getFullYear();
         let mm = String(date.getMonth() + 1).padStart(2, "0"); // Months start at 0!
         let dd = String(date.getDate()).padStart(2, "0");
-        const today = dd + '-' + mm + '-' + yyyy;
+        const today = yyyy + '-' + mm + '-' + dd;
         return today;
     } else {
         return ''

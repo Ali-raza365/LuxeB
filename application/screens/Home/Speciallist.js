@@ -1,5 +1,5 @@
 import { Image, Pressable, FlatList, StyleSheet, TouchableOpacity, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS, FS, HP, WP } from '../../theme/config'
 import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -8,40 +8,88 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import { AppBar, Button } from '../../components';
 import DateTimeModal from './components/DateTimeModal';
+import { useSelector, useDispatch } from 'react-redux';
+import { setServiceDetail } from '../../store/reducers/ServicesReducer';
 
 
 
 const Speciallist = () => {
 
+    const dispatch = useDispatch()
     const [selectedTab, setSelectedTab] = useState("Services");
     const TabArry = ["Services", "Review", "About", "Products"];
     const [selected, setSelected] = useState(false);
     const [serviceQuanity, setServiceQuanity] = useState(1);
-    const [data, setdata] = useState(speciallistData)
-
     const [showDateTimeModal, setShowDateTimeModal] = useState(false);
     const toggleDateTimeModal = () => {
         setShowDateTimeModal(!showDateTimeModal)
     }
 
+    const serviceDetail = useSelector(state => state.service.serviceDetail);
+
+    console.log({ serviceDetail })
+
     const incrementQuantity = (subServiceId) => {
-        speciallistData.services.forEach(service => {
-            service.sub_services.forEach(subService => {
-                if (subService.sub_service.id === subServiceId) {
-                    subService.quantity += 1;
+        let change = {
+            ...serviceDetail,
+            services: serviceDetail.services.map(service => {
+                return {
+                    ...service,
+                    sub_services: service.sub_services.map(subService => {
+                        if (subService?.sub_service?.id === subServiceId) {
+                            return {
+                                ...subService,
+                                quantity: subService.quantity += 1
+                            }
+                        }
+                        return subService
+                    })
                 }
-            });
-        });
+            })
+        }
+        dispatch(setServiceDetail(change))
     };
 
     const decrementQuantity = (subServiceId) => {
-        speciallistData.services.forEach(service => {
-            service.sub_services.forEach(subService => {
-                if (subService.sub_service.id === subServiceId && subService.quantity > 0) {
-                    subService.quantity -= 1;
+        let change = {
+            ...serviceDetail,
+            services: serviceDetail.services.map(service => {
+                return {
+                    ...service,
+                    sub_services: service.sub_services.map(subService => {
+                        if (subService?.sub_service?.id === subServiceId && subService.quantity > 1) {
+                            return {
+                                ...subService,
+                                quantity: subService.quantity -= 1
+                            }
+                        }
+                        return subService
+                    })
                 }
-            });
-        });
+            })
+        }
+        dispatch(setServiceDetail(change))
+    };
+
+    const onServiceSelect = (subServiceId) => {
+        let change = {
+            ...serviceDetail,
+            services: serviceDetail.services.map(service => {
+                return {
+                    ...service,
+                    sub_services: service.sub_services.map(subService => {
+                        if (subService?.sub_service?.id === subServiceId) {
+                            return {
+                                ...subService,
+                                isSelected: subService.isSelected = !subService.isSelected
+                            }
+                        }
+                        return subService
+                    })
+                }
+            })
+        }
+        dispatch(setServiceDetail(change))
     };
 
     let speciallistData = {
@@ -97,12 +145,24 @@ const Speciallist = () => {
                     "rating": 3,
                     "review_text": "very professional and polite, recommended 100%",
                     "created_at": "2023-06-11T15:35:41.171767Z"
-                }
+                },
+                {
+                    "rating": 4.6,
+                    "review_text": "very professional and polite, recommended 100%",
+                    "created_at": "2023-06-11T15:35:41.171767Z"
+                },
             ],
             "average_rating": 3.0,
             "total_ratings": 1
         }
     }
+
+    useEffect(() => {
+        let check = serviceDetail?.services[0]?.sub_services.find((item) => item.isSelected == true)
+        setSelected(check)
+        // console.log(check)
+    }, [serviceDetail])
+
 
 
     const CollapsibleViewHeader = ({ item }) => {
@@ -112,7 +172,7 @@ const Speciallist = () => {
                     <Text style={styles.listTitle} >{item?.sub_service?.sub_service_name || ''}</Text>
                     <Text style={styles.timeAndDate}>{item?.duration} min | ${item?.price || ''}</Text>
                 </View>
-                <Entypo name="chevron-small-down" size={WP(7)} color={COLORS.blackColor} />
+                <Entypo name="chevron-small-right" size={WP(7)} color={COLORS.blackColor} />
             </View>
         )
     }
@@ -133,23 +193,23 @@ const Speciallist = () => {
             <View style={styles.listTopView}>
                 <View style={styles.listLeftView}>
                     <View style={styles.listHeaderContainer}>
-                        <Text style={styles.listHeading}>{speciallistData?.username || ''}</Text>
+                        <Text style={styles.listHeading}>{serviceDetail?.username || ''}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         {
-                            speciallistData.services.map((service, index) => {
-                                return <Text style={styles.listText} >{service?.service?.service_name || ''}{speciallistData?.services.length != index + 1 ? ',' : ''} </Text>
+                            serviceDetail.services.map((service, index) => {
+                                return <Text key={index} style={styles.listText} >{service?.service?.service_name || ''}{serviceDetail?.services.length != index + 1 ? ',' : ''} </Text>
                             })
                         }
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View style={styles._circleView}>
                             {
-                                speciallistData?.therapist_info?.[0]?.type == 'silver' ?
+                                serviceDetail?.therapist_info?.[0]?.type == 'silver' ?
                                     <AntDesign name="heart" size={WP(4.5)} color={COLORS.whiteColor} />
-                                    : speciallistData?.therapist_info?.[0]?.type == 'gold' ?
+                                    : serviceDetail?.therapist_info?.[0]?.type == 'gold' ?
                                         <AntDesign name="star" size={WP(4.5)} color={COLORS.whiteColor} />
-                                        : speciallistData?.therapist_info?.[0]?.type == 'diamond' ?
+                                        : serviceDetail?.therapist_info?.[0]?.type == 'diamond' ?
                                             <MatComIcons name="diamond" size={WP(4.5)} color={COLORS.whiteColor} />
                                             : null
                             }
@@ -157,12 +217,12 @@ const Speciallist = () => {
                         <StarRating
                             disabled={false}
                             maxStars={5}
-                            rating={speciallistData?.reviews?.average_rating || 0}
+                            rating={serviceDetail?.reviews?.average_rating || 0}
                             starSize={FS(2.2)}
                             containerStyle={{ width: '48%', marginLeft: WP(2) }}
                         />
-                        <Text style={{ paddingHorizontal: WP(1.5) }}>{speciallistData?.reviews?.average_rating || 0}</Text>
-                        <Text>({speciallistData?.reviews?.total_ratings || 0})</Text>
+                        <Text style={{ paddingHorizontal: WP(1.5) }}>{serviceDetail?.reviews?.average_rating || 0}</Text>
+                        <Text>({serviceDetail?.reviews?.total_ratings || 0})</Text>
                     </View>
                 </View>
                 <View style={styles.listRightView}>
@@ -185,7 +245,7 @@ const Speciallist = () => {
             {
                 selectedTab == 'Services' ?
                     <FlatList
-                        data={speciallistData?.services[0]?.sub_services || []}
+                        data={serviceDetail?.services[0]?.sub_services || []}
                         keyExtractor={(_, index) => index.toString()}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ padding: WP(2), }}
@@ -193,7 +253,7 @@ const Speciallist = () => {
                             return (
                                 <CollapsibleView
                                     noArrow={true}
-                                    style={[styles.CollapsibleView, { backgroundColor: selected ? COLORS.grey : COLORS.whiteColor }]}
+                                    style={[styles.CollapsibleView, { backgroundColor: item.isSelected ? COLORS.grey : COLORS.whiteColor }]}
                                     title={<CollapsibleViewHeader item={item} />} >
                                     <View style={styles.CollapsibleViewContentContainer}>
                                         <Text style={styles.CollapsibleViewContent}>{item?.sub_service?.description || ''}</Text>
@@ -205,13 +265,13 @@ const Speciallist = () => {
                                         </View>
                                         <View style={{ flexDirection: "row" }}>
                                             <Text style={styles.headingText}>Price:</Text>
-                                            <Text style={styles.price}>${Number(item?.price * serviceQuanity)}</Text>
+                                            <Text style={styles.price}>${Number(item?.price * item?.quantity)}</Text>
                                         </View>
                                         <Button
-                                            onPress={() => setSelected(!selected)}
-                                            buttonStyle={[styles.buttonStyle, { backgroundColor: selected ? COLORS.whiteColor : COLORS.blackColor }]}
-                                            textStyle={{ color: selected ? COLORS.blackColor : COLORS.whiteColor }}
-                                            title={selected ? "Unselect" : 'Select'} />
+                                            onPress={() => onServiceSelect(item?.sub_service?.id)}
+                                            buttonStyle={[styles.buttonStyle, { backgroundColor: item.isSelected ? COLORS.whiteColor : COLORS.blackColor }]}
+                                            textStyle={{ color: item.isSelected ? COLORS.blackColor : COLORS.whiteColor }}
+                                            title={item.isSelected ? "Unselect" : 'Select'} />
                                     </View>
                                 </CollapsibleView>
 
@@ -219,10 +279,32 @@ const Speciallist = () => {
                         }}
                     /> :
                     selectedTab == 'Review' ?
-                        <View />
+                        serviceDetail.reviews.all_reviews.map((item, index) => {
+                            return (
+                                <View key={index} style={styles.reviewContainer}>
+                                    <View style={styles.reviewInfoContainer}>
+                                        <Text style={styles.reviewHeading}>{serviceDetail?.username || ''}</Text>
+                                        <View style={{ flexDirection: 'row', marginVertical: WP(1) }}>
+                                            <StarRating
+                                                disabled={false}
+                                                maxStars={5}
+                                                rating={item.rating || 0}
+                                                starSize={FS(2.2)}
+                                                containerStyle={{ width: '48%', }}
+                                            />
+                                            <Text style={{ paddingHorizontal: WP(1.5) }}>{item.rating || 0}</Text>
+                                        </View>
+                                        <Text style={styles.reviewText} >{item?.review_text || ''}{serviceDetail?.services.length != index + 1 ? ',' : ''} </Text>
+                                    </View>
+                                    <View style={styles.reviewImageContainer}>
+                                        <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60" }} />
+                                    </View>
+                                </View>
+                            )
+                        })
                         : selectedTab == 'About' ?
-                            <View style={styles.CollapsibleView}>
-                                <Text>{speciallistData?.therapist_info?.[0]?.about || ''}</Text>
+                            <View style={styles.CardBox}>
+                                <Text style={{ fontSize: FS(1.8), color: COLORS.blackColor }} >{serviceDetail?.therapist_info?.[0]?.about || ''}</Text>
                             </View>
                             : selectedTab == 'Products' ?
                                 <View />
@@ -274,6 +356,7 @@ const styles = StyleSheet.create({
         fontSize: WP(6),
         fontWeight: '600',
         paddingRight: WP(2),
+        color: COLORS.blackColor,
     },
     listText: {
         fontSize: WP(3.3),
@@ -323,7 +406,7 @@ const styles = StyleSheet.create({
     listTitle: {
         fontSize: WP(4),
         fontWeight: '500',
-        // flexDirection:""
+        color: COLORS.blackColor,
     },
     timeAndDate: {
         fontSize: FS(1.8),
@@ -368,9 +451,47 @@ const styles = StyleSheet.create({
     price: {
         fontSize: FS(2),
         fontWeight: "500",
+        color: COLORS.blackColor
     },
     buttonStyle: {
         marginVertical: WP(4),
-    }
+    },
+    CardBox: {
+        borderWidth: 0,
+        // backgroundColor: "#fff",
+        width: WP(90),
+        padding: WP(2),
+        alignSelf: 'center'
+    },
+    reviewContainer: {
+        width: '100%',
+        paddingHorizontal: WP(5),
+        paddingVertical: WP(3),
+        // backgroundColor: COLORS.whiteColor,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderBottomWidth: 0.5,
+        borderBottomColor: COLORS.borderColor
+    },
+    reviewImageContainer: {
+        width: WP(20),
+        borderRadius: WP(20),
+        overflow: 'hidden',
+        height: WP(20),
+    },
+    reviewHeading: {
+        fontSize: FS(2.2),
+        fontWeight: '600',
+        color: COLORS.blackColor,
+    },
+    reviewText: {
+        fontSize: WP(3.5),
+        paddingVertical: WP(1),
+        color: COLORS.blackColor,
+    },
+    reviewInfoContainer: {
+        width: '65%',
+        paddingLeft: WP(2),
+    },
 
 })

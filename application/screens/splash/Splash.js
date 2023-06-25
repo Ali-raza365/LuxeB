@@ -8,8 +8,8 @@ export default function Splash({ navigation }) {
 
     useEffect(() => {
         setTimeout(() => {
-            _gotoOnboard(navigation)
-            // _gotoBottomTabs(navigation);
+            // _gotoOnboard(navigation)
+            _gotoBottomTabs(navigation);
 
         }, 1000)
     }, [])

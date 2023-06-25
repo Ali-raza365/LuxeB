@@ -6,16 +6,21 @@ import { COLORS, HP, WP } from '../../theme/config'
 import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import StarRating from 'react-native-star-rating';
+import { useSelector } from 'react-redux';
 
 const ServiceDetail = ({ navigation }) => {
 
     const servicesData = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,];
-    const [filterValue, setFilterValue] = useState("Classic")
+    const [filterValue, setFilterValue] = useState("Silver")
+    const therapistData = useSelector(store=>store.service.therapistsList)
     const filterArray = [
         { name: "Silver", icon: (<AntDesign name="heart" size={WP(4)} color={COLORS.whiteColor} />) },
         { name: "Gold", icon: (<AntDesign name="star" size={WP(4)} color={COLORS.whiteColor} />) },
         { name: "Diamond", icon: (<MatComIcons name="diamond" size={WP(4)} color={COLORS.whiteColor} />) },
     ];
+
+    
+
     const timeArr = ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM"]
 
 
@@ -275,7 +280,7 @@ const ServiceDetail = ({ navigation }) => {
 
             <View >
                 <FlatList
-                    data={SpeciallistArr}
+                    data={therapistData||[]}
                     renderItem={renderItem}
                     keyExtractor={(_, index) => index.toString()}
                     showsVerticalScrollIndicator={false}

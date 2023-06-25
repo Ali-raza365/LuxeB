@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, Image, ImageBackground, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, ImageBackground, Pressable, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -8,8 +8,15 @@ import { AppBar, CardBox } from '../../components';
 import { COLORS, HP, RADIUS, SPACING_PERCENT, TEXT_SIZES, WP, isIOS } from '../../theme/config';
 import ImageCarousel from '../../components/ImageCarousel';
 import { IMAGES } from '../../constants/ImagePath';
+import actions from '../../store/actions';
+import { API_BASE_URL } from '../../api/apis';
+import { _formatDate } from '../../utils/TimeFunctions';
+import { useSelector } from 'react-redux';
 
 const Home = ({ navigation }) => {
+
+    const [loading, setLoading] = useState(false)
+    const [serviceData, setServiceData] = useState(null);
 
     const data = [
         {
@@ -64,8 +71,33 @@ const Home = ({ navigation }) => {
         },
     ];
 
-    const onServiceClick = () => {
-        navigation.navigate('servicedetail')
+    const _handleRefresh = async () => {
+        try {
+            setLoading(true)
+            let res = await actions.fetchServicesCategories()
+            setServiceData(res)
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+            console.log("error riased in sevices api", error)
+            alert(error)
+        }
+    }
+
+    useEffect(() => {
+        _handleRefresh()
+    }, [])
+
+
+    const onServiceClick = async (service) => {
+        try {
+            await actions.onServiceSelect(service, navigation)
+        } catch (error) {
+            console.log("error riased in on services api", error)
+            alert(error?.message)
+        }
+
+
     }
 
     let dataSliider = [
@@ -78,7 +110,7 @@ const Home = ({ navigation }) => {
         return (
             <Pressable onPress={() => onServiceClick(item)} style={styles.CardBoxConatiner} >
                 <Image
-                    source={{ uri: item.service_image }}
+                    source={{ uri: API_BASE_URL + item.service_image }}
                     style={{ width: '100%', height: '100%' }}
                 />
                 <View style={styles.cardBox}>
@@ -162,7 +194,16 @@ const Home = ({ navigation }) => {
 
                     <View style={styles._sectionThree}>
                         <FlatList
-                            data={data}
+                            scrollEnabled={false}
+                            initialNumToRender={6}
+                            refreshControl={
+                                <RefreshControl
+                                    tintColor={COLORS.blackColor}
+                                    refreshing={loading}
+                                    onRefresh={_handleRefresh}
+                                />
+                            }
+                            data={serviceData}
                             numColumns={2}
                             renderItem={renderItem}
                         />

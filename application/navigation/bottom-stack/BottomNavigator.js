@@ -9,6 +9,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { COLORS, FONT_BOLD, WP, isIOS } from '../../theme/config';
 import { Home } from '../../screens';
 import HomeStack from '../home-stack/HomeStack';
+import BookingStack from '../booking-stack/BookingStack';
+import RefferalStack from '../referral-stack/ReferralStack';
+import ProfileStack from '../profile-stack/ProfileStack';
 // import {Home} from '../screens/Home/Home';
 
 const Tab = createBottomTabNavigator();
@@ -53,10 +56,9 @@ export default function BottomNavigator() {
             />
             <Tab.Screen
                 name="Calendar"
-                component={Demo}
+                component={BookingStack}
                 options={{
                     tabBarLabel: 'Calendar',
-                    headerShown: true,
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons
                             name="calendar-month-outline"
@@ -79,10 +81,10 @@ export default function BottomNavigator() {
       /> */}
             <Tab.Screen
                 name="Referral"
-                component={Demo}
+                component={RefferalStack}
                 options={{
-                    tabBarLabel: 'Settings',
-                    headerShown: true,
+                    tabBarLabel: 'Referral',
+                    headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="gift-outline" color={color} size={26} />
                     ),
@@ -90,10 +92,10 @@ export default function BottomNavigator() {
             />
             <Tab.Screen
                 name="Profile"
-                component={Demo}
+                component={ProfileStack}
                 options={{
                     tabBarLabel: 'Profile',
-                    headerShown: true,
+                    headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <Ionicons name="person-outline" color={color} size={26} />
                     ),

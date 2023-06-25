@@ -21,6 +21,18 @@ import Checkout from "./Home/Checkout";
 import AddPaymentMethod from "./Home/AddPaymentMethod";
 import SelectPaymentMethod from "./Home/SelectPaymentMethod";
 
+// Bookings
+import UpComingBookings from "./Booking/UpComingBookings";
+import CompleteBooking from "./Booking/CompleteBooking";
+import CancelBooking from "./Booking/CancelBooking";
+import BookingDetail from "./Booking/BookingDetail";
+
+// Referral
+import Referral from "./Referral/Referral";
+// Profile
+import Profile from "./profile/Profile";
+
+
 export {
     Home,
     Services,
@@ -41,5 +53,14 @@ export {
     AskForLocation,
     Gender,
 
+    // bookings
+    UpComingBookings,
+    CompleteBooking,
+    CancelBooking,
+    BookingDetail,
+
+    Referral,
+
+    Profile,
 };
 
