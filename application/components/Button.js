@@ -2,10 +2,10 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { COLORS, WP } from '../theme/config'
 
-const Button = ({ title, onPress, buttonStyle, textStyle }) => {
+const Button = ({ title, onPress, buttonStyle, textStyle, disable = false }) => {
     return (
         <>
-            <TouchableOpacity style={[styles.BtnContainer, buttonStyle]} onPress={onPress}>
+            <TouchableOpacity style={[styles.BtnContainer, { backgroundColor: disable ? COLORS.gray500 : COLORS.blackColor }, buttonStyle,]} onPress={() => disable ? null : onPress()}>
                 <Text style={[styles.BtnText, textStyle]}>{title}</Text>
             </TouchableOpacity>
         </>

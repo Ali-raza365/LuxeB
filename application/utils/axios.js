@@ -5,12 +5,12 @@ import store from '../store/Store';
 const { dispatch, getState } = store;
 
 export async function getHeaders() {
-    let userData = await AsyncStorage.getItem('userData');
-    if (userData) {
-        userData = JSON.parse(userData);
-        //console.log(userData.accessToken, 'header')
+    let token = await AsyncStorage.getItem('token');
+    if (token) {
+        token = JSON.parse(token);
+        // console.log(token, 'header')
         return {
-            authorization: `${userData.access_token}`,
+            authorization: `Token ${token}`,
         };
     }
     return {};
@@ -50,7 +50,7 @@ export async function apiReq(
             })
             .catch(error => {
                 // console.log(error)
-                console.log(error && error.response, 'the error respne')
+                // console.log(error && error.response, 'the error respne')
                 if (error && error.response && error.response.status === 401) {
                     // clearUserData();
                     // NavigationService.resetNavigation();
@@ -67,14 +67,17 @@ export async function apiReq(
 
                 }
                 if (error && error.response && error.response.data) {
-                    // if (error.response.status == 413)
-                    //     return rej('Attachment size should be less than 5MB');
-                    // else if (error?.response?.data?.error)
-                    //     return rej(JSON.stringify(error?.response?.data?.error));
-                    // else if (error?.response?.data?.error)
-                    //     return rej(error?.response?.data?.error);
-                    // else if (error.response.data)
-                    //     return rej(JSON.stringify(error.response.data));
+                    if (error.response.status == 413)
+                        return rej('Attachment size should be less than 5MB');
+                    else if (error.response.status == 401)
+                        return rej({message:error?.response?.data?.detail });
+                    else if (error?.response?.data?.message)
+                    return rej({message:error?.response?.data?.message });
+                    else if (error?.response?.data?.error)
+                    return rej({message:error?.response?.data?.error });
+                    else if (error.response.data)
+                        return rej({message: JSON.stringify(error.response.data) });
+
 
                     // if (error.request) {
                     //     return rej('Server is not responding. Please try again');
@@ -121,6 +124,6 @@ export function getItem(key) {
 }
 
 
-export async function clearUserData() {
-    return AsyncStorage.removeItem('userData');
+export async function clearToken() {
+    return AsyncStorage.removeItem('token');
 }

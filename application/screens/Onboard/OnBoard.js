@@ -27,6 +27,7 @@ import {
     _gotoOnboard,
     _gotoWelcomeScr,
 } from '../../navigation/navigationServcies';
+import { setItem } from '../../utils/axios';
 // import { _setItem } from '../../utils/async';
 
 const Onboard = ({ navigation }) => {
@@ -35,19 +36,18 @@ const Onboard = ({ navigation }) => {
     const flatListRef = useRef(null);
 
     //On Skip Click
-    const _onSkipClick = () => {
-        _gotoWelcomeScr(navigation);
-        // _setItem('onboard', '1')
-        //     .then(() => {
-        //         _gotoHomeNavigator(navigation);
-        //     })
-        //     .catch((err) => {
-        //         alert(err);
-        //     })
+    const _onSkipClick = async () => {
+        await setItem('onboard', '1')
+            .then(() => {
+                _gotoWelcomeScr(navigation);
+            })
+            .catch((err) => {
+                alert(err);
+            })
     };
     const _onNextClick = index => {
         if (index == 1) {
-            _gotoWelcomeScr(navigation);
+            _onSkipClick()
         } else {
             flatListRef.current.scrollToIndex({ index: index + 1 });
         }

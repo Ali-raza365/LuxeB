@@ -1,9 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { AddPaymentMethod, Checkout, Home, SelectPaymentMethod, ServiceDetail, Services, Speciallist } from '../../screens';
-import { COLORS, FS, WP } from '../../theme/config';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { AddPaymentMethod, Checkout, SelectPaymentMethod, ServiceDetail, SpeciallistDetail } from '../../screens';
+import { COLORS, FS, WP } from '../../theme/config';
 import BottomNavigator from './BottomNavigator';
 
 const Stack = createStackNavigator();
@@ -114,8 +114,8 @@ const BottomStack = () => {
                         backgroundColor: COLORS.whiteColor,
                     }
                 }}
-                name='speciallist'
-                component={Speciallist}
+                name='speciallistdetail'
+                component={SpeciallistDetail}
             />
         </Stack.Navigator>
     );

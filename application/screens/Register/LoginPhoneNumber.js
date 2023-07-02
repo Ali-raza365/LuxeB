@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppBar, Button, LabelInput } from '../../components';
 import { _gotoBottomTabs } from '../../navigation/navigationServcies';
@@ -7,41 +7,31 @@ import { COLORS, FS, HP, WP } from '../../theme/config';
 import PhoneInput from "react-native-phone-number-input";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import actions from '../../store/actions';
-import { isValidPhone } from '../../utils/Validation';
 
-export default function PhoneNumber({ navigation }) {
+export default function LoginPhoneNumber({ navigation }) {
 
-    const [loading, setloading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [phoneValue, setphoneValue] = useState('');
-    const [Name, setName] = useState('')
-
     const phoneInput = useRef();
 
     const onPress = async () => {
+
         try {
-            if (Name == '')
-                Alert.alert("Name is Required")
-            else if (phoneValue == '')
+            if (phoneValue == '')
                 Alert.alert("Phone Number is Required")
             // else if (!isValidPhone(phoneValue))
             //     Alert.alert("Phone Number is not Vaild")
             else {
-                setloading(true)
-                let detail = {
-                    phone: phoneValue,
-                    name: Name
-                }
-                await actions.OnSignUpUser(detail, navigation).then(() => {
-                    setloading(false)
-                })
-                    .catch(() => {
-                        setloading(false)
-                    })
+                setLoading(true)
+                let detail = { phone: phoneValue, }
+                await actions.OnLoginUser(detail, navigation)
+                setLoading(false)
             }
-        } catch (error) {
-            setloading(false)
 
+        } catch (error) {
+            setLoading(false)
         }
+
         // _gotoBottomTabs(navigation);
     };
 
@@ -55,21 +45,12 @@ export default function PhoneNumber({ navigation }) {
                         <View style={styles.mainStyle}>
                             <View style={styles.innerContainer}>
                                 <View style={styles.headingContainer}>
-                                    <Text style={styles.heading}>What’s your phone number?</Text>
+                                    <Text style={styles.heading}>Login to your{'\n'} Account</Text>
                                     <Text style={styles.desc}>
                                         Create An account and start browsing
                                     </Text>
                                 </View>
                                 <View>
-
-                                    <LabelInput
-                                        label={'Name'}
-                                        value={Name}
-                                        onChangeText={(val) => setName(val)}
-                                        placeholder={'Enter your name'}
-                                        containerStyle={{ marginBottom: WP(4) }}
-                                    />
-
                                     <PhoneInput
                                         ref={phoneInput}
                                         defaultValue={phoneValue}
@@ -84,7 +65,6 @@ export default function PhoneNumber({ navigation }) {
                                         onChangeFormattedText={(text) => {
                                             setphoneValue(text);
                                         }}
-                                        // onChangeFormattedText={}
                                         flagButtonStyle={{
                                             borderRightWidth: 1,
                                             borderColor: COLORS.blackColor
@@ -99,9 +79,8 @@ export default function PhoneNumber({ navigation }) {
                                         withDarkTheme
                                     />
                                 </View>
-                                <Text style={styles.textInfo}>Already have an account?  <Text style={{ fontWeight: '600', textDecorationLine: 'underline' }} onPress={() => { navigation.navigate('loginphonenumber') }} >Login</Text></Text>
+                                <Text style={styles.textInfo}>Don’t have an account?  <Text style={{ fontWeight: '600', textDecorationLine: 'underline' }} onPress={() => { navigation.navigate('phoneNumber') }} >Register </Text></Text>
                             </View>
-
 
                             <Button
                                 title="Continue"
@@ -111,7 +90,6 @@ export default function PhoneNumber({ navigation }) {
                             />
                         </View>
                     </View>
-
                 </View>
             </KeyboardAwareScrollView>
         </View>
@@ -147,6 +125,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: COLORS.blackColor,
         fontSize: FS(3.5),
+        letterSpacing: 0.5,
     },
     desc: {
         paddingTop: HP(1),
@@ -171,3 +150,4 @@ const styles = StyleSheet.create({
     }
 
 });
+

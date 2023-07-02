@@ -32,3 +32,6 @@ export const _gotophoneNumber = (navigation) => {
 export const _gotoAskForLocation = (navigation) => {
     navigation.navigate('auth',{screen:'askForLocation'})
 }
+export const _gotoVoucherTabs = (navigation) => {
+    navigation.navigate('vouchertabs')
+}

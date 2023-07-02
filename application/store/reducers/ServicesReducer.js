@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const ServicesReducer = createSlice({
     name: 'service',
     initialState: {
-        serviceDetail: {
+        speciallistDetail: {
             "id": 9,
             "username": "faisal",
             "therapist_info": [
@@ -71,9 +71,6 @@ export const ServicesReducer = createSlice({
         therapistsList: null,
     },
     reducers: {
-        setServiceDetail: (state, action) => {
-            state.serviceDetail = action.payload
-        },
         decrement: state => {
             state.value -= 1
         },
@@ -86,11 +83,13 @@ export const ServicesReducer = createSlice({
         saveTherapistsList: (state, action) => {
             state.therapistsList = action.payload
         },
-
+        setSpeciallistDetail: (state, action) => {
+            state.speciallistDetail = action.payload
+        },
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { setServiceDetail, decrement, incrementByAmount, saveServicesCategories, saveTherapistsList } = ServicesReducer.actions
+export const { setSpeciallistDetail, decrement, incrementByAmount, saveServicesCategories, saveTherapistsList } = ServicesReducer.actions
 
 export default ServicesReducer.reducer

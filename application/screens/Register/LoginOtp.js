@@ -1,32 +1,31 @@
 import React, { useRef, useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppBar, Button } from '../../components';
 import { _gotoAskForLocation, _gotoBottomTabs } from '../../navigation/navigationServcies';
 import { COLORS, FS, HP, WP } from '../../theme/config';
 import OTPTextView from 'react-native-otp-textinput';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { useSelector } from 'react-redux';
 import actions from '../../store/actions';
+import { useSelector } from 'react-redux';
 
-export default function VerifyOtp({ navigation }) {
+export default function LoginOtp({ navigation }) {
 
+    const {  phoneNumber } = useSelector(store => store.user)
     const [otpCode, setOtpCode] = useState('');
     let otpInput = useRef(null);
-    const { signup_name, signup_phone } = useSelector(store => store.user)
-
     const onPress = async () => {
         if (otpCode == '')
             Alert.alert('OTP Code is Required')
         else if (otpCode.length != 4)
             Alert.alert('OTP Code is inVaild')
         else {
+            console.log({phoneNumber})
             let detail = {
-                phone: signup_phone,
-                name: signup_name,
+                phone: phoneNumber,
                 otp: otpCode
             }
-            await actions.OnVerifySignUpOtp(detail, navigation)
+            await actions.OnVerifyLoginOtp(detail, navigation)
         }
     };
 
@@ -34,7 +33,7 @@ export default function VerifyOtp({ navigation }) {
         <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
             <KeyboardAwareScrollView>
                 <View style={styles.container}>
-                    <View style={{ height: '88%' }}>
+                    <View style={{ height:'88%'}}>
                         <AppBar type={'dark'} backgroundColor={COLORS.offWhiteColor} />
                         <View style={styles.mainStyle}>
                             <View style={styles.innerContainer}>
@@ -63,13 +62,13 @@ export default function VerifyOtp({ navigation }) {
                                 </View>
                             </View>
                             <Button
-                                title="Continue"
-                                onPress={onPress}
-                                buttonStyle={styles.buttonStyle}
-                            />
+                        title="Continue"
+                        onPress={onPress}
+                        buttonStyle={styles.buttonStyle}
+                    />
                         </View>
                     </View>
-
+                   
                 </View>
             </KeyboardAwareScrollView>
 

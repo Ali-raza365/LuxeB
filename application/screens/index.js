@@ -11,12 +11,14 @@ import PhoneNumber from "./Register/PhoneNumber";
 import VerifyOtp from "./Register/VerifyOtp";
 import AskForLocation from "./Register/AskForLocation";
 import Gender from "./Register/Gender";
+import LoginPhoneNumber from "./Register/LoginPhoneNumber";
+import LoginOtp from "./Register/LoginOtp";
 
 // Home Screens 
 import Home from "./Home/Home";
 import Services from "./Home/Services";
 import ServiceDetail from "./Home/ServiceDetail";
-import Speciallist from "./Home/Speciallist";
+import SpeciallistDetail from "./Home/SpeciallistDetail";
 import Checkout from "./Home/Checkout";
 import AddPaymentMethod from "./Home/AddPaymentMethod";
 import SelectPaymentMethod from "./Home/SelectPaymentMethod";
@@ -31,13 +33,14 @@ import BookingDetail from "./Booking/BookingDetail";
 import Referral from "./Referral/Referral";
 // Profile
 import Profile from "./profile/Profile";
+import AvailableVoucher from "./profile/AvailableVoucher";
 
 
 export {
     Home,
     Services,
     ServiceDetail,
-    Speciallist,
+    SpeciallistDetail,
     Checkout,
     AddPaymentMethod,
     SelectPaymentMethod,
@@ -52,7 +55,9 @@ export {
     VerifyOtp,
     AskForLocation,
     Gender,
-
+    LoginPhoneNumber,
+    LoginOtp,
+    
     // bookings
     UpComingBookings,
     CompleteBooking,
@@ -62,5 +67,6 @@ export {
     Referral,
 
     Profile,
+    AvailableVoucher,
 };
 

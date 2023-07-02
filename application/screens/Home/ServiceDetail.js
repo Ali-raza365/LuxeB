@@ -7,25 +7,33 @@ import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import StarRating from 'react-native-star-rating';
 import { useSelector } from 'react-redux';
+import actions from '../../store/actions';
+import { API_BASE_URL } from '../../api/apis';
 
 const ServiceDetail = ({ navigation }) => {
 
     const servicesData = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,];
     const [filterValue, setFilterValue] = useState("Silver")
-    const therapistData = useSelector(store=>store.service.therapistsList)
+    const therapistData = useSelector(store => store.service.therapistsList)
     const filterArray = [
         { name: "Silver", icon: (<AntDesign name="heart" size={WP(4)} color={COLORS.whiteColor} />) },
         { name: "Gold", icon: (<AntDesign name="star" size={WP(4)} color={COLORS.whiteColor} />) },
         { name: "Diamond", icon: (<MatComIcons name="diamond" size={WP(4)} color={COLORS.whiteColor} />) },
     ];
 
-    
+
 
     const timeArr = ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM"]
 
 
-    const onServiceClick = () => {
-        navigation.navigate("speciallist")
+    const onSpeciallistClick = async (item) => {
+       
+        try {
+            await actions.onSpeciallistClick(item, navigation)
+        } catch (error) {
+            console.log("error riased in on Speciallist detail api", error)
+            alert(error?.message)
+        }
     }
 
     let SpeciallistArr = [
@@ -205,7 +213,7 @@ const ServiceDetail = ({ navigation }) => {
 
     const renderItem = ({ item, index }) => {
         return (
-            <Pressable onPress={onServiceClick} style={styles.listContainer}>
+            <Pressable onPress={() => onSpeciallistClick(item)} style={styles.listContainer}>
                 <View style={styles.listTopView}>
                     <View style={styles.listLeftView}>
                         <View style={styles.listHeaderContainer}>
@@ -225,16 +233,16 @@ const ServiceDetail = ({ navigation }) => {
                             <StarRating
                                 disabled={false}
                                 maxStars={5}
-                                rating={item?.reviews?.average_rating||0}
+                                rating={item?.reviews?.average_rating || 0}
                                 starSize={WP(5)}
                                 containerStyle={{ width: '50%' }}
                             />
-                            <Text style={{ paddingHorizontal: WP(1.5) }}>{item?.reviews?.average_rating||0}</Text>
-                            <Text>({item?.reviews?.total_ratings||0})</Text>
+                            <Text style={{ paddingHorizontal: WP(1.5) }}>{item?.reviews?.average_rating || 0}</Text>
+                            <Text>({item?.reviews?.total_ratings || 0})</Text>
                         </View>
                     </View>
                     <View style={styles.listRightView}>
-                        <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60" }} />
+                        <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: API_BASE_URL + item?.profile_image || '' }} />
                     </View>
                 </View>
                 <View style={styles.listBottomView}>
@@ -280,7 +288,7 @@ const ServiceDetail = ({ navigation }) => {
 
             <View >
                 <FlatList
-                    data={therapistData||[]}
+                    data={therapistData || []}
                     renderItem={renderItem}
                     keyExtractor={(_, index) => index.toString()}
                     showsVerticalScrollIndicator={false}

@@ -3,8 +3,20 @@ import React from 'react';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS, WP } from '../../theme/config'
+import { clearToken } from '../../utils/axios';
+import { _gotoVoucherTabs } from '../../navigation/navigationServcies';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
+
+    const onLogout = () => {
+        clearToken()
+        navigation.navigate('splash')
+    }
+
+    const onVoucherClick =()=>{
+        _gotoVoucherTabs(navigation)
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.row}>
@@ -13,19 +25,19 @@ const Profile = () => {
             </View>
             <View style={styles.row}>
                 <View style={styles.leftViewContainer}>
-                    <View style={{marginBottom:WP(5)}}>
+                    <View style={{ marginBottom: WP(5) }}>
                         <Text style={styles.labelSty}>Name</Text>
                         <Text style={styles.textSty}>Maria Bethany</Text>
                     </View>
-                    <View style={{marginBottom:WP(5)}}>
+                    <View style={{ marginBottom: WP(5) }}>
                         <Text style={styles.labelSty}>Contact Number</Text>
                         <Text style={styles.textSty}>+8801800000000</Text>
                     </View>
-                    <View style={{marginBottom:WP(5)}}>
+                    <View style={{ marginBottom: WP(5) }}>
                         <Text style={styles.labelSty}>Date of birth</Text>
                         <Text style={styles.textSty}>DD MM YYYY</Text>
                     </View>
-                    <View style={{marginBottom:WP(5)}}>
+                    <View style={{ marginBottom: WP(5) }}>
                         <Text style={styles.labelSty}>Location</Text>
                         <Text style={styles.textSty}>Add Details</Text>
                     </View>
@@ -47,7 +59,8 @@ const Profile = () => {
 
             <Text style={styles.headingText}>Addresses</Text>
             <Text style={styles.headingText}>Payment Methods</Text>
-            <Text style={styles.headingText}>Vouchers</Text>
+            <Text onPress={onVoucherClick} style={styles.headingText}>Vouchers</Text>
+            <Text onPress={onLogout} style={styles.headingText}>Logout</Text>
 
         </View>
     )
@@ -68,8 +81,8 @@ const styles = StyleSheet.create({
         fontSize: WP(4.5),
         letterSpacing: 1,
         fontWeight: '700',
-        color:COLORS.blackColor,
-        
+        color: COLORS.blackColor,
+
     },
     rightViewContainer: {
         marginTop: WP(4),
@@ -95,20 +108,20 @@ const styles = StyleSheet.create({
         fontSize: WP(3.3),
         letterSpacing: 1,
         fontWeight: '700',
-        color:COLORS.blackColor,
+        color: COLORS.blackColor,
     },
     textSty: {
         marginTop: WP(2.5),
         fontSize: WP(4),
         letterSpacing: 1,
-        color:COLORS.blackColor,
+        color: COLORS.blackColor,
     },
     headingText: {
-        marginTop:WP(5),
+        marginTop: WP(5),
         fontSize: WP(4.5),
         letterSpacing: 1,
         fontWeight: '700',
-        color:COLORS.blackColor,
-        
+        color: COLORS.blackColor,
+
     },
 })

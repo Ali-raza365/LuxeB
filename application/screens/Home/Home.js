@@ -80,7 +80,7 @@ const Home = ({ navigation }) => {
         } catch (error) {
             setLoading(false)
             console.log("error riased in sevices api", error)
-            alert(error)
+            alert(error.message)
         }
     }
 
@@ -96,8 +96,6 @@ const Home = ({ navigation }) => {
             console.log("error riased in on services api", error)
             alert(error?.message)
         }
-
-
     }
 
     let dataSliider = [

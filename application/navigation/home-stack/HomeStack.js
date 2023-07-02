@@ -1,9 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { Home, ServiceDetail, Services, Speciallist } from '../../screens';
-import { COLORS, FS, WP } from '../../theme/config';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Home, ServiceDetail, Services, SpeciallistDetail } from '../../screens';
+import { COLORS, FS, WP } from '../../theme/config';
 
 const Stack = createStackNavigator();
 
@@ -76,8 +76,8 @@ const HomeStack = () => {
                         backgroundColor: COLORS.whiteColor,
                     }
                 }}
-                name='speciallist'
-                component={Speciallist}
+                name='speciallistdetail'
+                component={SpeciallistDetail}
             />
         </Stack.Navigator>
     );

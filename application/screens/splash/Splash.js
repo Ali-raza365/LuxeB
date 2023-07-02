@@ -1,21 +1,41 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { COLORS, FS, HP, WP } from '../../theme/config'
-import { _gotoBottomTabs, _gotoOnboard } from '../../navigation/navigationServcies'
+import { _gotoAskForLocation, _gotoBottomTabs, _gotoOnboard, _gotoWelcomeScr } from '../../navigation/navigationServcies'
 import { AppBar } from '../../components'
+import { getItem } from '../../utils/axios'
 
 export default function Splash({ navigation }) {
 
     useEffect(() => {
-        setTimeout(() => {
-            // _gotoOnboard(navigation)
-            _gotoBottomTabs(navigation);
+        setTimeout(async () => {
+            try {
+                await getItem('token')
+                    .then(async (value) => {
+                        if (value) {
+                            _gotoAskForLocation(navigation);
+                        } else {
+                            await getItem('onboard')
+                                .then(async (value) => {
+                                    if (value == '1')
+                                        _gotoWelcomeScr(navigation);
+                                    else {
+                                        _gotoOnboard(navigation);
+                                    }
+                                })
+                        }
+                    })
+            } catch (error) {
+                console.log('splash error', error)
+            }
+
+            // _gotoBottomTabs(navigation);
 
         }, 1000)
     }, [])
     return (
         <View style={styles.container}>
-            <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} /> 
+            <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
             <Text style={styles.headerText} >U B E A U T Y</Text>
         </View>
     )

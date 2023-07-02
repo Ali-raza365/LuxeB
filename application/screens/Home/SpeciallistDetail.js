@@ -9,11 +9,12 @@ import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import { AppBar, Button } from '../../components';
 import DateTimeModal from './components/DateTimeModal';
 import { useSelector, useDispatch } from 'react-redux';
-import { setServiceDetail } from '../../store/reducers/ServicesReducer';
+import { setSpeciallistDetail } from '../../store/reducers/ServicesReducer';
+import { API_BASE_URL } from '../../api/apis';
 
 
 
-const Speciallist = () => {
+const SpeciallistDetail = () => {
 
     const dispatch = useDispatch()
     const [selectedTab, setSelectedTab] = useState("Services");
@@ -25,14 +26,12 @@ const Speciallist = () => {
         setShowDateTimeModal(!showDateTimeModal)
     }
 
-    const serviceDetail = useSelector(state => state.service.serviceDetail);
-
-    console.log({ serviceDetail })
+    const speciallistDetail = useSelector(state => state.service.speciallistDetail);
 
     const incrementQuantity = (subServiceId) => {
         let change = {
-            ...serviceDetail,
-            services: serviceDetail.services.map(service => {
+            ...speciallistDetail,
+            services: speciallistDetail.services.map(service => {
                 return {
                     ...service,
                     sub_services: service.sub_services.map(subService => {
@@ -47,13 +46,13 @@ const Speciallist = () => {
                 }
             })
         }
-        dispatch(setServiceDetail(change))
+        dispatch(setSpeciallistDetail(change))
     };
 
     const decrementQuantity = (subServiceId) => {
         let change = {
-            ...serviceDetail,
-            services: serviceDetail.services.map(service => {
+            ...speciallistDetail,
+            services: speciallistDetail.services.map(service => {
                 return {
                     ...service,
                     sub_services: service.sub_services.map(subService => {
@@ -68,13 +67,13 @@ const Speciallist = () => {
                 }
             })
         }
-        dispatch(setServiceDetail(change))
+        dispatch(setSpeciallistDetail(change))
     };
 
     const onServiceSelect = (subServiceId) => {
         let change = {
-            ...serviceDetail,
-            services: serviceDetail.services.map(service => {
+            ...speciallistDetail,
+            services: speciallistDetail.services.map(service => {
                 return {
                     ...service,
                     sub_services: service.sub_services.map(subService => {
@@ -89,7 +88,7 @@ const Speciallist = () => {
                 }
             })
         }
-        dispatch(setServiceDetail(change))
+        dispatch(setSpeciallistDetail(change))
     };
 
     let speciallistData = {
@@ -158,10 +157,12 @@ const Speciallist = () => {
     }
 
     useEffect(() => {
-        let check = serviceDetail?.services[0]?.sub_services.find((item) => item.isSelected == true)
+        let check = speciallistDetail?.services?.[0]?.sub_services.find((item) => item.isSelected == true)
         setSelected(check)
         // console.log(check)
-    }, [serviceDetail])
+    }, [speciallistDetail])
+
+    console.log(speciallistDetail)
 
 
 
@@ -193,23 +194,23 @@ const Speciallist = () => {
             <View style={styles.listTopView}>
                 <View style={styles.listLeftView}>
                     <View style={styles.listHeaderContainer}>
-                        <Text style={styles.listHeading}>{serviceDetail?.username || ''}</Text>
+                        <Text style={styles.listHeading}>{speciallistDetail?.username || ''}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         {
-                            serviceDetail.services.map((service, index) => {
-                                return <Text key={index} style={styles.listText} >{service?.service?.service_name || ''}{serviceDetail?.services.length != index + 1 ? ',' : ''} </Text>
+                            speciallistDetail?.services && speciallistDetail?.services?.map((service, index) => {
+                                return <Text key={index} style={styles.listText} >{service?.service?.service_name || ''}{speciallistDetail?.services.length != index + 1 ? ',' : ''} </Text>
                             })
                         }
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View style={styles._circleView}>
                             {
-                                serviceDetail?.therapist_info?.[0]?.type == 'silver' ?
+                                speciallistDetail?.therapist_info?.[0]?.type == 'silver' ?
                                     <AntDesign name="heart" size={WP(4.5)} color={COLORS.whiteColor} />
-                                    : serviceDetail?.therapist_info?.[0]?.type == 'gold' ?
+                                    : speciallistDetail?.therapist_info?.[0]?.type == 'gold' ?
                                         <AntDesign name="star" size={WP(4.5)} color={COLORS.whiteColor} />
-                                        : serviceDetail?.therapist_info?.[0]?.type == 'diamond' ?
+                                        : speciallistDetail?.therapist_info?.[0]?.type == 'diamond' ?
                                             <MatComIcons name="diamond" size={WP(4.5)} color={COLORS.whiteColor} />
                                             : null
                             }
@@ -217,16 +218,16 @@ const Speciallist = () => {
                         <StarRating
                             disabled={false}
                             maxStars={5}
-                            rating={serviceDetail?.reviews?.average_rating || 0}
+                            rating={speciallistDetail?.reviews?.average_rating || 0}
                             starSize={FS(2.2)}
                             containerStyle={{ width: '48%', marginLeft: WP(2) }}
                         />
-                        <Text style={{ paddingHorizontal: WP(1.5) }}>{serviceDetail?.reviews?.average_rating || 0}</Text>
-                        <Text>({serviceDetail?.reviews?.total_ratings || 0})</Text>
+                        <Text style={{ paddingHorizontal: WP(1.5) }}>{speciallistDetail?.reviews?.average_rating || 0}</Text>
+                        <Text>({speciallistDetail?.reviews?.total_ratings || 0})</Text>
                     </View>
                 </View>
                 <View style={styles.listRightView}>
-                    <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60" }} />
+                    <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: API_BASE_URL + speciallistDetail?.profile_image || '' }} />
                 </View>
             </View>
 
@@ -245,7 +246,7 @@ const Speciallist = () => {
             {
                 selectedTab == 'Services' ?
                     <FlatList
-                        data={serviceDetail?.services[0]?.sub_services || []}
+                        data={speciallistDetail?.services?.[0]?.sub_services || []}
                         keyExtractor={(_, index) => index.toString()}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ padding: WP(2), }}
@@ -265,7 +266,7 @@ const Speciallist = () => {
                                         </View>
                                         <View style={{ flexDirection: "row" }}>
                                             <Text style={styles.headingText}>Price:</Text>
-                                            <Text style={styles.price}>${Number(item?.price * item?.quantity)}</Text>
+                                            <Text style={styles.price}>${Number(item?.price * item?.quantity||1)}</Text>
                                         </View>
                                         <Button
                                             onPress={() => onServiceSelect(item?.sub_service?.id)}
@@ -279,11 +280,11 @@ const Speciallist = () => {
                         }}
                     /> :
                     selectedTab == 'Review' ?
-                        serviceDetail.reviews.all_reviews.map((item, index) => {
+                        speciallistDetail.reviews.all_reviews.map((item, index) => {
                             return (
                                 <View key={index} style={styles.reviewContainer}>
                                     <View style={styles.reviewInfoContainer}>
-                                        <Text style={styles.reviewHeading}>{serviceDetail?.username || ''}</Text>
+                                        <Text style={styles.reviewHeading}>{speciallistDetail?.username || ''}</Text>
                                         <View style={{ flexDirection: 'row', marginVertical: WP(1) }}>
                                             <StarRating
                                                 disabled={false}
@@ -294,7 +295,7 @@ const Speciallist = () => {
                                             />
                                             <Text style={{ paddingHorizontal: WP(1.5) }}>{item.rating || 0}</Text>
                                         </View>
-                                        <Text style={styles.reviewText} >{item?.review_text || ''}{serviceDetail?.services.length != index + 1 ? ',' : ''} </Text>
+                                        <Text style={styles.reviewText} >{item?.review_text || ''}{speciallistDetail?.services.length != index + 1 ? ',' : ''} </Text>
                                     </View>
                                     <View style={styles.reviewImageContainer}>
                                         <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60" }} />
@@ -304,7 +305,7 @@ const Speciallist = () => {
                         })
                         : selectedTab == 'About' ?
                             <View style={styles.CardBox}>
-                                <Text style={{ fontSize: FS(1.8), color: COLORS.blackColor }} >{serviceDetail?.therapist_info?.[0]?.about || ''}</Text>
+                                <Text style={{ fontSize: FS(1.8), color: COLORS.blackColor }} >{speciallistDetail?.therapist_info?.[0]?.about || ''}</Text>
                             </View>
                             : selectedTab == 'Products' ?
                                 <View />
@@ -325,7 +326,7 @@ const Speciallist = () => {
     )
 }
 
-export default Speciallist
+export default SpeciallistDetail
 
 const styles = StyleSheet.create({
     container: {
