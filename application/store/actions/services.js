@@ -1,6 +1,6 @@
 
 import { useNavigation } from "@react-navigation/native";
-import { GET_SERVICES_CATEGOIES_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API } from "../../api/apis";
+import { GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API } from "../../api/apis";
 import { apiGet, apiPost } from "../../utils/axios";
 import { _formatDate } from "../../utils/TimeFunctions";
 import { saveServicesCategories, saveTherapistsList, setSpeciallistDetail } from "../reducers/ServicesReducer";
@@ -12,6 +12,20 @@ export function fetchServicesCategories() {
         apiGet(GET_SERVICES_CATEGOIES_API).then((res) => {
             if (!!res) {
                 store.dispatch(saveServicesCategories(res))
+                resolve(res)
+                return;
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+
+export function fetchSliderItems() {
+    return new Promise((resolve, reject) => {
+        apiGet(GET_SLIDER_API).then((res) => {
+            if (!!res) {
                 resolve(res)
                 return;
             }
@@ -40,6 +54,20 @@ export function onServiceSelect(service, navigation, type) {
                 if (navigation) {
                     navigation.navigate('servicedetail')
                 }
+                return;
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+
+export function getTherapistAvailability(data) {
+    return new Promise((resolve, reject) => {
+        apiPost(GET_THERAPISTS_AVAILIBLE_API, data).then((res) => {
+            if (!!res) {
+                resolve(res)
                 return;
             }
             resolve(res)

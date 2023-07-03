@@ -12,11 +12,13 @@ import actions from '../../store/actions';
 import { API_BASE_URL } from '../../api/apis';
 import { _formatDate } from '../../utils/TimeFunctions';
 import { useSelector } from 'react-redux';
+import { clearToken } from '../../utils/axios';
 
 const Home = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false)
     const [serviceData, setServiceData] = useState(null);
+    const [sliderItems, setsliderItems] = useState([])
 
     const data = [
         {
@@ -71,6 +73,20 @@ const Home = ({ navigation }) => {
         },
     ];
 
+    const fetchSliderItems = async () => {
+        try {
+            let res = await actions.fetchSliderItems()
+            setsliderItems(res)
+        } catch (error) {
+            console.log("error riased in sevices api", error)
+            if (error?.status == 401) {
+                clearToken()
+                navigation.navigate('splash')
+            } else
+                alert(error.message)
+        }
+    }
+
     const _handleRefresh = async () => {
         try {
             setLoading(true)
@@ -85,9 +101,9 @@ const Home = ({ navigation }) => {
     }
 
     useEffect(() => {
+        fetchSliderItems()
         _handleRefresh()
     }, [])
-
 
     const onServiceClick = async (service) => {
         try {
@@ -97,12 +113,6 @@ const Home = ({ navigation }) => {
             alert(error?.message)
         }
     }
-
-    let dataSliider = [
-        { image: IMAGES.slider1 },
-        { image: IMAGES.slider2 },
-        { image: IMAGES.slider3 },
-    ]
 
     const renderItem = ({ item, index }) => {
         return (
@@ -117,17 +127,6 @@ const Home = ({ navigation }) => {
             </Pressable>
         )
     }
-
-    const renderSlider = ({ item, index }) => {
-        return (
-            <CardBox
-                onPress={() => { navigation.navigate("eventdetail", { detail: item }) }}
-                showsHorizontalScrollIndicator={false}
-                data={item}
-            />
-        )
-    }
-
     return (
         <>
             <SafeAreaView style={styles.container}>
@@ -137,46 +136,13 @@ const Home = ({ navigation }) => {
                 </View>
 
                 <ScrollView>
-                    <View style={[styles._sectionOne, { paddingBottom: 0 }]}>
-                        {/* <FlatList
-                            data={[{}, {}, {}]}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            pagingEnabled
-                            scrollEventThrottle={16}
-                            decelerationRate={'fast'}
-                            snapToInterval={WP(100)}
-                            renderItem={renderSlider}
-                        /> */}
-                        <ImageCarousel data={dataSliider} />
-                    </View>
-                    {/* <View style={styles._sectionTwo}>
-                        <View style={styles.dateView}>
-                            <Text style={styles._month}>Sep</Text>
-                            <Text style={styles._day}>30</Text>
-                            <Text style={styles._year}>22</Text>
-                        </View>
-                        <View style={styles.infoView}>
-                            <Text style={styles.infoHeading}>Haircuts and trims</Text>
-                            <View style={styles.infoContainer}>
-                                <View style={styles.infoDetails}>
-                                    <View style={styles._circleView}>
-                                        <AntDesign name="heart" size={WP(3.5)} color={COLORS.whiteColor} />
-                                    </View>
-                                    <Text style={styles.infoTitle}>  Prime Label  </Text>
-                                </View>
-                                <View style={styles.infoIcons}>
-                                    <View style={styles._circleView}>
-                                        <Fontisto name="clock" size={WP(3.5)} color={COLORS.whiteColor} />
-                                    </View>
-                                    <Text style={styles.infoTime}>  15:00</Text>
-                                </View>
+                    {
+                        sliderItems && sliderItems.length != 0 ?
+                            <View style={[styles._sectionOne, { paddingBottom: 0 }]}>
+                                <ImageCarousel data={sliderItems} />
                             </View>
-                        </View>
-                        <View style={styles.nextView}>
-                            <Entypo name="chevron-small-right" size={WP(7)} color={COLORS.whiteColor} />
-                        </View>
-                    </View> */}
+                            : null
+                    }
 
                     <View style={styles.FilterView}>
                         <View style={{ flexDirection: 'row' }}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal from "react-native-modal"
 import EvilIcons from "react-native-vector-icons/EvilIcons"
 import { COLORS, DAYS, HP, SPACING_PERCENT, TEXT_SIZES, WP } from '../../../theme/config'
@@ -9,11 +9,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { Button } from '../../../components'
 import { useNavigation } from '@react-navigation/native'
+import actions from '../../../store/actions'
 
-export default function DateTimeModal({ isVisible, onBackButtonPress, onBackdropPress }) {
+export default function DateTimeModal({ therapist, isVisible, onBackButtonPress, onBackdropPress }) {
 
     const navigation = useNavigation()
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [bookingDate, setBookingDate] = useState(null);
+    const [timeSlots, setTimeSlots] = useState([]);
+    const [loading, setLoading] = useState(false)
     const [dates, setDates] = useState([]);
     const timeArr = ["7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00"];
 
@@ -48,8 +52,6 @@ export default function DateTimeModal({ isVisible, onBackButtonPress, onBackdrop
             });
             date.setDate(date.getDate() + 1);
         }
-
-
         setDates(dates)
     }
 
@@ -64,8 +66,32 @@ export default function DateTimeModal({ isVisible, onBackButtonPress, onBackdrop
         setSelectedDate(date)
     }
 
+    const onSelectBookingDate = async (date) => {
+        try {
+            setLoading(true)
+            let detail = {
+                therapist_id: therapist?.id,
+                date: _formatDate(date)
+            }
+            let response = await actions.getTherapistAvailability(detail)
+            if (response?.message) {
+                Alert.alert(response?.message)
+            } else if (response) {
+                setLoading(false)
+                setSelectedDate(date);
+                setBookingDate(date);
+                setTimeSlots(response)
+            }
+
+        } catch (error) {
+            setLoading(false)
+            alert(error?.message)
+        }
+
+    }
+
     useEffect(() => {
-        getMonthDates(selectedDate)
+        getMonthDates(new Date)
     }, [selectedDate])
 
 
@@ -111,13 +137,14 @@ export default function DateTimeModal({ isVisible, onBackButtonPress, onBackdrop
                                     // const calDate = _formatDate(item?.formattedDate)
 
                                     // console.log(currDate,calDate , currDate==calDate)
+                                    let checkDateIsSelected = bookingDate && bookingDate?.getDate() == item.dayIndex;
                                     return (
                                         <TouchableOpacity
                                             key={index}
-                                            onPress={() => { setSelectedDate(item?.date) }}
-                                            style={[Styles.CalBtnStyle, { backgroundColor: selectedDate.getDate() == item.dayIndex ? COLORS.blackColor : COLORS.whiteColor }]}
+                                            onPress={() => { onSelectBookingDate(item.date) }}
+                                            style={[Styles.CalBtnStyle, { backgroundColor: checkDateIsSelected ? COLORS.blackColor : COLORS.whiteColor }]}
                                         >
-                                            <Text numberOfLines={1} style={[Styles.DateCountSty, { color: selectedDate.getDate() == item.dayIndex ? COLORS.whiteColor : COLORS.blackColor }]}>{item?.dayIndex || ''}</Text>
+                                            <Text numberOfLines={1} style={[Styles.DateCountSty, { color: checkDateIsSelected ? COLORS.whiteColor : COLORS.blackColor }]}>{item?.dayIndex || ''}</Text>
                                         </TouchableOpacity>
                                     )
                                 } else {
@@ -134,8 +161,8 @@ export default function DateTimeModal({ isVisible, onBackButtonPress, onBackdrop
                         style={{ marginVertical: WP(3) }}
                     >
                         {
-                            timeArr.map((item, index) => {
-                                return <Text key={index} style={{ padding: WP(3), paddingHorizontal: WP(4), marginLeft: WP(2), borderWidth: 1, fontSize: WP(4), letterSpacing: 1, borderColor: COLORS.blackColor }}>{item}</Text>
+                            bookingDate && timeSlots.length != 0 && timeArr?.map((item, index) => {
+                                return <Text key={index} style={{ padding: WP(1.5), paddingHorizontal: WP(3), marginLeft: WP(2), borderWidth: 1, fontSize: WP(4.2), fontWeight: '600', letterSpacing: 1, borderColor: COLORS.blackColor }}>{item}</Text>
                             })
                         }
                     </ScrollView>
@@ -200,7 +227,8 @@ const Styles = StyleSheet.create({
 
     },
     _calendarBtn: {
-        minWidth: '40%',
+        // minWidth: '40%',
+        paddingHorizontal: WP(2),
         height: HP(4.5),
         backgroundColor: COLORS.blackColor,
         alignItems: 'center',
@@ -212,7 +240,6 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
-        // backgroundColor:'cyan'
     },
     _calendarView: {
         marginTop: WP(5),

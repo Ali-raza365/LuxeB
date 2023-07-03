@@ -6,11 +6,11 @@ import { COLORS, HP, WP } from '../theme/config'
 export default function CardBox({ data, onPress }) {
     return (
         <View style={Styles._mainContainer}>
-            <Text style={Styles._subHeading} >It’s time to bloom!</Text>
-            <Text style={Styles._heading} >Art of make up</Text>
-            <Text style={Styles._detail} >Valentine’s Week only</Text>
+            <Text style={Styles._subHeading} >{data?.title || ''}</Text>
+            <Text style={Styles._heading} >{data?.headline || ''}</Text>
+            <Text style={Styles._detail} >{data?.description || ''}</Text>
             <View style={Styles._chip}>
-                <Text style={Styles._discount}>50%</Text>
+                <Text style={Styles._discount}>{data?.discount || ''}</Text>
             </View>
         </View>
     )
@@ -21,7 +21,7 @@ const Styles = StyleSheet.create({
         width: WP(90),
         height: HP(23),
         overflow: "hidden",
-        backgroundColor:'rgba(0,0,0,0.2)',
+        backgroundColor: 'rgba(0,0,0,0.2)',
         // margin: WP(1),
         // borderWidth: 1,
         // marginHorizontal: 10,

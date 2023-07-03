@@ -1,6 +1,6 @@
 import { Alert } from "react-native";
-import { GET_THERAPISTS_DETAIL_API, LOGIN_API, LOGIN_VERIFY_OTP_API, SIGN_UP_API, SIGN_UP_VERIFY_OTP_API } from "../../api/apis";
-import { apiPost, setItem } from "../../utils/axios";
+import { GET_THERAPISTS_DETAIL_API, LOGIN_API, LOGIN_VERIFY_OTP_API, LOGOUT_API, SIGN_UP_API, SIGN_UP_VERIFY_OTP_API } from "../../api/apis";
+import { apiGet, apiPost, clearToken, setItem } from "../../utils/axios";
 import { saveTherapistsList } from "../reducers/ServicesReducer";
 import { savePhoneNumber, saveSignUpCredentials } from "../reducers/UserReducer";
 import store from "../Store";
@@ -56,7 +56,6 @@ export function OnLoginUser(data, navigation) {
         }).catch((error) => {
             reject(error)
             Alert.alert(error?.message)
-
         })
     })
 }
@@ -68,6 +67,23 @@ export function OnVerifyLoginOtp(data, navigation) {
                 // navigation.navigate('loginphonenumber')
                 await setItem("token", res.token)
                 _gotoAskForLocation(navigation)
+                resolve(res)
+                return;
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+            Alert.alert(error?.message)
+        })
+    })
+}
+
+export function OnLogoutUser(navigation) {
+    return new Promise((resolve, reject) => {
+        apiPost(LOGOUT_API).then((res) => {
+            if (res) {
+                clearToken()
+                navigation.navigate('splash')
                 resolve(res)
                 return;
             }

@@ -95,6 +95,17 @@ export const _formatDateMonth = (date) => {
     today = mm + " " + yyyy;
     return today
 };
+export const _formatFullDate = (date) => {
+    var today = new Date(date);
+    // var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var dd = String(today.getDate()).padStart(2, "0");
+    var allmonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    var monthIndex = today.getMonth();
+    var mm = allmonths[monthIndex]
+    var yyyy = today.getFullYear();
+    today = dd + " " + mm + " " + yyyy;
+    return today
+};
 
 
 

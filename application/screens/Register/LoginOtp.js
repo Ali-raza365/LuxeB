@@ -1,13 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppBar, Button } from '../../components';
-import { _gotoAskForLocation, _gotoBottomTabs } from '../../navigation/navigationServcies';
-import { COLORS, FS, HP, WP } from '../../theme/config';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import OTPTextView from 'react-native-otp-textinput';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import actions from '../../store/actions';
 import { useSelector } from 'react-redux';
+import { AppBar, Button } from '../../components';
+import actions from '../../store/actions';
+import { COLORS, FS, HP, WP } from '../../theme/config';
 
 export default function LoginOtp({ navigation }) {
 

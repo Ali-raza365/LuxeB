@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import CardBox from './CardBox';
 import { HP } from '../theme/config';
+import { API_BASE_URL } from '../api/apis';
 const ImageCarousel = ({ data, autoPlay, }) => {
     const scrollViewRef = useAnimatedRef(null);
     const interval = useRef();
@@ -79,9 +80,9 @@ const ImageCarousel = ({ data, autoPlay, }) => {
                         return <View style={{ width: SPACER, }} key={index} />;
                     }
                     return (
-                        <View style={{ width: SIZE,}} key={index}>
+                        <View style={{ width: SIZE, }} key={index}>
                             <Animated.View style={[styles.imageContainer, style]}>
-                                <ImageBackground source={item.image} style={styles.image} >
+                                <ImageBackground source={{ uri: API_BASE_URL + item.image }} style={styles.image} >
                                     <CardBox
                                         onPress={() => { navigation.navigate("eventdetail", { detail: item }) }}
                                         showsHorizontalScrollIndicator={false}
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         backgroundColor: 'pink',
         height: HP(23),
-        
+
     },
     image: {
         width: '100%',

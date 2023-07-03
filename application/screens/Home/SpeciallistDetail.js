@@ -189,6 +189,7 @@ const SpeciallistDetail = () => {
                 onBackButtonPress={toggleDateTimeModal}
                 onBackdropPress={toggleDateTimeModal}
                 isVisible={showDateTimeModal}
+                therapist={speciallistDetail}
             />
 
             <View style={styles.listTopView}>

@@ -4,15 +4,18 @@ import { Button } from '../../components';
 import { COLORS, TEXT_SIZES, WP } from '../../theme/config';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { CardField, CardForm, useStripe } from '@stripe/stripe-react-native';
 
 const AddPaymentMethod = () => {
+
+    const { confirmPayment } = useStripe();
+
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView
                 contentContainerStyle={{ margin: WP(5), paddingBottom: WP(40) }}
             >
                 <Text style={styles.headingSty}>Add New Payment {"\n"}Method</Text>
-
                 <View>
                     <Text style={{ paddingBottom: WP(3) }}>Card information</Text>
                     <TextInput
@@ -26,7 +29,7 @@ const AddPaymentMethod = () => {
                             placeholder='MM/YY'
                             placeholderTextColor={COLORS.darkGrey}
                             keyboardType='decimal-pad'
-                            style={[styles._inputSty, { width: '48.5%', marginRight:WP(2) }]}
+                            style={[styles._inputSty, { width: '48.5%', marginRight: WP(2) }]}
                         />
                         <TextInput
                             placeholder='CVC'
@@ -65,9 +68,39 @@ const AddPaymentMethod = () => {
                     // isChecked={agreePrivacy}
                     // onPress={() => { setagreePrivacy(!agreePrivacy) }}
                     text={"Save this card for future payments"}
-                    textStyle={{  textDecorationLine: 'none', color: COLORS.blackColor, fontSize: WP(TEXT_SIZES.info_1) }}
+                    textStyle={{ textDecorationLine: 'none', color: COLORS.blackColor, fontSize: WP(TEXT_SIZES.info_1) }}
                 />
             </KeyboardAwareScrollView >
+
+            {/* <CardField
+                postalCodeEnabled={true}
+                placeholders={{
+                    number: '4242 4242 4242 4242',
+                }}
+                cardStyle={{
+                    backgroundColor: '#FFFFFF',
+                    textColor: '#000000',
+                }}
+                style={{
+                    width: '100%',
+                    height: 50,
+                    marginVertical: 30,
+                }}
+                onCardChange={(cardDetails) => {
+                    console.log('cardDetails', cardDetails);
+                }}
+                onFocus={(focusedField) => {
+                    console.log('focusField', focusedField);
+                }}
+            /> */}
+
+            {/* <CardForm
+                onFormComplete={(cardDetails) => {
+                    console.log('card details', cardDetails);
+                    //  setCard(cardDetails);
+                }}
+                style={{ height: 200 }}
+            /> */}
             <Button
                 buttonStyle={{ position: 'absolute', bottom: WP(6) }}
                 title={'Save Payment Method'}
@@ -134,7 +167,7 @@ const styles = StyleSheet.create({
         padding: WP(3),
         paddingVertical: WP(4.5),
         // backgroundColor:'cyan',
-        marginBottom:WP(2),
+        marginBottom: WP(2),
         borderColor: COLORS.blackColor,
         borderWidth: 1,
         fontSize: WP(4)

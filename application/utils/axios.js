@@ -70,13 +70,13 @@ export async function apiReq(
                     if (error.response.status == 413)
                         return rej('Attachment size should be less than 5MB');
                     else if (error.response.status == 401)
-                        return rej({message:error?.response?.data?.detail });
+                        return rej({ message: error?.response?.data?.detail, ...error.response });
                     else if (error?.response?.data?.message)
-                    return rej({message:error?.response?.data?.message });
+                        return rej({ message: error?.response?.data?.message });
                     else if (error?.response?.data?.error)
-                    return rej({message:error?.response?.data?.error });
+                        return rej({ message: error?.response?.data?.error });
                     else if (error.response.data)
-                        return rej({message: JSON.stringify(error.response.data) });
+                        return rej({ message: JSON.stringify(error.response.data) });
 
 
                     // if (error.request) {
@@ -86,7 +86,7 @@ export async function apiReq(
                     if (!error.response.data.message) {
                         return rej({ ...error.response.data, msg: error.response.data.message || "Network Error" })
                     }
-                    return rej({message:'Server is not responding. Please try again'})
+                    return rej({ message: 'Server is not responding. Please try again' })
                 } else {
                     return rej({ message: "Network Error", msg: "Network Error" });
                 }

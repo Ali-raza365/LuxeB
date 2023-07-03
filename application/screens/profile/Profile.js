@@ -1,20 +1,27 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react';
-import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { COLORS, WP } from '../../theme/config'
-import { clearToken } from '../../utils/axios';
+import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { _gotoVoucherTabs } from '../../navigation/navigationServcies';
+import { COLORS, WP } from '../../theme/config';
+import actions from '../../store/actions';
 
-const Profile = ({navigation}) => {
+const Profile = ({ navigation }) => {
 
-    const onLogout = () => {
-        clearToken()
-        navigation.navigate('splash')
+    const onLogout = async () => {
+        try {
+            await actions.OnLogoutUser(navigation)
+        } catch (error) {
+            console.log('logout error')
+        }
     }
 
-    const onVoucherClick =()=>{
+    const onVoucherClick = () => {
         _gotoVoucherTabs(navigation)
+    }
+
+    const onPaymentMethodsClick = () => {
+       navigation.navigate('paymentmethods')
     }
 
     return (
@@ -58,7 +65,7 @@ const Profile = ({navigation}) => {
             <View style={{ borderWidth: 1, borderColor: COLORS.grey, marginVertical: WP(3), }} />
 
             <Text style={styles.headingText}>Addresses</Text>
-            <Text style={styles.headingText}>Payment Methods</Text>
+            <Text onPress={onPaymentMethodsClick} style={styles.headingText}>Payment Methods</Text>
             <Text onPress={onVoucherClick} style={styles.headingText}>Vouchers</Text>
             <Text onPress={onLogout} style={styles.headingText}>Logout</Text>
 

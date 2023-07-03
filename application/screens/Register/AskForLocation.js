@@ -119,7 +119,7 @@ export default function AskForLocation({ navigation }) {
                     />
                     <Button
                         title="May be Later"
-                        textStyle={{ color: COLORS.whiteColor }}
+                        textStyle={{ color: COLORS.blackColor }}
                         onPress={onPress}
                         buttonStyle={styles.buttonStyle}
                     />
