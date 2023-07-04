@@ -69,6 +69,8 @@ export const ServicesReducer = createSlice({
         },
         servicesCategories: null,
         therapistsList: null,
+        selectedService:null,
+
     },
     reducers: {
         decrement: state => {
@@ -76,6 +78,9 @@ export const ServicesReducer = createSlice({
         },
         incrementByAmount: (state, action) => {
             state.value += action.payload
+        },
+        setSelectedService: (state, action) => {
+            state.selectedService = action.payload
         },
         saveServicesCategories: (state, action) => {
             state.servicesCategories = action.payload
@@ -90,6 +95,6 @@ export const ServicesReducer = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setSpeciallistDetail, decrement, incrementByAmount, saveServicesCategories, saveTherapistsList } = ServicesReducer.actions
+export const { setSpeciallistDetail, decrement, incrementByAmount, saveServicesCategories, saveTherapistsList,setSelectedService } = ServicesReducer.actions
 
 export default ServicesReducer.reducer

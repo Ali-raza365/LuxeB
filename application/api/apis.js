@@ -14,3 +14,6 @@ export const GET_THERAPISTS_BY_SERVICE_API = getApiUrl('/api/customer/getTherapi
 export const GET_THERAPISTS_AVAILIBLE_API = getApiUrl('/api/customer/getTherapistAvailability/');
 export const GET_THERAPISTS_DETAIL_API = getApiUrl('/api/customer/getTherapistDetails/');
 
+export const SAVE_PAYMENT_METHOD_API = getApiUrl('/api/customer/addPaymentMethod/');
+
+

@@ -1,9 +1,9 @@
 
 import { useNavigation } from "@react-navigation/native";
-import { GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API } from "../../api/apis";
+import { GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API, SAVE_PAYMENT_METHOD_API } from "../../api/apis";
 import { apiGet, apiPost } from "../../utils/axios";
 import { _formatDate } from "../../utils/TimeFunctions";
-import { saveServicesCategories, saveTherapistsList, setSpeciallistDetail } from "../reducers/ServicesReducer";
+import { saveServicesCategories, saveTherapistsList, setSelectedService, setSpeciallistDetail } from "../reducers/ServicesReducer";
 import store from "../Store";
 import { Alert } from "react-native";
 
@@ -38,20 +38,22 @@ export function fetchSliderItems() {
 
 export function onServiceSelect(service, navigation, type) {
     return new Promise((resolve, reject) => {
+        console.log(service, type)
         let data = {
-            service_id: 1,
+            service_id: service?.id,
             location_id: 1,
-            // date: _formatDate(new Date()),
-            date: '2023-06-27',
-            type: 'silver',
+            date: _formatDate(new Date()),
+            type: type,
         }
         apiPost(GET_THERAPISTS_BY_SERVICE_API, data).then((res) => {
             if (res?.message) {
                 Alert.alert(res?.message)
+                store.dispatch(saveTherapistsList([]))
             } else if (!!res) {
                 store.dispatch(saveTherapistsList(res))
                 resolve(res)
                 if (navigation) {
+                    store.dispatch(setSelectedService(service))
                     navigation.navigate('servicedetail')
                 }
                 return;
@@ -116,6 +118,23 @@ export function onSpeciallistClick(item, navigation) {
         })
     })
 }
+
+
+
+export function onSavePaymentMethod(data, navigation) {
+    return new Promise((resolve, reject) => {
+        apiPost(SAVE_PAYMENT_METHOD_API, data).then((res) => {
+            if (!!res) {
+                resolve(res)
+                return;
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+
 
 // setItem('userData', res.data).then((returnValue)=>{
 //     store.dispatch(saveUserData(res?.data))

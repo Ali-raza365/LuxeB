@@ -66,6 +66,7 @@ export function OnVerifyLoginOtp(data, navigation) {
             if (res) {
                 // navigation.navigate('loginphonenumber')
                 await setItem("token", res.token)
+                await setItem("user",res.user)
                 _gotoAskForLocation(navigation)
                 resolve(res)
                 return;

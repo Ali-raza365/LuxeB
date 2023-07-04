@@ -1,5 +1,5 @@
 
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Image, Pressable, StyleSheet, Text, View, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { AppBar } from '../../components'
 import { COLORS, HP, WP } from '../../theme/config'
@@ -12,9 +12,10 @@ import { API_BASE_URL } from '../../api/apis';
 
 const ServiceDetail = ({ navigation }) => {
 
-    const servicesData = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,];
-    const [filterValue, setFilterValue] = useState("Silver")
-    const therapistData = useSelector(store => store.service.therapistsList)
+    const [filterValue, setFilterValue] = useState("")
+    const therapistData = useSelector(store => store.service.therapistsList);
+    const service = useSelector(store => store.service.selectedService);
+
     const filterArray = [
         { name: "Silver", icon: (<AntDesign name="heart" size={WP(4)} color={COLORS.whiteColor} />) },
         { name: "Gold", icon: (<AntDesign name="star" size={WP(4)} color={COLORS.whiteColor} />) },
@@ -22,12 +23,21 @@ const ServiceDetail = ({ navigation }) => {
     ];
 
 
+    console.log()
 
     const timeArr = ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM"]
 
+    const onFilterTabClik = async (type) => {
+        try {
+            setFilterValue(type)
+            await actions.onServiceSelect(service, navigation, type?.toLowerCase())
+        } catch (error) {
+            console.log("error riased in on services api", error)
+        }
+    }
 
     const onSpeciallistClick = async (item) => {
-       
+
         try {
             await actions.onSpeciallistClick(item, navigation)
         } catch (error) {
@@ -245,7 +255,7 @@ const ServiceDetail = ({ navigation }) => {
                         <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: API_BASE_URL + item?.profile_image || '' }} />
                     </View>
                 </View>
-                <View style={styles.listBottomView}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.listBottomView}>
                     {
                         item?.availability?.[0]?.time_slots.map((item, index) => {
                             return (
@@ -258,7 +268,7 @@ const ServiceDetail = ({ navigation }) => {
                             )
                         })
                     }
-                </View>
+                </ScrollView>
             </Pressable>
         )
     }
@@ -273,7 +283,7 @@ const ServiceDetail = ({ navigation }) => {
                     filterArray.map((item, index) => {
                         return (
                             <Pressable key={index}
-                                onPress={() => setFilterValue(item.name)}
+                                onPress={() => onFilterTabClik(item.name)}
                                 style={[styles.filterView, { backgroundColor: filterValue == item?.name ? COLORS.primaryColor : COLORS.whiteColor }]}
                             >
                                 <View style={styles._circleView}>
@@ -379,8 +389,8 @@ const styles = StyleSheet.create({
         width: '100%',
         // backgroundColor: 'cyan',
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
+        // alignItems: 'center',
+        // justifyContent: 'center',
     },
     TimeView: {
         // width:'24%',

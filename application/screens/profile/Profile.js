@@ -5,6 +5,7 @@ import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { _gotoVoucherTabs } from '../../navigation/navigationServcies';
 import { COLORS, WP } from '../../theme/config';
 import actions from '../../store/actions';
+import { AppBar } from '../../components';
 
 const Profile = ({ navigation }) => {
 
@@ -26,6 +27,8 @@ const Profile = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <AppBar type='light' backgroundColor={COLORS.blackColor} />
+
             <View style={styles.row}>
                 <Text style={styles.boldText}>Personal information</Text>
                 <MatComIcon name="pencil" size={WP(7)} color={COLORS.blackColor} />
