@@ -1,23 +1,22 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
 import { COLORS, WP } from '../../../theme/config'
 import { IMAGES } from '../../../constants/ImagePath'
 
-const PaymentCard = ({select = false}) => {
+const PaymentCard = ({ item, selected, onPress }) => {
     return (
-        <View style={[styles.paymentCardContainer, { borderWidth: select ? 1 : 0 }]}>
+        <View style={[styles.paymentCardContainer, { borderWidth: selected?.payment_method_id == item?.payment_method_id ? 1 : 0 }]}>
             <Image source={IMAGES.visa} style={{ width: WP(10), height: WP(10) }} resizeMode='contain' />
             <View style={styles.row}>
-                <Text style={{ fontSize: WP(4), fontWeight: '500' }}>Visa</Text>
-                <Text>**** <Text>4096</Text> </Text>
+                <Text style={{ fontSize: WP(4), fontWeight: '500' }}>{item.brand}</Text>
+                <Text>**** <Text>{item?.last4}</Text> </Text>
             </View>
 
-            <View style={styles.circleView}>
+            <Pressable onPress={() => onPress(item)} style={styles.circleView}>
                 {
-                    select && <View style={styles.dot} />
+                    selected?.payment_method_id == item?.payment_method_id && <View style={styles.dot} />
                 }
-
-            </View>
+            </Pressable>
         </View>
     )
 }

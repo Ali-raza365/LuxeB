@@ -1,6 +1,6 @@
 
 import { useNavigation } from "@react-navigation/native";
-import { GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API, SAVE_PAYMENT_METHOD_API } from "../../api/apis";
+import { GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API, SAVE_PAYMENT_METHOD_API, SET_DEFAULT_PAYMENT_METHOD_API } from "../../api/apis";
 import { apiGet, apiPost } from "../../utils/axios";
 import { _formatDate } from "../../utils/TimeFunctions";
 import { saveServicesCategories, saveTherapistsList, setSelectedService, setSpeciallistDetail } from "../reducers/ServicesReducer";
@@ -36,24 +36,17 @@ export function fetchSliderItems() {
     })
 }
 
-export function onServiceSelect(service, navigation, type) {
+export function onServiceSelect(data,service, navigation) {
     return new Promise((resolve, reject) => {
-        console.log(service, type)
-        let data = {
-            service_id: service?.id,
-            location_id: 1,
-            date: _formatDate(new Date()),
-            type: type,
-        }
         apiPost(GET_THERAPISTS_BY_SERVICE_API, data).then((res) => {
+            store.dispatch(setSelectedService(service))
             if (res?.message) {
-                Alert.alert(res?.message)
+                navigation.navigate('servicedetail')
                 store.dispatch(saveTherapistsList([]))
             } else if (!!res) {
                 store.dispatch(saveTherapistsList(res))
                 resolve(res)
                 if (navigation) {
-                    store.dispatch(setSelectedService(service))
                     navigation.navigate('servicedetail')
                 }
                 return;
@@ -80,7 +73,7 @@ export function getTherapistAvailability(data) {
 }
 
 
-export function onSpeciallistClick(item, navigation) {
+export function onSpeciallistClick(item, navigation,timeSlot) {
     return new Promise((resolve, reject) => {
         let data = {
             therapist_id: item?.id,
@@ -108,7 +101,7 @@ export function onSpeciallistClick(item, navigation) {
                 store.dispatch(setSpeciallistDetail(response))
                 resolve(res)
                 if (navigation) {
-                    navigation.navigate("speciallistdetail")
+                    navigation.navigate("speciallistdetail",{timeSlot:timeSlot?.time_slot})
                 }
                 return;
             }
@@ -125,6 +118,21 @@ export function onSavePaymentMethod(data, navigation) {
     return new Promise((resolve, reject) => {
         apiPost(SAVE_PAYMENT_METHOD_API, data).then((res) => {
             if (!!res) {
+                resolve(res)
+                return;
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+
+export function onSetDefaultPaymentMethod(data) {
+    return new Promise((resolve, reject) => {
+        apiPost(SET_DEFAULT_PAYMENT_METHOD_API, data).then((res) => {
+            if (res.message) {
+                Alert.alert(res.message)
                 resolve(res)
                 return;
             }

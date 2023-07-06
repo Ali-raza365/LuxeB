@@ -6,7 +6,11 @@ export const UserReducer = createSlice({
         value: 0,
         signup_name: "",
         signup_phone: "",
-        phoneNumber:"",
+        phoneNumber: "",
+        districts: [],
+        userDetail: null,
+        userLocation: null,
+
 
     },
     reducers: {
@@ -14,13 +18,22 @@ export const UserReducer = createSlice({
             store.signup_name = action.payload.name;
             store.signup_phone = action.payload.phone;
         },
-        savePhoneNumber:(store, action) => {
+        savePhoneNumber: (store, action) => {
             store.phoneNumber = action.payload;
+        },
+        saveDistricts: (store, action) => {
+            store.districts = action.payload;
+        },
+        saveUserDetail: (store, action) => {
+            store.userDetail = action.payload;
+        },
+        saveUserLocation: (store, action) => {
+            store.userLocation = action.payload;
         },
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { saveSignUpCredentials , savePhoneNumber} = UserReducer.actions
+export const { saveSignUpCredentials, savePhoneNumber, saveDistricts, saveUserDetail, saveUserLocation } = UserReducer.actions
 
 export default UserReducer.reducer

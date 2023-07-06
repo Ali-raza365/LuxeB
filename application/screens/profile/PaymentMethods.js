@@ -1,14 +1,39 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { AppBar, Button } from '../../components';
+import { AppBar, Button, Loader } from '../../components';
 import { COLORS, WP } from '../../theme/config';
 import PaymentCard from '../Home/components/PaymentCard';
+import { useSelector } from 'react-redux';
+import actions from '../../store/actions';
 
 const PaymentMethods = () => {
+
+    const userDetail = useSelector(store => store.user.userDetail);
+    const [selected, setSelected] = useState(null);
+    const [loading, setloading] = useState(false)
+
+    const setDefaultPaymentMethod = async () => {
+        try {
+            setloading(true)
+            const data = {
+                customer_id: userDetail?.id,
+                payment_method_id: selected?.payment_method_id,
+            }
+            await actions.onSetDefaultPaymentMethod(data)
+            setloading(false)
+        } catch (error) {
+            setloading(false)
+            Alert.alert(error.message)
+        }
+
+    }
+
+
     return (
         <View style={styles.container}>
             <AppBar type='light' backgroundColor={COLORS.blackColor} />
+            <Loader isVisible={loading} />
             <KeyboardAwareScrollView
                 contentContainerStyle={{ margin: WP(5), paddingBottom: WP(40) }}
             >
@@ -16,15 +41,24 @@ const PaymentMethods = () => {
 
                 <View>
                     <Text style={{ paddingBottom: WP(3) }}>Default Payment Method</Text>
-                    <PaymentCard select={true} />
-                    <PaymentCard />
-                    <PaymentCard />
-                    <PaymentCard />
+                    {
+                        userDetail?.payment_methods && userDetail?.payment_methods.map((item, index) => {
+                            return (
+                                <PaymentCard
+                                key={index}
+                                    onPress={(val) => setSelected(val)}
+                                    selected={selected}
+                                    item={item}
+                                />
+                            )
+                        })
+                    }
                 </View>
 
 
             </KeyboardAwareScrollView >
             <Button
+                onPress={setDefaultPaymentMethod}
                 buttonStyle={{ position: 'absolute', bottom: WP(6) }}
                 title={'Set As Default Payment Method'}
             />

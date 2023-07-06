@@ -11,7 +11,7 @@ import { Button } from '../../../components'
 import { useNavigation } from '@react-navigation/native'
 import actions from '../../../store/actions'
 
-export default function DateTimeModal({ therapist, isVisible, onBackButtonPress, onBackdropPress }) {
+export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackButtonPress, onBackdropPress }) {
 
     const navigation = useNavigation()
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -19,6 +19,7 @@ export default function DateTimeModal({ therapist, isVisible, onBackButtonPress,
     const [timeSlots, setTimeSlots] = useState([]);
     const [loading, setLoading] = useState(false)
     const [dates, setDates] = useState([]);
+    const [selectedSlot, setSelectedSlot] = useState(timeSlot || '')
     const timeArr = ["7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00"];
 
     function getMonthDates(d) {
@@ -54,7 +55,7 @@ export default function DateTimeModal({ therapist, isVisible, onBackButtonPress,
         }
         setDates(dates)
     }
-
+    
     const incrementDate = () => {
         const date = new Date(selectedDate);
         date.setMonth(date.getMonth() + 1);
@@ -80,7 +81,7 @@ export default function DateTimeModal({ therapist, isVisible, onBackButtonPress,
                 setLoading(false)
                 setSelectedDate(date);
                 setBookingDate(date);
-                setTimeSlots(response)
+                setTimeSlots(response?.[0]?.time_slots || [])
             }
 
         } catch (error) {
@@ -93,7 +94,6 @@ export default function DateTimeModal({ therapist, isVisible, onBackButtonPress,
     useEffect(() => {
         getMonthDates(new Date)
     }, [selectedDate])
-
 
     return (
         <Modal
@@ -161,8 +161,22 @@ export default function DateTimeModal({ therapist, isVisible, onBackButtonPress,
                         style={{ marginVertical: WP(3) }}
                     >
                         {
-                            bookingDate && timeSlots.length != 0 && timeArr?.map((item, index) => {
-                                return <Text key={index} style={{ padding: WP(1.5), paddingHorizontal: WP(3), marginLeft: WP(2), borderWidth: 1, fontSize: WP(4.2), fontWeight: '600', letterSpacing: 1, borderColor: COLORS.blackColor }}>{item}</Text>
+                            bookingDate && timeSlots.length != 0 && timeSlots?.map((item, index) => {
+                                return <Text key={index}
+                                    onPress={() => setSelectedSlot(item.time_slot)}
+                                    style={{
+                                        padding: WP(1.5),
+                                        paddingHorizontal: WP(3),
+                                        marginLeft: WP(2),
+                                        borderWidth: 1,
+                                        fontSize: WP(4.2),
+                                        fontWeight: '600',
+                                        backgroundColor: item?.time_slot == selectedSlot ? COLORS.blackColor : COLORS.whiteColor,
+                                        color: item?.time_slot == selectedSlot ? COLORS.whiteColor : COLORS.blackColor,
+                                        letterSpacing: 1,
+                                        borderColor: COLORS.blackColor
+                                    }}
+                                >{item?.time_slot}</Text>
                             })
                         }
                     </ScrollView>

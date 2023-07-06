@@ -14,7 +14,10 @@ import { API_BASE_URL } from '../../api/apis';
 
 
 
-const SpeciallistDetail = () => {
+const SpeciallistDetail = ({ route, navigation }) => {
+
+    const { timeSlot } = route?.params
+    // console.log({timeSlot})
 
     const dispatch = useDispatch()
     const [selectedTab, setSelectedTab] = useState("Services");
@@ -157,12 +160,16 @@ const SpeciallistDetail = () => {
     }
 
     useEffect(() => {
-        let check = speciallistDetail?.services?.[0]?.sub_services.find((item) => item.isSelected == true)
+        let check = false;
+        speciallistDetail?.services.map((service) => {
+            return service?.sub_services?.map((item) => {
+                if (item.isSelected == true) {
+                    check = true
+                }
+            })
+        })
         setSelected(check)
-        // console.log(check)
     }, [speciallistDetail])
-
-    console.log(speciallistDetail)
 
 
 
@@ -190,6 +197,7 @@ const SpeciallistDetail = () => {
                 onBackdropPress={toggleDateTimeModal}
                 isVisible={showDateTimeModal}
                 therapist={speciallistDetail}
+                timeSlot={timeSlot}
             />
 
             <View style={styles.listTopView}>
@@ -247,36 +255,44 @@ const SpeciallistDetail = () => {
             {
                 selectedTab == 'Services' ?
                     <FlatList
-                        data={speciallistDetail?.services?.[0]?.sub_services || []}
+                        data={speciallistDetail?.services || []}
+                        // data={speciallistDetail?.services?.[0]?.sub_services || []}
                         keyExtractor={(_, index) => index.toString()}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ padding: WP(2), }}
                         renderItem={({ item, index }) => {
                             return (
-                                <CollapsibleView
-                                    noArrow={true}
-                                    style={[styles.CollapsibleView, { backgroundColor: item.isSelected ? COLORS.grey : COLORS.whiteColor }]}
-                                    title={<CollapsibleViewHeader item={item} />} >
-                                    <View style={styles.CollapsibleViewContentContainer}>
-                                        <Text style={styles.CollapsibleViewContent}>{item?.sub_service?.description || ''}</Text>
-                                        <View style={styles.QuantityStyle}>
-                                            <Text style={styles.headingText}>Quantity:</Text>
-                                            <TouchableOpacity onPress={() => decrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>-</Text></TouchableOpacity>
-                                            <Text style={styles.Qty}>{item?.quantity}</Text>
-                                            <TouchableOpacity onPress={() => incrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>+</Text></TouchableOpacity>
-                                        </View>
-                                        <View style={{ flexDirection: "row" }}>
-                                            <Text style={styles.headingText}>Price:</Text>
-                                            <Text style={styles.price}>${Number(item?.price * item?.quantity||1)}</Text>
-                                        </View>
-                                        <Button
-                                            onPress={() => onServiceSelect(item?.sub_service?.id)}
-                                            buttonStyle={[styles.buttonStyle, { backgroundColor: item.isSelected ? COLORS.whiteColor : COLORS.blackColor }]}
-                                            textStyle={{ color: item.isSelected ? COLORS.blackColor : COLORS.whiteColor }}
-                                            title={item.isSelected ? "Unselect" : 'Select'} />
-                                    </View>
-                                </CollapsibleView>
-
+                                <View>
+                                    <Text style={styles.serviceNameSty}>{item?.service?.service_name || 'fd'}</Text>
+                                    {
+                                        item?.sub_services?.map((item, index) => (
+                                            <CollapsibleView
+                                                key={index}
+                                                noArrow={true}
+                                                style={[styles.CollapsibleView, { backgroundColor: item.isSelected ? COLORS.grey : COLORS.whiteColor }]}
+                                                title={<CollapsibleViewHeader item={item} />} >
+                                                <View style={styles.CollapsibleViewContentContainer}>
+                                                    <Text style={styles.CollapsibleViewContent}>{item?.sub_service?.description || ''}</Text>
+                                                    <View style={styles.QuantityStyle}>
+                                                        <Text style={styles.headingText}>Quantity:</Text>
+                                                        <TouchableOpacity onPress={() => decrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>-</Text></TouchableOpacity>
+                                                        <Text style={styles.Qty}>{item?.quantity}</Text>
+                                                        <TouchableOpacity onPress={() => incrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>+</Text></TouchableOpacity>
+                                                    </View>
+                                                    <View style={{ flexDirection: "row" }}>
+                                                        <Text style={styles.headingText}>Price:</Text>
+                                                        <Text style={styles.price}>${Number(item?.price * item?.quantity || 1)}</Text>
+                                                    </View>
+                                                    <Button
+                                                        onPress={() => onServiceSelect(item?.sub_service?.id)}
+                                                        buttonStyle={[styles.buttonStyle, { backgroundColor: item.isSelected ? COLORS.whiteColor : COLORS.blackColor }]}
+                                                        textStyle={{ color: item.isSelected ? COLORS.blackColor : COLORS.whiteColor }}
+                                                        title={item.isSelected ? "Unselect" : 'Select'} />
+                                                </View>
+                                            </CollapsibleView>
+                                        ))
+                                    }
+                                </View>
                             )
                         }}
                     /> :
@@ -414,6 +430,12 @@ const styles = StyleSheet.create({
         fontSize: FS(1.8),
         color: COLORS.darkGrey,
         paddingVertical: WP(1)
+    },
+    serviceNameSty: {
+        fontSize: WP(4),
+        fontWeight: '600',
+        color: COLORS.blackColor,
+        padding: WP(2),
     },
     CollapsibleView: {
         borderWidth: 0,

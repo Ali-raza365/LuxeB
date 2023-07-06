@@ -1,99 +1,150 @@
-import React, { useRef, useState } from 'react';
-import { Image, PermissionsAndroid, StyleSheet, Text, ToastAndroid, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Image, PermissionsAndroid, StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppBar, Button } from '../../components';
 import { COLORS, FS, HP, PLATFORM, WP } from '../../theme/config';
 import { IMAGES } from '../../constants/ImagePath';
 import Geolocation from '@react-native-community/geolocation';
+import LocationModal from './Components/LocationModal';
+import DeviceInfo from 'react-native-device-info';
+import actions from '../../store/actions';
+import { getItem } from '../../utils/axios';
 
 export default function AskForLocation({ navigation }) {
+
+    const [showModal, setShowModal] = useState(false);
+    const [coordinate, setCoordinate] = useState(null)
+
+    const toggleLocationModal = () => {
+        if (showModal) setShowModal(false)
+        else setShowModal(true)
+    }
+
     const onPress = () => {
         navigation.navigate('gender');
     };
 
+    const fetchDistricts = async () => {
+        try {
+            let res = await actions.fetchDistricts()
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    useEffect(() => {
+        fetchDistricts()
+    }, [])
+
+
+    const onSaveLocation = async (lat, lng) => {
+        try {
+            const customer_id = await getItem('user')
+            const data = {
+                // district: district.id,
+                // sub_district: subDistrict.id,
+                lat: lat,
+                long: lng,
+                customer_id: "14"
+            }
+            let resp = await actions.SaveUserLocation(data)
+            if (resp) {
+                navigation.navigate('gender');
+            }
+        } catch (error) {
+            Alert.alert(error.message);
+        }
+    }
+
+
 
     const onGettingLocation = async () => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                if (PLATFORM == 'ios') {
-                    Geolocation.getCurrentPosition(
-                        //Will give you the current location
-                        (position) => {
-                            console.log('You are Here');
-                            //getting the Longitude from the location json
-                            const currentLongitude =
-                                JSON.stringify(position.coords.longitude);
-                            //getting the Latitude from the location json
-                            const currentLatitude =
-                                JSON.stringify(position.coords.latitude);
-                            //Setting Longitude state
-                            console.log({ currentLongitude });
-                            resolve({ longitude: currentLongitude, latitude: currentLatitude })
-                        },
-                        (error) => {
-                            resolve({ longitude: null, latitude: null })
-                        }
-                    )
-                } else {
-                    try {
-                        const granted = await PermissionsAndroid.request(
-                            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                            {
-                                title: 'Location Access Required',
-                                message: 'This App needs to Access your location',
-                            },
-                        );
-                        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                            DeviceInfo.isLocationEnabled().then((enabled) => {
-                                console.log("Is location is enable", enabled)
-                                // true or false
-                                if (enabled) {
-                                    Geolocation.getCurrentPosition(
-                                        //Will give you the current location
-                                        (position) => {
-                                            console.log('You are Here');
-                                            //getting the Longitude from the location json
-                                            const currentLongitude =
-                                                JSON.stringify(position.coords.longitude);
-                                            //getting the Latitude from the location json
-                                            const currentLatitude =
-                                                JSON.stringify(position.coords.latitude);
-                                            resolve({ longitude: currentLongitude, latitude: currentLatitude })
-                                            //Setting Longitude state
-                                            console.log({ currentLongitude });
-                                        },
-                                        (error) => {
-                                            resolve({ longitude: null, latitude: null })
-                                        }
-                                    )
-                                } else {
-                                    ToastAndroid.show('Please turn on your mobile location', ToastAndroid.SHORT);
-                                    resolve({ longitude: null, latitude: null })
-                                    resolve({ longitude: null, latitude: null })
-                                }
-                            });
-                        } else {
-                            console.log('Permission Denied');
-                            resolve({ longitude: null, latitude: null })
-                        }
-                    } catch (err) {
-                        console.log('Permission Denied 11');
-                        resolve({ longitude: null, latitude: null })
-                        console.log(err);
+        try {
+            if (PLATFORM == 'ios') {
+                Geolocation.getCurrentPosition(
+                    //Will give you the current location
+                    (position) => {
+                        console.log('You are Here');
+                        //getting the Longitude from the location json
+                        const currentLongitude =
+                            JSON.stringify(position.coords.longitude);
+                        //getting the Latitude from the location json
+                        const currentLatitude =
+                            JSON.stringify(position.coords.latitude);
+                        //Setting Longitude state
+                        console.log({ currentLongitude });
+                        setCoordinate({ longitude: currentLongitude, latitude: currentLatitude })
+                        toggleLocationModal()
+                        // onSaveLocation(currentLatitude, currentLongitude)
+                    },
+                    (error) => {
+                        console.log(error)
                     }
+                )
+            } else {
+                try {
+                    const granted = await PermissionsAndroid.request(
+                        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                        {
+                            title: 'Location Access Required',
+                            message: 'This App needs to Access your location',
+                        },
+                    );
+                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                        DeviceInfo.isLocationEnabled().then((enabled) => {
+                            console.log("Is location is enable", enabled)
+                            // true or false
+                            if (enabled) {
+                                Geolocation.getCurrentPosition(
+                                    //Will give you the current location
+                                    (position) => {
+                                        console.log('You are Here');
+                                        //getting the Longitude from the location json
+                                        const currentLongitude =
+                                            JSON.stringify(position.coords.longitude);
+                                        //getting the Latitude from the location json
+                                        const currentLatitude =
+                                            JSON.stringify(position.coords.latitude);
+                                        setCoordinate({ longitude: currentLongitude, latitude: currentLatitude })
+                                        //Setting Longitude state
+                                        console.log({ currentLongitude });
+                                        toggleLocationModal()
+                                        // onSaveLocation(currentLatitude, currentLongitude)
+                                    },
+                                    (error) => {
+                                        // resolve({ longitude: null, latitude: null })
+                                        console.log(error)
+                                    }
+                                )
+                            } else {
+                                ToastAndroid.show('Please turn on your mobile location', ToastAndroid.SHORT);
+
+                            }
+                        });
+                    } else {
+                        console.log('Permission Denied');
+                    }
+                } catch (err) {
+                    console.log('Permission Denied 11');
+                    console.log(err);
                 }
-            } catch (error) {
-                resolve({ longitude: null, latitude: null })
-                console.log(error, "234")
-                reject(error);
             }
-        })
+        } catch (error) {
+            console.log(error, "234")
+        }
     }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
             <AppBar type={'dark'} backgroundColor={COLORS.offWhiteColor} />
+
+            <LocationModal
+                isVisible={showModal}
+                onBackButtonPress={toggleLocationModal}
+                onBackdropPress={toggleLocationModal}
+                coordinate={coordinate}
+            />
 
             <View style={styles.container}>
                 <View style={styles.mainStyle}>

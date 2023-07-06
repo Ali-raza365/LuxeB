@@ -1,20 +1,28 @@
 
 import { FlatList, Image, Pressable, StyleSheet, Text, View, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppBar } from '../../components'
-import { COLORS, HP, WP } from '../../theme/config'
+import { COLORS, FS, HP, WP } from '../../theme/config'
 import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import StarRating from 'react-native-star-rating';
 import { useSelector } from 'react-redux';
 import actions from '../../store/actions';
 import { API_BASE_URL } from '../../api/apis';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FilterModal from './components/FilterModal';
+import { _formatDate } from '../../utils/TimeFunctions';
+
 
 const ServiceDetail = ({ navigation }) => {
 
     const [filterValue, setFilterValue] = useState("")
     const therapistData = useSelector(store => store.service.therapistsList);
     const service = useSelector(store => store.service.selectedService);
+    const [showfilterModal, setShowfilterModal] = useState(false);
+    const [timeSlot, settimeSlot] = useState('');
+    const userLocation = useSelector(store => store.user.userLocation);
+
 
     const filterArray = [
         { name: "Silver", icon: (<AntDesign name="heart" size={WP(4)} color={COLORS.whiteColor} />) },
@@ -22,15 +30,35 @@ const ServiceDetail = ({ navigation }) => {
         { name: "Diamond", icon: (<MatComIcons name="diamond" size={WP(4)} color={COLORS.whiteColor} />) },
     ];
 
-
-    console.log()
-
     const timeArr = ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM"]
+
+    const toggleFilterModal = () => {
+        if (showfilterModal) setShowfilterModal(false)
+        else setShowfilterModal(true)
+    }
+
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <FontAwesome onPress={toggleFilterModal} name="sliders" size={FS(3)} color={COLORS.whiteColor} />
+            )
+        })
+    }, [])
+
+
 
     const onFilterTabClik = async (type) => {
         try {
             setFilterValue(type)
-            await actions.onServiceSelect(service, navigation, type?.toLowerCase())
+            settimeSlot('')
+            const data = {
+                service_id: service?.id,
+                sub_district: userLocation?.sub_district,
+                date: _formatDate(new Date()),
+                type: type?.toLowerCase(),
+            }
+            await actions.onServiceSelect(data, service, navigation,)
         } catch (error) {
             console.log("error riased in on services api", error)
         }
@@ -39,7 +67,7 @@ const ServiceDetail = ({ navigation }) => {
     const onSpeciallistClick = async (item) => {
 
         try {
-            await actions.onSpeciallistClick(item, navigation)
+            await actions.onSpeciallistClick(item, navigation, timeSlot)
         } catch (error) {
             console.log("error riased in on Speciallist detail api", error)
             alert(error?.message)
@@ -258,10 +286,11 @@ const ServiceDetail = ({ navigation }) => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.listBottomView}>
                     {
                         item?.availability?.[0]?.time_slots.map((item, index) => {
+                            console.log({item})
                             return (
                                 <Pressable key={index}
-                                    // onPress={() => setFilterValue(item.name)}
-                                    style={[styles.TimeView, { backgroundColor: filterValue == item?.time_slot ? COLORS.primaryColor : COLORS.whiteColor }]}
+                                    onPress={() => settimeSlot(item)}
+                                    style={[styles.TimeView, { backgroundColor: timeSlot?.id == item?.id ? COLORS.primaryColor : COLORS.whiteColor }]}
                                 >
                                     <Text style={styles.TimeTextSty}>{item.time_slot}</Text>
                                 </Pressable>
@@ -276,6 +305,13 @@ const ServiceDetail = ({ navigation }) => {
     return (
         <View style={styles._container}>
             <AppBar type='light' backgroundColor={COLORS.blackColor} />
+
+            <FilterModal
+                isVisible={showfilterModal}
+                onBackButtonPress={toggleFilterModal}
+                onBackdropPress={toggleFilterModal}
+                type={filterValue}
+            />
 
             {/* filter */}
             <View style={styles.filterContainer}>
@@ -303,6 +339,11 @@ const ServiceDetail = ({ navigation }) => {
                     keyExtractor={(_, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingBottom: WP(30) }}
+                    ListEmptyComponent={(
+                        <View style={{ height: HP(60), alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={styles.listHeading} >No Speciallist Found!</Text>
+                        </View>
+                    )}
                 />
             </View>
         </View>

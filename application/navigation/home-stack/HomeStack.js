@@ -4,6 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Home, ServiceDetail, Services, SpeciallistDetail } from '../../screens';
 import { COLORS, FS, WP } from '../../theme/config';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const Stack = createStackNavigator();
 
@@ -54,7 +55,7 @@ const HomeStack = () => {
                     headerTitleAlign:'center',
                     headerRightContainerStyle: { paddingRight: WP(4) },
                     headerLeftContainerStyle: { paddingLeft: WP(4) },
-                    headerRight: () => (<Ionicons name="ios-location-outline" size={FS(3)} color={COLORS.whiteColor} />),
+                    // headerRight: () => (<FontAwesome name="sliders" size={FS(3)} color={COLORS.whiteColor} />),
                     headerStyle: {
                         backgroundColor: COLORS.blackColor,
                     }

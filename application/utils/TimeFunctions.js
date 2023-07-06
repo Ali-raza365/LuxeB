@@ -60,7 +60,7 @@ export const _formatTime = (date) => {
 
 export const _formatDate = (d) => {
     const timestamp = Date.parse(d);
-    console.log(timestamp)
+    // console.log(timestamp)
     if (!isNaN(timestamp)) {
         const date = new Date(d)
         const yyyy = date.getFullYear();

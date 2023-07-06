@@ -19,7 +19,9 @@ const Home = ({ navigation }) => {
     const [loading, setLoading] = useState(false)
     const [serviceData, setServiceData] = useState(null);
     const [sliderItems, setsliderItems] = useState([])
-
+    const userLocation = useSelector(store => store.user.userLocation);
+    const userDetail = useSelector(store => store.user.userDetail);
+    // console.log({ userDetail })
     const data = [
         {
             id: 1,
@@ -100,14 +102,29 @@ const Home = ({ navigation }) => {
         }
     }
 
+
+    const fetchDistricts = async () => {
+        try {
+            let res = await actions.fetchDistricts()
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
     useEffect(() => {
         fetchSliderItems()
         _handleRefresh()
+        fetchDistricts()
     }, [])
 
     const onServiceClick = async (service) => {
         try {
-            await actions.onServiceSelect(service, navigation)
+            const data = {
+                service_id: service?.id,
+                sub_district: userLocation?.sub_district,
+                date: _formatDate(new Date()),
+            }
+            await actions.onServiceSelect(data, service, navigation)
         } catch (error) {
             console.log("error riased in on services api", error)
             alert(error?.message)
@@ -143,7 +160,6 @@ const Home = ({ navigation }) => {
                             </View>
                             : null
                     }
-
                     <View style={styles.FilterView}>
                         <View style={{ flexDirection: 'row' }}>
                             <Pressable style={[styles.FilterBox]}>

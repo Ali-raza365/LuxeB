@@ -4,6 +4,7 @@ import { COLORS, FS, HP, WP } from '../../theme/config'
 import { _gotoAskForLocation, _gotoBottomTabs, _gotoOnboard, _gotoWelcomeScr } from '../../navigation/navigationServcies'
 import { AppBar } from '../../components'
 import { getItem } from '../../utils/axios'
+import actions from '../../store/actions'
 
 export default function Splash({ navigation }) {
 
@@ -13,7 +14,7 @@ export default function Splash({ navigation }) {
                 await getItem('token')
                     .then(async (value) => {
                         if (value) {
-                            _gotoAskForLocation(navigation);
+                            await actions.checkUserStatus(navigation)
                         } else {
                             await getItem('onboard')
                                 .then(async (value) => {

@@ -5,21 +5,32 @@ import { COLORS, TEXT_SIZES, WP } from '../../theme/config';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import PaymentCard from './components/PaymentCard';
+import { useSelector } from 'react-redux';
 
 const SelectPaymentMethod = () => {
+
+    const userDetail = useSelector(store => store.user.userDetail);
+
     return (
         <View style={styles.container}>
             <KeyboardAwareScrollView
                 contentContainerStyle={{ margin: WP(5), paddingBottom: WP(40) }}
             >
                 <Text style={styles.headingSty}>Select Payment Methods</Text>
-
                 <View>
                     <Text style={{ paddingBottom: WP(3) }}>Default Payment Method</Text>
-                    <PaymentCard select={true} />
+                    {
+                        userDetail?.payment_methods && userDetail?.payment_methods.map((item, index) => {
+                            return (
+                                // <PaymentCard />
+                                <View/>
+                            )
+                        })
+                    }
+                    {/* <PaymentCard select={true} />
                     <PaymentCard />
                     <PaymentCard />
-                    <PaymentCard />
+                    <PaymentCard /> */}
                 </View>
 
 

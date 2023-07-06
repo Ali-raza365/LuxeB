@@ -178,6 +178,14 @@ const AddPaymentMethod = ({ navigation }) => {
                             console.log('card details', cardDetails);
                             //  setCard(cardDetails);
                         }}
+                        cardStyle={{
+                            backgroundColor: '#ffffff',
+                            fontSize: 12,
+                            placeholderColor: '#000000',
+                            textColor: '#000000',
+                            textErrorColor: '#000000'
+                            }}
+
                         style={{ height: PLATFORM === 'android' ? 300 : 200, }}
                     />
                 </View>
