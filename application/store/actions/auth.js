@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { GET_DISTRICTS_API, GET_SUBDISTRICTS_API, GET_THERAPISTS_DETAIL_API, LOGIN_API, LOGIN_VERIFY_OTP_API, LOGOUT_API, SAVE_USER_LOCATION_API, SIGN_UP_API, SIGN_UP_VERIFY_OTP_API } from "../../api/apis";
+import { GET_DISTRICTS_API, GET_SUBDISTRICTS_API, GET_THERAPISTS_DETAIL_API, GET_USER_DETAIL_API, LOGIN_API, LOGIN_VERIFY_OTP_API, LOGOUT_API, SAVE_USER_LOCATION_API, SIGN_UP_API, SIGN_UP_VERIFY_OTP_API } from "../../api/apis";
 import { apiGet, apiPost, clearToken, getItem, setItem } from "../../utils/axios";
 import { saveTherapistsList } from "../reducers/ServicesReducer";
 import { saveDistricts, savePhoneNumber, saveSignUpCredentials, saveUserDetail, saveUserLocation } from "../reducers/UserReducer";
@@ -147,19 +147,52 @@ export function SaveUserLocation(data) {
 
 export function checkUserStatus(navigation) {
     return new Promise((resolve, reject) => {
-        getItem('user').then((userDetail) => {
-            console.log({ userDetail })
-            store.dispatch(saveUserDetail(userDetail))
-            if (userDetail?.locations && userDetail?.locations.length != 0) {
-                let defaultLocation = userDetail?.locations.find((item) => item?.is_booking == true)
-                store.dispatch(saveUserLocation(defaultLocation))
-                _gotoBottomTabs(navigation)
-            } else {
-                _gotoAskForLocation(navigation);
-            }
+        getItem('user').then((user) => {
+            apiPost(GET_USER_DETAIL_API, { customer_id: user?.id }).then((userDetail) => {
+                if (!!userDetail) {
+                    console.log({ userDetail })
+                    store.dispatch(saveUserDetail(userDetail))
+                    if (userDetail?.locations && userDetail?.locations.length != 0) {
+                        let defaultLocation = userDetail?.locations.find((item) => item?.is_booking == true)
+                        store.dispatch(saveUserLocation(defaultLocation))
+                        _gotoBottomTabs(navigation)
+                    } else {
+                        _gotoAskForLocation(navigation);
+                    }
+                }
+                resolve()
+            }).catch((error) => {
+                reject(error)
+                if (error?.status == 401) {
+                    clearToken()
+                    navigation.navigate('splash')
+                }
+            })
             resolve()
         }).catch((error) => {
             reject(error)
         })
     })
+}
+
+
+export function getUserDetails() {
+    return new Promise((resolve, reject) => {
+        getItem('user').then((user) => {
+            apiPost(GET_USER_DETAIL_API, { customer_id: user?.id }).then((userDetail) => {
+                if (!!userDetail) {
+                    console.log({ userDetail })
+                    store.dispatch(saveUserDetail(userDetail))
+                }
+                resolve()
+            }).catch((error) => {
+                reject(error)
+            })
+            resolve()
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+
+
 }

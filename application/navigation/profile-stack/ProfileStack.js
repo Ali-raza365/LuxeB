@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { PaymentMethods, Profile, Referral } from '../../screens';
+import { Addresses, PaymentMethods, Profile, Referral } from '../../screens';
 import { COLORS, FS, WP } from '../../theme/config';
 import VoucherTabs from './VoucherTabs';
 import { _gotoVoucherTabs } from '../navigationServcies';
@@ -67,6 +67,23 @@ const ProfileStack = ({ navigation }) => {
                 }}
                 name='paymentmethods'
                 component={PaymentMethods}
+            />
+             <Stack.Screen
+                options={{
+                    headerShown: true,
+                    headerBackTitleVisible: false,
+                    headerTintColor: COLORS.whiteColor,
+                    headerTitleAlign: 'center',
+                    headerTitle: 'Addresses',
+                    headerRightContainerStyle: { paddingRight: WP(4) },
+                    headerLeftContainerStyle: { paddingLeft: WP(4) },
+                    headerRight: () => ( <MatComIcon onPress={()=>navigation.navigate("addPaymentMethod")} name="pencil-outline" size={FS(4)} color={COLORS.whiteColor} />),
+                    headerStyle: {
+                        backgroundColor: COLORS.blackColor,
+                    }
+                }}
+                name='addresses'
+                component={Addresses}
             />
         </Stack.Navigator>
     );

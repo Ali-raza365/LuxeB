@@ -35,6 +35,7 @@ import Referral from "./Referral/Referral";
 import Profile from "./profile/Profile";
 import AvailableVoucher from "./profile/AvailableVoucher";
 import PaymentMethods from "./profile/PaymentMethods";
+import Addresses from "./profile/Addresses";
 
 
 export {
@@ -70,5 +71,6 @@ export {
     Profile,
     AvailableVoucher,
     PaymentMethods,
+    Addresses,
 };
 

@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { AddPaymentMethod, Checkout, SelectPaymentMethod, ServiceDetail, SpeciallistDetail } from '../../screens';
+import { AddPaymentMethod, Checkout, PaymentMethods, SelectPaymentMethod, ServiceDetail, SpeciallistDetail } from '../../screens';
 import { COLORS, FS, WP } from '../../theme/config';
 import BottomNavigator from './BottomNavigator';
 
@@ -80,7 +80,7 @@ const BottomStack = () => {
                     }
                 }}
                 name='selectpaymentmethod'
-                component={SelectPaymentMethod}
+                component={PaymentMethods}
             />
 
             <Stack.Screen

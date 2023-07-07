@@ -7,6 +7,7 @@ export const SIGN_UP_VERIFY_OTP_API = getApiUrl('/api/account/register/');
 export const LOGIN_API = getApiUrl('/api/account/send-login-otp/');
 export const LOGOUT_API = getApiUrl('/api/account/logout/');
 export const LOGIN_VERIFY_OTP_API = getApiUrl('/api/account/login/');
+export const GET_USER_DETAIL_API = getApiUrl('/api/customer/getCustomerDetails/');
 
 export const GET_DISTRICTS_API = getApiUrl('/api/customer/getDistricts/');
 export const GET_SUBDISTRICTS_API = getApiUrl('/api/customer/getSubDistricts/');

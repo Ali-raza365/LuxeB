@@ -12,7 +12,9 @@ const Referral = () => {
             <Text style={styles.heading}>Become a{'\n'} LuxeBeauty Ambassador {'\n'}and be rewarded with free{'\n'} treatment credit!</Text>
             <Text style={styles.infoText}>Below is your unique Ambassador Code which gives your friends $15 off their first treatment! {'\n'} {'\n'}For every friend you refer who books using your unique, you’ll receive $15 LuxeBeauty Credit. It’s a win win!</Text>
             <Text style={styles.codeText}>Maria1392</Text>
-            <Button title={'Copy Code'} buttonStyle={{ padding: WP(4) }} />
+            <Button 
+                    onPress={() => { }}
+                    title={'Copy Code'} buttonStyle={{ padding: WP(4) }} />
             <View style={styles.shareContainer}>
                 <Text style={styles.shareText}>Share my code</Text>
                 <View style={styles.row} >

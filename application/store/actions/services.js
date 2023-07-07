@@ -6,6 +6,7 @@ import { _formatDate } from "../../utils/TimeFunctions";
 import { saveServicesCategories, saveTherapistsList, setSelectedService, setSpeciallistDetail } from "../reducers/ServicesReducer";
 import store from "../Store";
 import { Alert } from "react-native";
+import actions from ".";
 
 export function fetchServicesCategories() {
     return new Promise((resolve, reject) => {
@@ -36,7 +37,7 @@ export function fetchSliderItems() {
     })
 }
 
-export function onServiceSelect(data,service, navigation) {
+export function onServiceSelect(data, service, navigation) {
     return new Promise((resolve, reject) => {
         apiPost(GET_THERAPISTS_BY_SERVICE_API, data).then((res) => {
             store.dispatch(setSelectedService(service))
@@ -73,7 +74,7 @@ export function getTherapistAvailability(data) {
 }
 
 
-export function onSpeciallistClick(item, navigation,timeSlot) {
+export function onSpeciallistClick(item, navigation, timeSlot) {
     return new Promise((resolve, reject) => {
         let data = {
             therapist_id: item?.id,
@@ -101,7 +102,7 @@ export function onSpeciallistClick(item, navigation,timeSlot) {
                 store.dispatch(setSpeciallistDetail(response))
                 resolve(res)
                 if (navigation) {
-                    navigation.navigate("speciallistdetail",{timeSlot:timeSlot?.time_slot})
+                    navigation.navigate("speciallistdetail", { timeSlot: timeSlot?.time_slot })
                 }
                 return;
             }
@@ -133,6 +134,7 @@ export function onSetDefaultPaymentMethod(data) {
         apiPost(SET_DEFAULT_PAYMENT_METHOD_API, data).then((res) => {
             if (res.message) {
                 Alert.alert(res.message)
+                actions.getUserDetails()
                 resolve(res)
                 return;
             }

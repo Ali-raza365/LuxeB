@@ -5,7 +5,7 @@ export const ServicesReducer = createSlice({
     initialState: {
         speciallistDetail: {
             "id": 9,
-            "username": "faisal",
+            "name": "faisal",
             "therapist_info": [
                 {
                     "type": "gold",

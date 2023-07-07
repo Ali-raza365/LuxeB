@@ -55,7 +55,7 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
         }
         setDates(dates)
     }
-    
+
     const incrementDate = () => {
         const date = new Date(selectedDate);
         date.setMonth(date.getMonth() + 1);
@@ -66,6 +66,11 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
         date.setMonth(date.getMonth() - 1);
         setSelectedDate(date)
     }
+
+    useEffect(() => {
+        onSelectBookingDate(new Date())
+    }, [])
+
 
     const onSelectBookingDate = async (date) => {
         try {
@@ -86,7 +91,7 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
 
         } catch (error) {
             setLoading(false)
-            alert(error?.message)
+            Alert.alert(error?.message)
         }
 
     }

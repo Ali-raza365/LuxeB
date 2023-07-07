@@ -74,180 +74,6 @@ const ServiceDetail = ({ navigation }) => {
         }
     }
 
-    let SpeciallistArr = [
-        {
-            "id": 8,
-            "username": "faraz",
-            "therapist_info": [
-                {
-                    "type": "silver",
-                    "about": "lorem ipusm dolor dummy text"
-                }
-            ],
-            "profile_image": "/media/profile_images/Original-9.png",
-            "is_therapist": true,
-            "services": [
-                {
-                    "services-1": "Facial"
-                },
-                {
-                    "services-2": "Tanning"
-                }
-            ],
-            "reviews": {
-                "average_rating": 4.5,
-                "total_ratings": 2
-            },
-            "availability": [
-                {
-                    "date": "2023-06-17",
-                    "time_slots": [
-
-                    ]
-                }
-            ]
-        },
-        {
-            "id": 10,
-            "username": "tariq",
-            "therapist_info": [
-                {
-                    "type": "silver",
-                    "about": "lorem"
-                }
-            ],
-            "profile_image": "/media/profile_images/Original-9_w6C5Emo.png",
-            "is_therapist": true,
-            "services": [
-                {
-                    "services-1": "Facial"
-                }
-            ],
-            "reviews": {
-                "average_rating": null,
-                "total_ratings": 0
-            },
-            "availability": [
-                {
-                    "date": "2023-06-17",
-                    "time_slots": [
-                        {
-                            "id": 9,
-                            "time_slot": "09:00"
-                        },
-                        {
-                            "id": 10,
-                            "time_slot": "10:00"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": 9,
-            "username": "faisal",
-            "therapist_info": [
-                {
-                    "type": "gold",
-                    "about": "lorem ipusm dolor dummy text"
-                }
-            ],
-            "profile_image": "/media/profile_images/Original-6.png",
-            "is_therapist": true,
-            "services": [
-                {
-                    "services-1": "Facial"
-                }
-            ],
-            "reviews": {
-                "average_rating": 3.0,
-                "total_ratings": 1
-            },
-            "availability": [
-                {
-                    "date": "2023-06-17",
-                    "time_slots": [
-                        {
-                            "id": 7,
-                            "time_slot": "09:00"
-                        },
-                        {
-                            "id": 8,
-                            "time_slot": "10:00"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": 8,
-            "username": "faraz",
-            "therapist_info": [
-                {
-                    "type": "silver",
-                    "about": "lorem ipusm dolor dummy text"
-                }
-            ],
-            "profile_image": "/media/profile_images/Original-9.png",
-            "is_therapist": true,
-            "services": [
-                {
-                    "services-1": "Facial"
-                },
-                {
-                    "services-2": "Tanning"
-                }
-            ],
-            "reviews": {
-                "average_rating": 4.5,
-                "total_ratings": 2
-            },
-            "availability": [
-                {
-                    "date": "2023-06-17",
-                    "time_slots": [
-
-                    ]
-                }
-            ]
-        },
-        {
-            "id": 10,
-            "username": "tariq",
-            "therapist_info": [
-                {
-                    "type": "silver",
-                    "about": "lorem"
-                }
-            ],
-            "profile_image": "/media/profile_images/Original-9_w6C5Emo.png",
-            "is_therapist": true,
-            "services": [
-                {
-                    "services-1": "Facial"
-                }
-            ],
-            "reviews": {
-                "average_rating": null,
-                "total_ratings": 0
-            },
-            "availability": [
-                {
-                    "date": "2023-06-17",
-                    "time_slots": [
-                        {
-                            "id": 9,
-                            "time_slot": "09:00"
-                        },
-                        {
-                            "id": 10,
-                            "time_slot": "10:00"
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
 
     const renderItem = ({ item, index }) => {
         return (
@@ -255,7 +81,7 @@ const ServiceDetail = ({ navigation }) => {
                 <View style={styles.listTopView}>
                     <View style={styles.listLeftView}>
                         <View style={styles.listHeaderContainer}>
-                            <Text style={styles.listHeading}>{item?.username || ''}</Text>
+                            <Text style={styles.listHeading}>{item?.name || ''}</Text>
                             <View style={styles._circleView}>
                                 {
                                     item?.therapist_info?.[0]?.type == 'silver' ?
@@ -266,7 +92,13 @@ const ServiceDetail = ({ navigation }) => {
                                 }
                             </View>
                         </View>
-                        <Text style={styles.listText} >Makeup • Facial • Hair</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            {
+                                item?.services && item?.services?.map((service, index) => {
+                                    return <Text key={index} style={styles.listText} >{Object.values(service)[0] || ''} {item?.services.length != index + 1 ? '•' : ''} </Text>
+                                })
+                            }
+                        </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <StarRating
                                 disabled={false}
@@ -286,7 +118,6 @@ const ServiceDetail = ({ navigation }) => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.listBottomView}>
                     {
                         item?.availability?.[0]?.time_slots.map((item, index) => {
-                            console.log({item})
                             return (
                                 <Pressable key={index}
                                     onPress={() => settimeSlot(item)}

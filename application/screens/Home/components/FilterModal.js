@@ -29,7 +29,30 @@ export default function FilterModal({ type, isVisible, onBackButtonPress, onBack
     const [districtSubModal, setdistrictSubModal] = useState(false);
     const [loading, setloading] = useState(false);
     const [filterDate, setfilterDate] = useState(new Date());
-    const [datePickerModal, setDatePickerModal] = useState(false)
+    const [datePickerModal, setDatePickerModal] = useState(false);
+    const userLocation = useSelector(store => store.user.userLocation);
+
+    const setdefaultLocation = async () => {
+        try {
+            const currDistric = districtsArr.find((dist) => dist.id == userLocation?.district);
+            setDistrict(currDistric);
+            const data = { district_id: currDistric?.id }
+            const subDistrictRes = await actions.fetchSubDistricts(data)
+            if (subDistrictRes) {
+                setSubDistrictsArr(subDistrictRes);
+                const currSubDistric = subDistrictRes.find((dist) => dist.id == userLocation?.sub_district);
+                setSubDistrict(currSubDistric)
+            }
+        } catch (error) {
+            Alert.alert(error.message);
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        setdefaultLocation()
+    }, [])
+
 
     const onDistricSelect = async (val) => {
         try {

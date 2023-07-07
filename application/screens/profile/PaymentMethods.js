@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AppBar, Button, Loader } from '../../components';
@@ -11,7 +11,13 @@ const PaymentMethods = () => {
 
     const userDetail = useSelector(store => store.user.userDetail);
     const [selected, setSelected] = useState(null);
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+
+    useEffect(() => {
+        let Method = userDetail?.payment_methods.find((item) => item?.is_default)
+        setSelected(Method)
+    }, [userDetail])
+
 
     const setDefaultPaymentMethod = async () => {
         try {
@@ -38,14 +44,13 @@ const PaymentMethods = () => {
                 contentContainerStyle={{ margin: WP(5), paddingBottom: WP(40) }}
             >
                 <Text style={styles.headingSty}>Select Payment Methods</Text>
-
                 <View>
                     <Text style={{ paddingBottom: WP(3) }}>Default Payment Method</Text>
                     {
                         userDetail?.payment_methods && userDetail?.payment_methods.map((item, index) => {
                             return (
                                 <PaymentCard
-                                key={index}
+                                    key={index}
                                     onPress={(val) => setSelected(val)}
                                     selected={selected}
                                     item={item}

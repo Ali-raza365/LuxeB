@@ -96,7 +96,7 @@ const SpeciallistDetail = ({ route, navigation }) => {
 
     let speciallistData = {
         "id": 9,
-        "username": "faisal",
+        "name": "faisal",
         "therapist_info": [
             {
                 "type": "gold",
@@ -203,12 +203,12 @@ const SpeciallistDetail = ({ route, navigation }) => {
             <View style={styles.listTopView}>
                 <View style={styles.listLeftView}>
                     <View style={styles.listHeaderContainer}>
-                        <Text style={styles.listHeading}>{speciallistDetail?.username || ''}</Text>
+                        <Text style={styles.listHeading}>{speciallistDetail?.name || ''}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         {
                             speciallistDetail?.services && speciallistDetail?.services?.map((service, index) => {
-                                return <Text key={index} style={styles.listText} >{service?.service?.service_name || ''}{speciallistDetail?.services.length != index + 1 ? ',' : ''} </Text>
+                                return <Text key={index} style={styles.listText} >{service?.service?.service_name || ''} {speciallistDetail?.services.length != index + 1 ? '•' : ''} </Text>
                             })
                         }
                     </View>
@@ -301,7 +301,7 @@ const SpeciallistDetail = ({ route, navigation }) => {
                             return (
                                 <View key={index} style={styles.reviewContainer}>
                                     <View style={styles.reviewInfoContainer}>
-                                        <Text style={styles.reviewHeading}>{speciallistDetail?.username || ''}</Text>
+                                        <Text style={styles.reviewHeading}>{speciallistDetail?.name || ''}</Text>
                                         <View style={{ flexDirection: 'row', marginVertical: WP(1) }}>
                                             <StarRating
                                                 disabled={false}

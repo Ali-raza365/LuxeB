@@ -7,7 +7,7 @@ import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PaymentCard from './components/PaymentCard';
 import { AppBar, Button } from '../../components';
 
-const Checkout = ({navigation}) => {
+const Checkout = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <AppBar type='light' backgroundColor={COLORS.blackColor} />
@@ -91,16 +91,33 @@ const Checkout = ({navigation}) => {
                 <View style={styles._boxContainer}>
                     <View style={[styles.headerView, { justifyContent: 'space-between' }]}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <MaterialIcons  name="payments" size={WP(7.5)} color={COLORS.gary300} />
+                            <MaterialIcons name="payments" size={WP(7.5)} color={COLORS.gary300} />
                             <Text style={styles.headerText}>Payment Methods</Text>
                         </View>
-                        <MatComIcon onPress={()=>navigation.navigate("selectpaymentmethod")} name="pencil-outline" size={WP(7.5)} color={COLORS.gary300} />
+                        <MatComIcon onPress={() => navigation.navigate("selectpaymentmethod")} name="pencil-outline" size={WP(7.5)} color={COLORS.gary300} />
                     </View>
                     <Text style={styles.paymentHeading}>Default Payment Methods</Text>
-                    <PaymentCard select={true} />
+                    <PaymentCard
+
+                        selected={{
+                            brand: "Visa",
+                            customer_id: 14,
+                            expiration_month: 2,
+                            expiration_year: 2030,
+                            last4: "4242",
+                            payment_method_id: "tok_1NQFM3FCp9JuJuBC7YzqxwxF",
+                        }}
+                        item={{
+                            brand: "Visa",
+                            customer_id: 14,
+                            expiration_month: 2,
+                            expiration_year: 2030,
+                            last4: "4242",
+                            payment_method_id: "tok_1NQFM3FCp9JuJuBC7YzqxwxF",
+                        }} />
                     <Text style={{ textAlign: 'center', fontSize: WP(4.5), marginVertical: WP(5) }} >or</Text>
                     <Button
-                    onPress={()=>{navigation.push('addPaymentMethod')}}
+                        onPress={() => { navigation.push('addPaymentMethod') }}
                         title={'Add New Payment Method'}
                     />
                 </View>
@@ -140,13 +157,14 @@ const Checkout = ({navigation}) => {
                     <Button
                         title={'Apply'}
                         buttonStyle={{ marginTop: WP(5), backgroundColor: 'transparent', borderWidth: 1, }}
-                        textStyle={{ color: COLORS.borderColor, fontSize:WP(4) }}
+                        textStyle={{ color: COLORS.borderColor, fontSize: WP(4) }}
 
                     />
                 </View>
 
                 <Button
                     title={'Book Now'}
+                    onPress={() => { }}
                 />
 
             </ScrollView >
