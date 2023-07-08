@@ -8,10 +8,10 @@ import {
 } from 'react-native';
 import { COLORS, FONT, HP, INPUT_HEIGHT, RADIUS, SPACING_PERCENT, TEXT_SIZES, WP } from '../theme/config';
 
-const LabelInput = ({ label, placeholder, value, onChangeText, editable,stric,edit, width, inputStyle, containerStyle, keyboard }) => {
+const LabelInput = ({ label, placeholder, value, onChangeText, editable, stric, edit, width, inputStyle, containerStyle, keyboard }) => {
     return (
         <View style={containerStyle}>
-            <Text style={Styles._label}>{label} {stric ? "*" : ''}</Text>
+            {label && <Text style={Styles._label}>{label} {stric ? "*" : ''}</Text>}
             <TextInput
                 selectionColor={COLORS.secondaryColor}
                 editable={editable || edit}
@@ -43,9 +43,9 @@ const Styles = StyleSheet.create({
         fontFamily: FONT,
         fontSize: WP(TEXT_SIZES.info_1),
         color: COLORS.blackColor,
-        marginBottom: WP(SPACING_PERCENT/2),
+        marginBottom: WP(SPACING_PERCENT / 2),
         textAlign: 'left',
-        fontWeight:'600',
+        fontWeight: '600',
     },
 });
 

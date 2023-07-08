@@ -13,6 +13,22 @@ const PaymentMethods = () => {
     const [selected, setSelected] = useState(null);
     const [loading, setloading] = useState(false);
 
+
+    const _handleRefresh = async () => {
+        try {
+            setloading(true)
+            await actions.getUserDetails()
+            setloading(false)
+        } catch (error) {
+            setloading(false)
+        }
+    }
+
+    useEffect(() => {
+        _handleRefresh()
+    }, [])
+
+
     useEffect(() => {
         let Method = userDetail?.payment_methods.find((item) => item?.is_default)
         setSelected(Method)

@@ -115,35 +115,6 @@ export function onSpeciallistClick(item, navigation, timeSlot) {
 
 
 
-export function onSavePaymentMethod(data, navigation) {
-    return new Promise((resolve, reject) => {
-        apiPost(SAVE_PAYMENT_METHOD_API, data).then((res) => {
-            if (!!res) {
-                resolve(res)
-                return;
-            }
-            resolve(res)
-        }).catch((error) => {
-            reject(error)
-        })
-    })
-}
-
-export function onSetDefaultPaymentMethod(data) {
-    return new Promise((resolve, reject) => {
-        apiPost(SET_DEFAULT_PAYMENT_METHOD_API, data).then((res) => {
-            if (res.message) {
-                Alert.alert(res.message)
-                actions.getUserDetails()
-                resolve(res)
-                return;
-            }
-            resolve(res)
-        }).catch((error) => {
-            reject(error)
-        })
-    })
-}
 
 
 // setItem('userData', res.data).then((returnValue)=>{

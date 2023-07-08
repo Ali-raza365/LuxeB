@@ -9,14 +9,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { BottomSheetDropdown, BottomSheetInput, Button, Loader } from '../../../components'
+import { BottomSheetDropdown, BottomSheetInput, Button } from '../../../components'
 import { useNavigation } from '@react-navigation/native'
 import actions from '../../../store/actions'
 import { useSelector } from 'react-redux'
-import { getItem } from '../../../utils/axios'
+import DatePicker from 'react-native-date-picker'
 
-export default function LocationModal({  coordinate, isVisible, onBackButtonPress, onBackdropPress }) {
-
+export default function NewAddressModal({ isVisible, onBackButtonPress, onBackdropPress, coordinate }) {
 
     const navigation = useNavigation()
     const [district, setDistrict] = useState('');
@@ -44,7 +43,7 @@ export default function LocationModal({  coordinate, isVisible, onBackButtonPres
                 lat: Number(coordinate?.latitude),
                 long: Number(coordinate?.longitude),
                 customer: customer_id,
-                is_booking: true,
+                is_booking: false,
                 is_billing: false,
                 address: addressText,
             }
@@ -52,7 +51,7 @@ export default function LocationModal({  coordinate, isVisible, onBackButtonPres
             if (resp) {
                 onBackButtonPress()
                 Alert.alert(resp.message)
-                navigation.navigate('gender')
+                actions.getUserDetails()
                 setAddressText('')
                 setDistrict('')
                 setSubDistrict('')

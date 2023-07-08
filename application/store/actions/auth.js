@@ -1,10 +1,11 @@
 import { Alert } from "react-native";
-import { GET_DISTRICTS_API, GET_SUBDISTRICTS_API, GET_THERAPISTS_DETAIL_API, GET_USER_DETAIL_API, LOGIN_API, LOGIN_VERIFY_OTP_API, LOGOUT_API, SAVE_USER_LOCATION_API, SIGN_UP_API, SIGN_UP_VERIFY_OTP_API } from "../../api/apis";
-import { apiGet, apiPost, clearToken, getItem, setItem } from "../../utils/axios";
+import { GET_DISTRICTS_API, GET_SUBDISTRICTS_API, GET_THERAPISTS_DETAIL_API, GET_USER_DETAIL_API, LOGIN_API, LOGIN_VERIFY_OTP_API, LOGOUT_API, SAVE_PAYMENT_METHOD_API, SAVE_USER_LOCATION_API, SET_DEFAULT_PAYMENT_METHOD_API, SIGN_UP_API, SIGN_UP_VERIFY_OTP_API } from "../../api/apis";
+import { apiGet, apiPost, apiPut, clearToken, getItem, setItem } from "../../utils/axios";
 import { saveTherapistsList } from "../reducers/ServicesReducer";
 import { saveDistricts, savePhoneNumber, saveSignUpCredentials, saveUserDetail, saveUserLocation } from "../reducers/UserReducer";
 import store from "../Store";
 import { _gotoAskForLocation, _gotoBottomTabs } from "../../navigation/navigationServcies";
+import actions from ".";
 
 export function OnSignUpUser(data, navigation) {
     return new Promise((resolve, reject) => {
@@ -165,7 +166,7 @@ export function checkUserStatus(navigation) {
                 reject(error)
                 if (error?.status == 401) {
                     clearToken()
-                    navigation.navigate('splash')
+                    navigation.navigate('welcome')
                 }
             })
             resolve()
@@ -193,6 +194,53 @@ export function getUserDetails() {
             reject(error)
         })
     })
+}
 
 
+export function onSavePaymentMethod(data, navigation) {
+    return new Promise((resolve, reject) => {
+        apiPost(SAVE_PAYMENT_METHOD_API, data).then((res) => {
+            if (!!res) {
+                actions.getUserDetails()
+                resolve(res)
+                return;
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+
+export function onSetDefaultPaymentMethod(data) {
+    return new Promise((resolve, reject) => {
+        apiPost(SET_DEFAULT_PAYMENT_METHOD_API, data).then(async (res) => {
+            if (res.message) {
+                Alert.alert(res.message)
+                await actions.getUserDetails()
+                resolve(res)
+                return;
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+
+
+export function onSetDefaultAddress(data) {
+    return new Promise((resolve, reject) => {
+        apiPut(SAVE_USER_LOCATION_API, data).then(async (res) => {
+            if (res.message) {
+                Alert.alert(res.message)
+                await actions.getUserDetails()
+                resolve(res)
+                return;
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
 }

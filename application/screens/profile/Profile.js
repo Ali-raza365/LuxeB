@@ -6,8 +6,12 @@ import { _gotoVoucherTabs } from '../../navigation/navigationServcies';
 import { COLORS, WP } from '../../theme/config';
 import actions from '../../store/actions';
 import { AppBar } from '../../components';
+import { useSelector } from 'react-redux';
+import { API_BASE_URL } from '../../api/apis';
 
 const Profile = ({ navigation }) => {
+
+    const userDetail = useSelector(store => store.user.userDetail);
 
     const onLogout = async () => {
         try {
@@ -37,11 +41,11 @@ const Profile = ({ navigation }) => {
                 <View style={styles.leftViewContainer}>
                     <View style={{ marginBottom: WP(5) }}>
                         <Text style={styles.labelSty}>Name</Text>
-                        <Text style={styles.textSty}>Maria Bethany</Text>
+                        <Text style={styles.textSty}>{userDetail?.name || ''}</Text>
                     </View>
                     <View style={{ marginBottom: WP(5) }}>
                         <Text style={styles.labelSty}>Contact Number</Text>
-                        <Text style={styles.textSty}>+8801800000000</Text>
+                        <Text style={styles.textSty}>{userDetail?.phone || ''}</Text>
                     </View>
                     <View style={{ marginBottom: WP(5) }}>
                         <Text style={styles.labelSty}>Date of birth</Text>
@@ -55,7 +59,7 @@ const Profile = ({ navigation }) => {
                 </View>
                 <View style={[styles.rightViewContainer, { overflow: 'visible' }]}>
                     <View style={styles.rightViewContainer}>
-                        <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: "https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60" }} />
+                        <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: API_BASE_URL + userDetail?.profile_image }} />
                     </View>
                     <Ionicons
                         style={styles.cameraIconSty}

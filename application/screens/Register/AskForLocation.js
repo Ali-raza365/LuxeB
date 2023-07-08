@@ -10,6 +10,7 @@ import LocationModal from './Components/LocationModal';
 import DeviceInfo from 'react-native-device-info';
 import actions from '../../store/actions';
 import { getItem } from '../../utils/axios';
+import { GetLocation } from '../../utils/GetLocation';
 
 export default function AskForLocation({ navigation }) {
 
@@ -58,82 +59,94 @@ export default function AskForLocation({ navigation }) {
     }
 
 
-
     const onGettingLocation = async () => {
         try {
-            if (PLATFORM == 'ios') {
-                Geolocation.getCurrentPosition(
-                    //Will give you the current location
-                    (position) => {
-                        console.log('You are Here');
-                        //getting the Longitude from the location json
-                        const currentLongitude =
-                            JSON.stringify(position.coords.longitude);
-                        //getting the Latitude from the location json
-                        const currentLatitude =
-                            JSON.stringify(position.coords.latitude);
-                        //Setting Longitude state
-                        console.log({ currentLongitude });
-                        setCoordinate({ longitude: currentLongitude, latitude: currentLatitude })
-                        toggleLocationModal()
-                        // onSaveLocation(currentLatitude, currentLongitude)
-                    },
-                    (error) => {
-                        console.log(error)
-                    }
-                )
-            } else {
-                try {
-                    const granted = await PermissionsAndroid.request(
-                        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                        {
-                            title: 'Location Access Required',
-                            message: 'This App needs to Access your location',
-                        },
-                    );
-                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                        DeviceInfo.isLocationEnabled().then((enabled) => {
-                            console.log("Is location is enable", enabled)
-                            // true or false
-                            if (enabled) {
-                                Geolocation.getCurrentPosition(
-                                    //Will give you the current location
-                                    (position) => {
-                                        console.log('You are Here');
-                                        //getting the Longitude from the location json
-                                        const currentLongitude =
-                                            JSON.stringify(position.coords.longitude);
-                                        //getting the Latitude from the location json
-                                        const currentLatitude =
-                                            JSON.stringify(position.coords.latitude);
-                                        setCoordinate({ longitude: currentLongitude, latitude: currentLatitude })
-                                        //Setting Longitude state
-                                        console.log({ currentLongitude });
-                                        toggleLocationModal()
-                                        // onSaveLocation(currentLatitude, currentLongitude)
-                                    },
-                                    (error) => {
-                                        // resolve({ longitude: null, latitude: null })
-                                        console.log(error)
-                                    }
-                                )
-                            } else {
-                                ToastAndroid.show('Please turn on your mobile location', ToastAndroid.SHORT);
-
-                            }
-                        });
-                    } else {
-                        console.log('Permission Denied');
-                    }
-                } catch (err) {
-                    console.log('Permission Denied 11');
-                    console.log(err);
-                }
-            }
+            await GetLocation().then((loc) => {
+                console.log({ loc })
+                setCoordinate(loc)
+                toggleLocationModal()
+            })
         } catch (error) {
-            console.log(error, "234")
+            console.log('error', error)
         }
     }
+
+
+    // const onGettingLocation = async () => {
+    //     try {
+    //         if (PLATFORM == 'ios') {
+    //             Geolocation.getCurrentPosition(
+    //                 //Will give you the current location
+    //                 (position) => {
+    //                     console.log('You are Here');
+    //                     //getting the Longitude from the location json
+    //                     const currentLongitude =
+    //                         JSON.stringify(position.coords.longitude);
+    //                     //getting the Latitude from the location json
+    //                     const currentLatitude =
+    //                         JSON.stringify(position.coords.latitude);
+    //                     //Setting Longitude state
+    //                     console.log({ currentLongitude });
+    //                     setCoordinate({ longitude: currentLongitude, latitude: currentLatitude })
+    //                     toggleLocationModal()
+    //                     // onSaveLocation(currentLatitude, currentLongitude)
+    //                 },
+    //                 (error) => {
+    //                     console.log(error)
+    //                 }
+    //             )
+    //         } else {
+    //             try {
+    //                 const granted = await PermissionsAndroid.request(
+    //                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    //                     {
+    //                         title: 'Location Access Required',
+    //                         message: 'This App needs to Access your location',
+    //                     },
+    //                 );
+    //                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //                     DeviceInfo.isLocationEnabled().then((enabled) => {
+    //                         console.log("Is location is enable", enabled)
+    //                         // true or false
+    //                         if (enabled) {
+    //                             Geolocation.getCurrentPosition(
+    //                                 //Will give you the current location
+    //                                 (position) => {
+    //                                     console.log('You are Here');
+    //                                     //getting the Longitude from the location json
+    //                                     const currentLongitude =
+    //                                         JSON.stringify(position.coords.longitude);
+    //                                     //getting the Latitude from the location json
+    //                                     const currentLatitude =
+    //                                         JSON.stringify(position.coords.latitude);
+    //                                     setCoordinate({ longitude: currentLongitude, latitude: currentLatitude })
+    //                                     //Setting Longitude state
+    //                                     console.log({ currentLongitude });
+    //                                     toggleLocationModal()
+    //                                     // onSaveLocation(currentLatitude, currentLongitude)
+    //                                 },
+    //                                 (error) => {
+    //                                     // resolve({ longitude: null, latitude: null })
+    //                                     console.log(error)
+    //                                 }
+    //                             )
+    //                         } else {
+    //                             ToastAndroid.show('Please turn on your mobile location', ToastAndroid.SHORT);
+
+    //                         }
+    //                     });
+    //                 } else {
+    //                     console.log('Permission Denied');
+    //                 }
+    //             } catch (err) {
+    //                 console.log('Permission Denied 11');
+    //                 console.log(err);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.log(error, "234")
+    //     }
+    // }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>

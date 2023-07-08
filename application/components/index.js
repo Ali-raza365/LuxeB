@@ -5,6 +5,7 @@ import LabelInput from "./LabelInput";
 import Loader from "./Loader";
 import EmptyRecord from "./EmptyRecord";
 import BottomSheetDropdown from "./BottomSheetDropdown";
+import BottomSheetInput from "./BottomSheetInput";
 
 export {
     AppBar,
@@ -14,5 +15,7 @@ export {
     Loader,
     EmptyRecord,
     BottomSheetDropdown,
+    BottomSheetInput,
+
 
 }

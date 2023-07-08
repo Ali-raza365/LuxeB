@@ -11,7 +11,7 @@ export const GET_USER_DETAIL_API = getApiUrl('/api/customer/getCustomerDetails/'
 
 export const GET_DISTRICTS_API = getApiUrl('/api/customer/getDistricts/');
 export const GET_SUBDISTRICTS_API = getApiUrl('/api/customer/getSubDistricts/');
-export const SAVE_USER_LOCATION_API = getApiUrl('/api/customer/addCustomerLocation/');
+export const SAVE_USER_LOCATION_API = getApiUrl('/api/customer/customerLocation/');
 
 export const GET_SLIDER_API = getApiUrl('/api/customer/getSliderItems/');
 export const GET_SERVICES_CATEGOIES_API = getApiUrl('/api/customer/getCategories/');

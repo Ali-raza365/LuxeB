@@ -1,45 +1,37 @@
-import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, StyleSheet, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import Modal from "react-native-modal";
 import { COLORS, HP, WP } from '../theme/config';
+import Button from './Button';
+import LabelInput from './LabelInput';
 
-export default function BottomSheetDropdown({ data, lable, isVisible, onCloseModal,onPressItem }) {
+export default function BottomSheetInput({ lable, isVisible, onCloseModal, onPressItem }) {
 
-
+    const [inputValue, setinputValue] = useState('')
     return (
         <Modal
             isVisible={isVisible}
             style={Styles._modal}
             onBackButtonPress={onCloseModal}
             onBackdropPress={onCloseModal}
+            avoidKeyboard
         >
             <View style={[Styles._modalMain, {}]}>
                 {/* <View style={Styles.dashView} /> */}
                 {lable && <Text style={Styles._lable} >{lable}</Text>}
                 <View style={Styles.detailSty} >
-                    <FlatList
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingBottom: 50 }}
-                        data={data}
-                        keyExtractor={(_, index) => index.toString()}
-                        ListEmptyComponent={(
-                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                <Text style={Styles.titleSty} >No Record Found!</Text>
-                            </View>
-                        )}
-                        renderItem={({ item, index }) => {
-                            return (
-                                <TouchableHighlight
-                                    underlayColor='#dddddd'
-                                    onPress={() => { onPressItem(item) }}
-                                    style={Styles.itemViewSty}>
-                                    <Text style={Styles.titleSty} >{item?.name || ''}</Text>
-                                </TouchableHighlight>
-                            )
-                        }}
-
+                    <LabelInput
+                        value={inputValue}
+                        containerStyle={Styles.InputContainer}
+                        placeholder={lable}
+                        onChangeText={(val) => setinputValue(val)}
                     />
+
                 </View>
+                <Button
+                    onPress={() => { onPressItem(inputValue),onCloseModal() }}
+                    buttonStyle={{ alignSelf: 'center', }}
+                    title={"Save"} />
             </View>
         </Modal>
     )
@@ -87,8 +79,8 @@ const Styles = StyleSheet.create({
         // fontWeight: "600",
         letterSpacing: 1,
     },
-    itemViewSty: {
-        width: '97%',
+    InputContainer: {
+        width: '95%',
         padding: WP(2),
         margin: WP(2),
         marginVertical: WP(1),
@@ -103,5 +95,6 @@ const Styles = StyleSheet.create({
         color: COLORS.darkGrey,
         letterSpacing: 1,
     },
+
 
 })
