@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { COLORS, WP, FS, HP } from '../../theme/config'
+import { COLORS, WP, FS, HP, FONT_BOLD } from '../../theme/config'
 import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import { AppBar } from '../../components';
@@ -124,8 +124,9 @@ const styles = StyleSheet.create({
     },
     reviewHeading: {
         fontSize: FS(3),
-        fontWeight: '600',
+        fontWeight: '700',
         color: COLORS.blackColor,
+        fontFamily:FONT_BOLD,
     },
     reviewText: {
         fontSize: WP(3.7),

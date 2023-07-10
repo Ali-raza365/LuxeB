@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { COLORS, FS, WP } from '../../theme/config';
+import { COLORS, FONT_BOLD, FS, WP } from '../../theme/config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { _formatFullDate } from '../../utils/TimeFunctions';
 import { AppBar } from '../../components';
@@ -71,7 +71,8 @@ const styles = StyleSheet.create({
     },
     voucherTitle: {
         fontSize: WP(8),
-        fontWeight: '600',
+        fontWeight: '700',
+        fontFamily:FONT_BOLD,
         color: COLORS.blackColor,
 
     },

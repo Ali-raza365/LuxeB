@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppBar, Button } from '../../components';
 import { _gotoBottomTabs, _gotophoneNumber } from '../../navigation/navigationServcies';
-import { COLORS, FS, HP, WP } from '../../theme/config';
+import { COLORS, FONT_BOLD, FS, HP, WP } from '../../theme/config';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { IMAGES } from '../../constants/ImagePath';
 
@@ -77,11 +77,12 @@ const styles = StyleSheet.create({
         paddingTop: HP(12),
     },
     heading: {
-        fontWeight: '600',
+        fontWeight: '700',
         color: COLORS.blackColor,
         fontSize: FS(3.5),
         width: '80%',
         textAlign: 'center',
+        fontFamily:FONT_BOLD,
     },
     desc: {
         paddingTop: HP(1),

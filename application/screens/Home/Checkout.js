@@ -1,13 +1,55 @@
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS, HP, WP } from '../../theme/config'
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PaymentCard from './components/PaymentCard';
 import { AppBar, Button } from '../../components';
+import { useSelector } from 'react-redux';
+import { _formatDateMonth } from '../../utils/TimeFunctions';
 
 const Checkout = ({ navigation }) => {
+
+    const speciallistDetail = useSelector(state => state.service.speciallistDetail);
+    const userDetail = useSelector(store => store.user.userDetail);
+
+    const [serviceArr, setServiceArr] = useState([]);
+    const [subTotal, setSubTotal] = useState(0);
+    const [bookingFee, setBookingFee] = useState(2.99);
+    const [PaymentMethod, setPaymentMethod] = useState({});
+    const [bookingAddress, setBookingAddress] = useState('');
+    const [billingAddress, setBillingAddress] = useState('');
+
+    useEffect(() => {
+        let services = [],
+            sub_total = 0;
+        speciallistDetail.services.map((service) => {
+            service.sub_services.map(subService => {
+                if (subService?.isSelected) {
+                    services.push(subService)
+                    sub_total = sub_total + (Number(subService?.price || 0) * Number(subService?.quantity || 1))
+                }
+            })
+        })
+        setServiceArr(services)
+        setSubTotal(sub_total)
+        console.log({ services })
+    }, [speciallistDetail])
+
+    useEffect(() => {
+        let Method = userDetail?.payment_methods.find((item) => item?.is_default)
+        let booking_Address = userDetail?.locations.find((item) => item?.is_booking)
+        let billing_ddress = userDetail?.locations.find((item) => item?.is_billing)
+        setBillingAddress(billing_ddress)
+        setBookingAddress(booking_Address)
+        setPaymentMethod(Method)
+    }, [userDetail])
+
+    console.log(speciallistDetail?.bookingDate)
+
+
+
     return (
         <View style={styles.container}>
             <AppBar type='light' backgroundColor={COLORS.blackColor} />
@@ -27,8 +69,8 @@ const Checkout = ({ navigation }) => {
                         <Text style={[styles.infoText, { width: '40%' }]}>Start Time</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.ValueText}>Thu, 30 Mar 2023 </Text>
-                        <Text style={[styles.ValueText, { width: '40%' }]}>2:00 PM</Text>
+                        <Text style={styles.ValueText}>{_formatDateMonth(speciallistDetail?.bookingDate)} </Text>
+                        <Text style={[styles.ValueText, { width: '40%' }]}>{speciallistDetail?.bookingTime || ''} PM</Text>
                     </View>
 
 
@@ -37,7 +79,7 @@ const Checkout = ({ navigation }) => {
                         <Text style={[styles.infoText, { width: '40%' }]}>Duration</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.ValueText}>Suzie </Text>
+                        <Text style={styles.ValueText}>{speciallistDetail?.name || ''} </Text>
                         <Text style={[styles.ValueText, { width: '40%' }]}>3 Hours 15 mins</Text>
                     </View>
                 </View>
@@ -48,41 +90,34 @@ const Checkout = ({ navigation }) => {
                         <Feather name="trending-up" size={WP(7.5)} color={COLORS.gary300} />
                         <Text style={styles.headerText}>Service</Text>
                     </View>
-                    <View style={[styles.row, { marginTop: WP(4) }]}>
-                        <Text style={styles.ValueText}>Acupuncture</Text>
-                        <Text style={[styles.ValueText]}>x1</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.infoText}>$ 50</Text>
-                    </View>
-                    <View style={[styles.row, { marginTop: WP(1) }]}>
-                        <Text style={styles.ValueText}>Chinese Anti-aging Facial</Text>
-                        <Text style={[styles.ValueText]}>x2</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.infoText}>$ 100</Text>
-                    </View>
-                    <View style={[styles.row, { marginTop: WP(1) }]}>
-                        <Text style={styles.ValueText}>Facial Acupuncture add-on </Text>
-                        <Text style={[styles.ValueText,]}>x1</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.infoText}>$ 50</Text>
-                    </View>
-
+                    {
+                        serviceArr && serviceArr?.map((item, index) => {
+                            return (
+                                <View>
+                                    <View key={index} style={[styles.row, { marginTop: WP(1) }]}>
+                                        <Text style={styles.ValueText}>{item?.sub_service?.sub_service_name || ''}</Text>
+                                        <Text style={[styles.ValueText]}>x{item?.quantity || '1'}</Text>
+                                    </View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.infoText}>$ {Number(item?.price || 0) * Number(item?.quantity || 1)}</Text>
+                                    </View>
+                                </View>
+                            )
+                        })
+                    }
                     <View style={{ borderWidth: 1, borderColor: COLORS.grey, marginVertical: WP(3), }} />
 
                     <View style={[styles.row, { marginTop: WP(1) }]}>
                         <Text style={styles.ValueText}>Subtotal</Text>
-                        <Text style={[styles.ValueText]}>$ 200</Text>
+                        <Text style={[styles.ValueText]}>$ {subTotal || 0}</Text>
                     </View>
                     <View style={[styles.row]}>
                         <Text style={styles.infoText}>Booking fee</Text>
-                        <Text style={[styles.infoText]}>$ 2.99</Text>
+                        <Text style={[styles.infoText]}>$ {bookingFee || 0}</Text>
                     </View>
                     <View style={[styles.row, { marginTop: WP(1) }]}>
                         <Text style={styles.ValueText}>Total</Text>
-                        <Text style={[styles.ValueText]}>$ 202.99</Text>
+                        <Text style={[styles.ValueText]}>$ {subTotal + bookingFee || 0}</Text>
                     </View>
                 </View>
 
@@ -98,23 +133,9 @@ const Checkout = ({ navigation }) => {
                     </View>
                     <Text style={styles.paymentHeading}>Default Payment Methods</Text>
                     <PaymentCard
-
-                        selected={{
-                            brand: "Visa",
-                            customer_id: 14,
-                            expiration_month: 2,
-                            expiration_year: 2030,
-                            last4: "4242",
-                            payment_method_id: "tok_1NQFM3FCp9JuJuBC7YzqxwxF",
-                        }}
-                        item={{
-                            brand: "Visa",
-                            customer_id: 14,
-                            expiration_month: 2,
-                            expiration_year: 2030,
-                            last4: "4242",
-                            payment_method_id: "tok_1NQFM3FCp9JuJuBC7YzqxwxF",
-                        }} />
+                        selected={PaymentMethod}
+                        item={PaymentMethod}
+                    />
                     <Text style={{ textAlign: 'center', fontSize: WP(4.5), marginVertical: WP(5) }} >or</Text>
                     <Button
                         onPress={() => { navigation.push('addPaymentMethod') }}
@@ -126,13 +147,13 @@ const Checkout = ({ navigation }) => {
                 <View style={styles._boxContainer}>
                     <Text style={styles.ValueText}>Booking Address</Text>
                     <View style={[styles.row, { marginVertical: WP(3) }]}>
-                        <Text style={styles.infoText}>South Bank University SE1 </Text>
-                        <MatComIcon name="pencil-outline" size={WP(7)} color={COLORS.gary300} />
+                        <Text style={styles.infoText}>{bookingAddress?.address || ""}</Text>
+                        <MatComIcon onPress={() => navigation.navigate('addresses')} name="pencil-outline" size={WP(7)} color={COLORS.gary300} />
                     </View>
                     <Text style={styles.ValueText}>Billing Address</Text>
                     <View style={[styles.row, { marginTop: WP(3) }]}>
-                        <Text style={styles.infoText}>South Bank University SE1 </Text>
-                        <MatComIcon name="pencil-outline" size={WP(7)} color={COLORS.gary300} />
+                        <Text style={styles.infoText}>{billingAddress?.address || ''}</Text>
+                        <MatComIcon onPress={() => navigation.navigate('addresses')} name="pencil-outline" size={WP(7)} color={COLORS.gary300} />
                     </View>
                 </View>
 
@@ -156,6 +177,7 @@ const Checkout = ({ navigation }) => {
 
                     <Button
                         title={'Apply'}
+                        onPress={() => { }}
                         buttonStyle={{ marginTop: WP(5), backgroundColor: 'transparent', borderWidth: 1, }}
                         textStyle={{ color: COLORS.borderColor, fontSize: WP(4) }}
 

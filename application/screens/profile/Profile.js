@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { _gotoVoucherTabs } from '../../navigation/navigationServcies';
-import { COLORS, WP } from '../../theme/config';
+import { COLORS, FONT_BOLD, WP } from '../../theme/config';
 import actions from '../../store/actions';
 import { AppBar } from '../../components';
 import { useSelector } from 'react-redux';
@@ -48,12 +48,12 @@ const Profile = ({ navigation }) => {
                         <Text style={styles.textSty}>{userDetail?.phone || ''}</Text>
                     </View>
                     <View style={{ marginBottom: WP(5) }}>
-                        <Text style={styles.labelSty}>Date of birth</Text>
-                        <Text style={styles.textSty}>DD MM YYYY</Text>
+                        <Text style={styles.labelSty}>Email</Text>
+                        <Text style={styles.textSty}>{userDetail?.email||""}</Text>
                     </View>
                     <View style={{ marginBottom: WP(5) }}>
-                        <Text style={styles.labelSty}>Location</Text>
-                        <Text style={styles.textSty}>Add Details</Text>
+                        <Text style={styles.labelSty}>Loyalty points</Text>
+                        <Text style={styles.textSty}>{userDetail?.loyalty_points || 0} pts</Text>
                     </View>
 
                 </View>
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         fontWeight: '700',
         color: COLORS.blackColor,
+        fontFamily:FONT_BOLD,
 
     },
     rightViewContainer: {
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         fontWeight: '700',
         color: COLORS.blackColor,
+        fontFamily:FONT_BOLD,
 
     },
 })

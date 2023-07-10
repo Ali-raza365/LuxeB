@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { COLORS, FS, WP } from '../../theme/config'
+import { COLORS, FONT_BOLD, FS, WP } from '../../theme/config'
 import { AppBar, Button } from '../../components'
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -41,11 +41,12 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: WP(5.5),
-        fontWeight: '600',
+        fontWeight: '700',
         textAlign: 'center',
         letterSpacing: 1,
         lineHeight: 25,
-        color: COLORS.blackColor
+        color: COLORS.blackColor,
+        fontFamily:FONT_BOLD,
     },
     infoText: {
         paddingVertical: 45,

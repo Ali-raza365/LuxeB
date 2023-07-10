@@ -1,6 +1,6 @@
 import { FlatList, Pressable, RefreshControl, StyleSheet, Text, ToastAndroid, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { COLORS, FS, WP } from '../../theme/config'
+import { COLORS, FONT_BOLD, FS, WP } from '../../theme/config'
 import { Button } from '../../components'
 import { useSelector } from 'react-redux'
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
         fontSize: WP(4),
         letterSpacing: 1,
         fontWeight: '700',
+        fontFamily:FONT_BOLD,
         color: COLORS.blackColor,
     },
     addressText: {

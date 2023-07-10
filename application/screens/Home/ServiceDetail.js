@@ -50,13 +50,14 @@ const ServiceDetail = ({ navigation }) => {
 
     const onFilterTabClik = async (type) => {
         try {
-            setFilterValue(type)
+            let filter = type == filterValue ? '' : type
+            setFilterValue(filter)
             settimeSlot('')
             const data = {
                 service_id: service?.id,
                 sub_district: userLocation?.sub_district,
                 date: _formatDate(new Date()),
-                type: type?.toLowerCase(),
+                type: filter?.toLowerCase(),
             }
             await actions.onServiceSelect(data, service, navigation,)
         } catch (error) {

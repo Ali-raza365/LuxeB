@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { AddPaymentMethod, Checkout, PaymentMethods, SelectPaymentMethod, ServiceDetail, SpeciallistDetail } from '../../screens';
+import { AddPaymentMethod, Addresses, Checkout, PaymentMethods, SelectPaymentMethod, ServiceDetail, SpeciallistDetail } from '../../screens';
 import { COLORS, FS, WP } from '../../theme/config';
 import BottomNavigator from './BottomNavigator';
 
@@ -45,6 +45,22 @@ const BottomStack = () => {
                 }}
                 name='checkout'
                 component={Checkout}
+            />
+               <Stack.Screen
+                options={{
+                    headerShown: true,
+                    headerBackTitleVisible: false,
+                    headerTintColor: COLORS.whiteColor,
+                    headerTitleAlign: 'center',
+                    headerTitle: 'Addresses',
+                    headerRightContainerStyle: { paddingRight: WP(4) },
+                    headerLeftContainerStyle: { paddingLeft: WP(4) },
+                    headerStyle: {
+                        backgroundColor: COLORS.blackColor,
+                    }
+                }}
+                name='addresses'
+                component={Addresses}
             />
             <Stack.Screen
                 options={{

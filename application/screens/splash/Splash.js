@@ -37,7 +37,7 @@ export default function Splash({ navigation }) {
     return (
         <View style={styles.container}>
             <AppBar type={'dark'} backgroundColor={COLORS.primaryColor} />
-            <Text style={styles.headerText} >U B E A U T Y</Text>
+            <Text style={styles.headerText} >L U X E B E A U T Y</Text>
         </View>
     )
 }

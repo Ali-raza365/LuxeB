@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { COLORS, FS, WP } from '../../../theme/config';
+import { COLORS, FONT_BOLD, FS, WP } from '../../../theme/config';
 import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -48,8 +48,9 @@ const styles = StyleSheet.create({
     },
     reviewHeading: {
         fontSize: FS(2.2),
-        fontWeight: '600',
+        fontWeight: '700',
         color: COLORS.blackColor,
+        fontFamily:FONT_BOLD,
     },
     reviewText: {
         fontSize: WP(2.8),

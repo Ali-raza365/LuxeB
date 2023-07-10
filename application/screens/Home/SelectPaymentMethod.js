@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Button } from '../../components';
-import { COLORS, TEXT_SIZES, WP } from '../../theme/config';
+import { COLORS, FONT_BOLD, TEXT_SIZES, WP } from '../../theme/config';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import PaymentCard from './components/PaymentCard';
@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
         // width: '60%',
         fontSize: WP(4),
         color: COLORS.blackColor,
-        fontWeight: '600',
+        fontWeight: '700',
+        fontFamily:FONT_BOLD,
     },
     paymentHeading: {
         paddingTop: WP(4),

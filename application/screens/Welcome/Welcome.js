@@ -8,7 +8,7 @@ import {
 import { AppBar, Button } from '../../components';
 import { IMAGES } from '../../constants/ImagePath';
 import { _gotophoneNumber } from '../../navigation/navigationServcies';
-import { COLORS, FS, HP, WP } from '../../theme/config';
+import { COLORS, FONT_BOLD, FS, HP, WP } from '../../theme/config';
 export default function Welcome({ navigation }) {
     const onPress = () => {
         _gotophoneNumber(navigation);
@@ -67,9 +67,10 @@ const styles = StyleSheet.create({
         paddingTop: HP(12),
     },
     heading: {
-        fontWeight: '600',
+        fontWeight: '700',
         color: COLORS.blackColor,
         fontSize: FS(3.5),
+        fontFamily:FONT_BOLD,
     },
     desc: {
         paddingTop: HP(2),

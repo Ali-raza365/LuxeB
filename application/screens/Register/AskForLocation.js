@@ -3,7 +3,7 @@ import { Alert, Image, PermissionsAndroid, StyleSheet, Text, ToastAndroid, View 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppBar, Button } from '../../components';
-import { COLORS, FS, HP, PLATFORM, WP } from '../../theme/config';
+import { COLORS, FONT_BOLD, FS, HP, PLATFORM, WP } from '../../theme/config';
 import { IMAGES } from '../../constants/ImagePath';
 import Geolocation from '@react-native-community/geolocation';
 import LocationModal from './Components/LocationModal';
@@ -220,10 +220,11 @@ const styles = StyleSheet.create({
         marginBottom: HP(1.5),
     },
     heading: {
-        fontWeight: '600',
+        fontWeight: '700',
         textAlign: 'center',
         color: COLORS.blackColor,
         fontSize: FS(3.5),
+        fontFamily:FONT_BOLD,
     },
     desc: {
         paddingTop: HP(1),

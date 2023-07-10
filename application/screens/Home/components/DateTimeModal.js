@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal from "react-native-modal"
 import EvilIcons from "react-native-vector-icons/EvilIcons"
-import { COLORS, DAYS, HP, SPACING_PERCENT, TEXT_SIZES, WP } from '../../../theme/config'
+import { COLORS, DAYS, FONT_BOLD, HP, SPACING_PERCENT, TEXT_SIZES, WP } from '../../../theme/config'
 import { _formatDate, getFullMonthName, isCurrentDate } from '../../../utils/TimeFunctions'
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -10,10 +10,15 @@ import Feather from 'react-native-vector-icons/Feather';
 import { Button } from '../../../components'
 import { useNavigation } from '@react-navigation/native'
 import actions from '../../../store/actions'
+import { setSpeciallistDetail } from '../../../store/reducers/ServicesReducer'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackButtonPress, onBackdropPress }) {
 
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const dispatch = useDispatch()
+    const speciallistDetail = useSelector(state => state.service.speciallistDetail);
+
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [bookingDate, setBookingDate] = useState(null);
     const [timeSlots, setTimeSlots] = useState([]);
@@ -21,6 +26,7 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
     const [dates, setDates] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState(timeSlot || '')
     const timeArr = ["7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00"];
+
 
     function getMonthDates(d) {
 
@@ -86,14 +92,18 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
                 setLoading(false)
                 setSelectedDate(date);
                 setBookingDate(date);
+                dispatch(setSpeciallistDetail({ ...speciallistDetail, bookingDate: date }))
                 setTimeSlots(response?.[0]?.time_slots || [])
             }
-
         } catch (error) {
             setLoading(false)
             Alert.alert(error?.message)
         }
+    }
 
+    const onSelectBookingTime = (time) => {
+        setSelectedSlot(time)
+        dispatch(setSpeciallistDetail({ ...speciallistDetail, bookingTime: time }))
     }
 
     useEffect(() => {
@@ -168,7 +178,7 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
                         {
                             bookingDate && timeSlots.length != 0 && timeSlots?.map((item, index) => {
                                 return <Text key={index}
-                                    onPress={() => setSelectedSlot(item.time_slot)}
+                                    onPress={() => onSelectBookingTime(item.time_slot)}
                                     style={{
                                         padding: WP(1.5),
                                         paddingHorizontal: WP(3),
@@ -224,6 +234,7 @@ const Styles = StyleSheet.create({
         fontSize: WP(5),
         color: COLORS.blackColor,
         fontWeight: "bold",
+        fontFamily: FONT_BOLD,
         letterSpacing: 1,
         width: '80%'
     },

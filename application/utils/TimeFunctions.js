@@ -85,14 +85,17 @@ export const _formatDotDate = (d) => {
 }
 
 export const _formatDateMonth = (date) => {
-    // var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-    // var dd = String(today.getDate()).padStart(2, "0");
     var today = new Date(date);
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var dd = String(today.getDate()).padStart(2, "0");
+    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     var allmonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     var monthIndex = today.getMonth();
     var mm = allmonths[monthIndex]
+    var dayIndex = today.getDay();
+    var dayName = days[dayIndex];
     var yyyy = today.getFullYear();
-    today = mm + " " + yyyy;
+    today = dayName + ", " + dd + " " + mm + " " + yyyy;
     return today
 };
 export const _formatFullDate = (date) => {
