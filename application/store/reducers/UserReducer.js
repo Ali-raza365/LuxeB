@@ -4,6 +4,7 @@ export const UserReducer = createSlice({
     name: 'counter',
     initialState: {
         value: 0,
+        currency:"THB",
         signup_name: "",
         signup_phone: "",
         phoneNumber: "",

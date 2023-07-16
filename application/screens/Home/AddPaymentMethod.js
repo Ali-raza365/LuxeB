@@ -76,7 +76,6 @@ const AddPaymentMethod = ({ navigation }) => {
                     Alert.alert("Payment method successfully added!");
                     navigation.goBack()
                 }
-
             } else if (respToken.error) {
                 setloading(false)
                 Alert.alert(respToken?.error?.message || '')

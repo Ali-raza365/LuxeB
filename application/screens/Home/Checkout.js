@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { COLORS, HP, WP } from '../../theme/config'
+import { COLORS, FONT_BOLD, HP, WP } from '../../theme/config'
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,6 +13,7 @@ const Checkout = ({ navigation }) => {
 
     const speciallistDetail = useSelector(state => state.service.speciallistDetail);
     const userDetail = useSelector(store => store.user.userDetail);
+    const currency = useSelector(state => state.user.currency);
 
     const [serviceArr, setServiceArr] = useState([]);
     const [subTotal, setSubTotal] = useState(0);
@@ -93,13 +94,13 @@ const Checkout = ({ navigation }) => {
                     {
                         serviceArr && serviceArr?.map((item, index) => {
                             return (
-                                <View>
-                                    <View key={index} style={[styles.row, { marginTop: WP(1) }]}>
+                                <View key={index}>
+                                    <View  style={[styles.row, { marginTop: WP(1) }]}>
                                         <Text style={styles.ValueText}>{item?.sub_service?.sub_service_name || ''}</Text>
                                         <Text style={[styles.ValueText]}>x{item?.quantity || '1'}</Text>
                                     </View>
                                     <View style={styles.row}>
-                                        <Text style={styles.infoText}>$ {Number(item?.price || 0) * Number(item?.quantity || 1)}</Text>
+                                        <Text style={styles.infoText}>{currency} {Number(item?.price || 0) * Number(item?.quantity || 1)}</Text>
                                     </View>
                                 </View>
                             )
@@ -109,15 +110,15 @@ const Checkout = ({ navigation }) => {
 
                     <View style={[styles.row, { marginTop: WP(1) }]}>
                         <Text style={styles.ValueText}>Subtotal</Text>
-                        <Text style={[styles.ValueText]}>$ {subTotal || 0}</Text>
+                        <Text style={[styles.ValueText]}>{currency} {subTotal || 0}</Text>
                     </View>
                     <View style={[styles.row]}>
                         <Text style={styles.infoText}>Booking fee</Text>
-                        <Text style={[styles.infoText]}>$ {bookingFee || 0}</Text>
+                        <Text style={[styles.infoText]}>{currency} {bookingFee || 0}</Text>
                     </View>
                     <View style={[styles.row, { marginTop: WP(1) }]}>
                         <Text style={styles.ValueText}>Total</Text>
-                        <Text style={[styles.ValueText]}>$ {subTotal + bookingFee || 0}</Text>
+                        <Text style={[styles.ValueText]}>{currency} {subTotal + bookingFee || 0}</Text>
                     </View>
                 </View>
 
@@ -161,7 +162,7 @@ const Checkout = ({ navigation }) => {
                 <View style={styles._boxContainer}>
                     <Text style={styles.ValueText}>Special Instructions</Text>
                     <TextInput
-                        style={{ height: HP(7), textAlign: 'left', marginTop: WP(3), borderBottomWidth: 1, fontSize: WP(4.5) }}
+                        style={{  textAlign: 'left', marginTop: WP(3), borderBottomWidth: 1, fontSize: WP(4.5) }}
                         placeholder='Parking, address clarification, special requests for your booking, etc '
                         multiline
                     />
@@ -178,8 +179,8 @@ const Checkout = ({ navigation }) => {
                     <Button
                         title={'Apply'}
                         onPress={() => { }}
-                        buttonStyle={{ marginTop: WP(5), backgroundColor: 'transparent', borderWidth: 1, }}
-                        textStyle={{ color: COLORS.borderColor, fontSize: WP(4) }}
+                        buttonStyle={{ marginTop: WP(5),}}
+                        textStyle={{ color: COLORS.whiteColor, fontSize: WP(4) }}
 
                     />
                 </View>
@@ -202,9 +203,11 @@ const styles = StyleSheet.create({
     },
     headingSty: {
         fontSize: WP(6.5),
-        fontWeight: '500',
+        fontWeight: '700',
         letterSpacing: 1,
         paddingVertical: WP(4),
+        fontFamily:FONT_BOLD,
+        color:COLORS.blackColor,
     },
     _boxContainer: {
         padding: WP(5),

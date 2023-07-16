@@ -7,7 +7,7 @@ import { _formatDate, getFullMonthName, isCurrentDate } from '../../../utils/Tim
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-import { Button } from '../../../components'
+import { Button, Loader } from '../../../components'
 import { useNavigation } from '@react-navigation/native'
 import actions from '../../../store/actions'
 import { setSpeciallistDetail } from '../../../store/reducers/ServicesReducer'
@@ -24,7 +24,8 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
     const [timeSlots, setTimeSlots] = useState([]);
     const [loading, setLoading] = useState(false)
     const [dates, setDates] = useState([]);
-    const [selectedSlot, setSelectedSlot] = useState(timeSlot || '')
+    const [selectedSlot, setSelectedSlot] = useState(timeSlot || '');
+    const [duration, setduration] = useState(0)
     const timeArr = ["7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00"];
 
 
@@ -66,24 +67,41 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
         const date = new Date(selectedDate);
         date.setMonth(date.getMonth() + 1);
         setSelectedDate(date)
+        onSelectBookingDate(date)
     }
     const decrementDate = () => {
         const date = new Date(selectedDate);
         date.setMonth(date.getMonth() - 1);
         setSelectedDate(date)
+        onSelectBookingDate(date)
     }
 
     useEffect(() => {
+        let total_duration = 0;
+        speciallistDetail.services.map((service) => {
+            service.sub_services.map(subService => {
+                if (subService?.isSelected) {
+                    total_duration = total_duration + Number(subService?.duration || 0)
+                }
+            })
+        })
+        setduration(total_duration)
+    }, [speciallistDetail])
+
+
+    useEffect(() => {
         onSelectBookingDate(new Date())
-    }, [])
+    }, [isVisible == true])
 
 
-    const onSelectBookingDate = async (date) => {
+    const onSelectBookingDate = async (date, time) => {
         try {
             setLoading(true)
             let detail = {
                 therapist_id: therapist?.id,
-                date: _formatDate(date)
+                date: _formatDate(date),
+                duration: duration,
+                selected_timeslot: time,
             }
             let response = await actions.getTherapistAvailability(detail)
             if (response?.message) {
@@ -94,6 +112,12 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
                 setBookingDate(date);
                 dispatch(setSpeciallistDetail({ ...speciallistDetail, bookingDate: date }))
                 setTimeSlots(response?.[0]?.time_slots || [])
+                const timeSlot = response?.[0]?.time_slots?.find((slot) => {
+                    return slot?.is_selectable && slot?.time_slot == selectedSlot
+                })
+                if (timeSlot) {
+                    setSelectedSlot(selectedSlot)
+                } else setSelectedSlot("")
             }
         } catch (error) {
             setLoading(false)
@@ -101,14 +125,18 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
         }
     }
 
-    const onSelectBookingTime = (time) => {
-        setSelectedSlot(time)
-        dispatch(setSpeciallistDetail({ ...speciallistDetail, bookingTime: time }))
+    const onSelectBookingTime = (slot) => {
+        if (slot?.is_selectable) {
+            setSelectedSlot(slot?.time_slot)
+            onSelectBookingDate(bookingDate, slot?.time_slot)
+            dispatch(setSpeciallistDetail({ ...speciallistDetail, bookingTime: slot?.time_slot }))
+        }
     }
 
     useEffect(() => {
         getMonthDates(new Date)
     }, [selectedDate])
+
 
     return (
         <Modal
@@ -118,6 +146,7 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
             onBackdropPress={onBackdropPress}
         >
             <View style={Styles._modalMain}>
+                <Loader isVisible={loading} />
                 <View style={Styles.dashView} />
                 <Text style={Styles._lable} >What’s your favorite time for treatment?</Text>
                 <View style={Styles._calendarContainer}>
@@ -127,10 +156,10 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
                             <Text style={{ color: COLORS.whiteColor, fontSize: WP(4), fontWeight: '700', paddingRight: WP(3) }} >{getFullMonthName(selectedDate)} {selectedDate.getFullYear()}</Text>
                             <FontAwesome name="caret-down" size={WP(5)} color={COLORS.whiteColor} />
                         </Pressable>
-                        <View style={Styles._calendarNexts}>
+                        {/* <View style={Styles._calendarNexts}>
                             <Feather onPress={decrementDate} name="chevron-left" size={WP(7)} color={COLORS.gary300} />
                             <Feather onPress={incrementDate} name="chevron-right" size={WP(7)} color={COLORS.gary300} />
-                        </View>
+                        </View> */}
                     </View>
 
                     <View style={Styles._calendarView}>
@@ -178,7 +207,7 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
                         {
                             bookingDate && timeSlots.length != 0 && timeSlots?.map((item, index) => {
                                 return <Text key={index}
-                                    onPress={() => onSelectBookingTime(item.time_slot)}
+                                    onPress={() => onSelectBookingTime(item)}
                                     style={{
                                         padding: WP(1.5),
                                         paddingHorizontal: WP(3),
@@ -186,7 +215,7 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
                                         borderWidth: 1,
                                         fontSize: WP(4.2),
                                         fontWeight: '600',
-                                        backgroundColor: item?.time_slot == selectedSlot ? COLORS.blackColor : COLORS.whiteColor,
+                                        backgroundColor: item?.is_selectable ? item?.time_slot == selectedSlot ? COLORS.blackColor : COLORS.whiteColor : '#e1e1e1ff',
                                         color: item?.time_slot == selectedSlot ? COLORS.whiteColor : COLORS.blackColor,
                                         letterSpacing: 1,
                                         borderColor: COLORS.blackColor
@@ -198,6 +227,7 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
 
 
                     <Button
+                        disable={!selectedSlot}
                         onPress={() => { onBackButtonPress(); navigation.push('checkout') }}
                         buttonStyle={{ alignSelf: 'center' }}
                         title={"Next"} />

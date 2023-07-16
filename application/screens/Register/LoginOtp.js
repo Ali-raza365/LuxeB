@@ -9,8 +9,10 @@ import { COLORS, FONT_BOLD, FS, HP, WP } from '../../theme/config';
 
 export default function LoginOtp({ navigation }) {
 
-    const {  phoneNumber } = useSelector(store => store.user)
+    const { phoneNumber } = useSelector(store => store.user)
     const [otpCode, setOtpCode] = useState('');
+    const [loading, setloading] = useState(false)
+
     let otpInput = useRef(null);
     const onPress = async () => {
         if (otpCode == '')
@@ -18,12 +20,14 @@ export default function LoginOtp({ navigation }) {
         else if (otpCode.length != 4)
             Alert.alert('OTP Code is inVaild')
         else {
-            console.log({phoneNumber})
+            console.log({ phoneNumber })
             let detail = {
                 phone: phoneNumber,
                 otp: otpCode
             }
+            setloading(true)
             await actions.OnVerifyLoginOtp(detail, navigation)
+            setloading(false)
         }
     };
 
@@ -31,7 +35,7 @@ export default function LoginOtp({ navigation }) {
         <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
             <KeyboardAwareScrollView>
                 <View style={styles.container}>
-                    <View style={{ height:'88%'}}>
+                    <View style={{ height: '88%' }}>
                         <AppBar type={'dark'} backgroundColor={COLORS.offWhiteColor} />
                         <View style={styles.mainStyle}>
                             <View style={styles.innerContainer}>
@@ -60,13 +64,14 @@ export default function LoginOtp({ navigation }) {
                                 </View>
                             </View>
                             <Button
-                        title="Continue"
-                        onPress={onPress}
-                        buttonStyle={styles.buttonStyle}
-                    />
+                                disable={loading}
+                                title="Continue"
+                                onPress={onPress}
+                                buttonStyle={styles.buttonStyle}
+                            />
                         </View>
                     </View>
-                   
+
                 </View>
             </KeyboardAwareScrollView>
 
@@ -102,7 +107,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: COLORS.blackColor,
         fontSize: FS(3.5),
-        fontFamily:FONT_BOLD,
+        fontFamily: FONT_BOLD,
     },
     desc: {
         paddingTop: HP(3),

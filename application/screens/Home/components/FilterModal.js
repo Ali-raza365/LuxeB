@@ -9,13 +9,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { BottomSheetDropdown, Button } from '../../../components'
+import { BottomSheetDropdown, Button, Loader } from '../../../components'
 import { useNavigation } from '@react-navigation/native'
 import actions from '../../../store/actions'
 import { useSelector } from 'react-redux'
 import DatePicker from 'react-native-date-picker'
 
-export default function FilterModal({ type, isVisible, onBackButtonPress, onBackdropPress }) {
+export default function FilterModal({ type, onChangeLoc, onChangeDate, isVisible, onBackButtonPress, onBackdropPress }) {
 
     const navigation = useNavigation()
     const [district, setDistrict] = useState('');
@@ -76,7 +76,7 @@ export default function FilterModal({ type, isVisible, onBackButtonPress, onBack
 
     const onFilterServices = async () => {
         try {
-            onBackButtonPress();
+            setloading(true)
             const data = {
                 service_id: service?.id,
                 sub_district: subDistrict?.id,
@@ -84,7 +84,10 @@ export default function FilterModal({ type, isVisible, onBackButtonPress, onBack
                 type: type,
             }
             await actions.onServiceSelect(data, service, navigation,)
+            setloading(false);
+            onBackButtonPress();
         } catch (error) {
+            setloading(false)
             console.log("error riased in on services api", error)
         }
     }
@@ -97,7 +100,7 @@ export default function FilterModal({ type, isVisible, onBackButtonPress, onBack
             onBackdropPress={onBackdropPress}
         >
             <View style={Styles._modalMain}>
-
+                <Loader isVisible={loading} />
                 <BottomSheetDropdown
                     lable={'Select District'}
                     data={districtsArr}
@@ -111,7 +114,7 @@ export default function FilterModal({ type, isVisible, onBackButtonPress, onBack
                     data={subDistrictsArr}
                     isVisible={districtSubModal}
                     onCloseModal={() => setdistrictSubModal(false)}
-                    onPressItem={(val) => { setdistrictSubModal(false); setSubDistrict(val) }}
+                    onPressItem={(val) => { setdistrictSubModal(false); setSubDistrict(val); onChangeLoc(val?.id) }}
                 />
 
                 <DatePicker
@@ -123,6 +126,7 @@ export default function FilterModal({ type, isVisible, onBackButtonPress, onBack
                     onConfirm={(date) => {
                         setDatePickerModal(false)
                         setfilterDate(date)
+                        onChangeDate(date)
                     }}
                     onCancel={() => {
                         setDatePickerModal(false)

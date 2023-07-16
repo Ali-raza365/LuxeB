@@ -39,16 +39,17 @@ export function fetchSliderItems() {
 
 export function onServiceSelect(data, service, navigation) {
     return new Promise((resolve, reject) => {
+        navigation.navigate('servicedetail')
         apiPost(GET_THERAPISTS_BY_SERVICE_API, data).then((res) => {
             store.dispatch(setSelectedService(service))
             if (res?.message) {
-                navigation.navigate('servicedetail')
+                // navigation.navigate('servicedetail')
                 store.dispatch(saveTherapistsList([]))
             } else if (!!res) {
                 store.dispatch(saveTherapistsList(res))
                 resolve(res)
                 if (navigation) {
-                    navigation.navigate('servicedetail')
+                    // navigation.navigate('servicedetail')
                 }
                 return;
             }

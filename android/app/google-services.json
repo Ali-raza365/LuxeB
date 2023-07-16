@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "3970260918",
+    "project_id": "luxe-beauty-86444",
+    "storage_bucket": "luxe-beauty-86444.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3970260918:android:e2be56f9e46ec6506c2b17",
+        "android_client_info": {
+          "package_name": "com.luxeb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3970260918-d0rr28t8812oe280pv605qe9eqqehkvl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQtWCBbv-MBhvE_DrU3kCsDi5ECBqoU2o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3970260918-d0rr28t8812oe280pv605qe9eqqehkvl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "3970260918-4kf0rvl7klja285f80u2vu6k7j7um17u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.luxeb"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

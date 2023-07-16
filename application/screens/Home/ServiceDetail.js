@@ -1,7 +1,7 @@
 
 import { FlatList, Image, Pressable, StyleSheet, Text, View, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { AppBar } from '../../components'
+import { AppBar, Loader } from '../../components'
 import { COLORS, FS, HP, WP } from '../../theme/config'
 import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -22,6 +22,9 @@ const ServiceDetail = ({ navigation }) => {
     const [showfilterModal, setShowfilterModal] = useState(false);
     const [timeSlot, settimeSlot] = useState('');
     const userLocation = useSelector(store => store.user.userLocation);
+    const [filterLoc, setFilterLoc] = useState(userLocation?.sub_district);
+    const [filterDate, setFilterDate] = useState(new Date());
+    const [loading, setLoading] = useState(false)
 
 
     const filterArray = [
@@ -47,20 +50,24 @@ const ServiceDetail = ({ navigation }) => {
     }, [])
 
 
+    // console.log({filterLoc})
 
     const onFilterTabClik = async (type) => {
         try {
             let filter = type == filterValue ? '' : type
             setFilterValue(filter)
             settimeSlot('')
+            setLoading(true)
             const data = {
                 service_id: service?.id,
-                sub_district: userLocation?.sub_district,
-                date: _formatDate(new Date()),
+                sub_district: filterLoc,
+                date: _formatDate(filterDate),
                 type: filter?.toLowerCase(),
             }
             await actions.onServiceSelect(data, service, navigation,)
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.log("error riased in on services api", error)
         }
     }
@@ -68,8 +75,11 @@ const ServiceDetail = ({ navigation }) => {
     const onSpeciallistClick = async (item) => {
 
         try {
+            setLoading(true)
             await actions.onSpeciallistClick(item, navigation, timeSlot)
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.log("error riased in on Speciallist detail api", error)
             alert(error?.message)
         }
@@ -137,11 +147,14 @@ const ServiceDetail = ({ navigation }) => {
     return (
         <View style={styles._container}>
             <AppBar type='light' backgroundColor={COLORS.blackColor} />
+            <Loader isVisible={loading} />
 
             <FilterModal
                 isVisible={showfilterModal}
                 onBackButtonPress={toggleFilterModal}
                 onBackdropPress={toggleFilterModal}
+                onChangeLoc={(val) => setFilterLoc(val)}
+                onChangeDate={(val) => setFilterDate(val)}
                 type={filterValue}
             />
 

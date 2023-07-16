@@ -30,6 +30,7 @@ const SpeciallistDetail = ({ route, navigation }) => {
     }
 
     const speciallistDetail = useSelector(state => state.service.speciallistDetail);
+    const currency = useSelector(state => state.user.currency);
 
     const incrementQuantity = (subServiceId) => {
         let change = {
@@ -178,7 +179,7 @@ const SpeciallistDetail = ({ route, navigation }) => {
             <View style={styles.listContainer}>
                 <View style={styles.listView}>
                     <Text style={styles.listTitle} >{item?.sub_service?.sub_service_name || ''}</Text>
-                    <Text style={styles.timeAndDate}>{item?.duration} min | ${item?.price || ''}</Text>
+                    <Text style={styles.timeAndDate}>{item?.duration} min | {currency} {item?.price || ''}</Text>
                 </View>
                 <Entypo name="chevron-small-right" size={WP(7)} color={COLORS.blackColor} />
             </View>
@@ -254,48 +255,59 @@ const SpeciallistDetail = ({ route, navigation }) => {
             </View>
             {
                 selectedTab == 'Services' ?
-                    <FlatList
-                        data={speciallistDetail?.services || []}
-                        // data={speciallistDetail?.services?.[0]?.sub_services || []}
-                        keyExtractor={(_, index) => index.toString()}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ padding: WP(2), }}
-                        renderItem={({ item, index }) => {
-                            return (
-                                <View>
-                                    <Text style={styles.serviceNameSty}>{item?.service?.service_name || 'fd'}</Text>
-                                    {
-                                        item?.sub_services?.map((item, index) => (
-                                            <CollapsibleView
-                                                key={index}
-                                                noArrow={true}
-                                                style={[styles.CollapsibleView, { backgroundColor: item.isSelected ? COLORS.grey : COLORS.whiteColor }]}
-                                                title={<CollapsibleViewHeader item={item} />} >
-                                                <View style={styles.CollapsibleViewContentContainer}>
-                                                    <Text style={styles.CollapsibleViewContent}>{item?.sub_service?.description || ''}</Text>
-                                                    <View style={styles.QuantityStyle}>
-                                                        <Text style={styles.headingText}>Quantity:</Text>
-                                                        <TouchableOpacity onPress={() => decrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>-</Text></TouchableOpacity>
-                                                        <Text style={styles.Qty}>{item?.quantity}</Text>
-                                                        <TouchableOpacity onPress={() => incrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>+</Text></TouchableOpacity>
+                    <>
+                        <FlatList
+                            data={speciallistDetail?.services || []}
+                            // data={speciallistDetail?.services?.[0]?.sub_services || []}
+                            keyExtractor={(_, index) => index.toString()}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{ padding: WP(2), }}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <View>
+                                        <Text style={styles.serviceNameSty}>{item?.service?.service_name || 'fd'}</Text>
+                                        {
+                                            item?.sub_services?.map((item, index) => (
+                                                <CollapsibleView
+                                                    key={index}
+                                                    noArrow={true}
+                                                    style={[styles.CollapsibleView, { backgroundColor: item.isSelected ? COLORS.grey : COLORS.whiteColor }]}
+                                                    title={<CollapsibleViewHeader item={item} />} >
+                                                    <View style={styles.CollapsibleViewContentContainer}>
+                                                        <Text style={styles.CollapsibleViewContent}>{item?.sub_service?.description || ''}</Text>
+                                                        <View style={styles.QuantityStyle}>
+                                                            <Text style={styles.headingText}>Quantity:</Text>
+                                                            <TouchableOpacity onPress={() => decrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>-</Text></TouchableOpacity>
+                                                            <Text style={styles.Qty}>{item?.quantity}</Text>
+                                                            <TouchableOpacity onPress={() => incrementQuantity(item?.sub_service?.id)} activeOpacity={0.7} style={[styles.box]}><Text style={styles.boxText}>+</Text></TouchableOpacity>
+                                                        </View>
+                                                        <View style={{ flexDirection: "row" }}>
+                                                            <Text style={styles.headingText}>Price:</Text>
+                                                            <Text style={styles.price}>{currency} {Number(item?.price * item?.quantity || 1)}</Text>
+                                                        </View>
+                                                        <Button
+                                                            onPress={() => onServiceSelect(item?.sub_service?.id)}
+                                                            buttonStyle={[styles.buttonStyle, { backgroundColor: item.isSelected ? COLORS.whiteColor : COLORS.blackColor }]}
+                                                            textStyle={{ color: item.isSelected ? COLORS.blackColor : COLORS.whiteColor }}
+                                                            title={item.isSelected ? "Unselect" : 'Select'} />
                                                     </View>
-                                                    <View style={{ flexDirection: "row" }}>
-                                                        <Text style={styles.headingText}>Price:</Text>
-                                                        <Text style={styles.price}>${Number(item?.price * item?.quantity || 1)}</Text>
-                                                    </View>
-                                                    <Button
-                                                        onPress={() => onServiceSelect(item?.sub_service?.id)}
-                                                        buttonStyle={[styles.buttonStyle, { backgroundColor: item.isSelected ? COLORS.whiteColor : COLORS.blackColor }]}
-                                                        textStyle={{ color: item.isSelected ? COLORS.blackColor : COLORS.whiteColor }}
-                                                        title={item.isSelected ? "Unselect" : 'Select'} />
-                                                </View>
-                                            </CollapsibleView>
-                                        ))
-                                    }
-                                </View>
-                            )
-                        }}
-                    /> :
+                                                </CollapsibleView>
+                                            ))
+                                        }
+                                    </View>
+                                )
+                            }}
+                        />
+
+                        {
+                            selected &&
+                            <Button
+                                onPress={toggleDateTimeModal}
+                                buttonStyle={[styles.buttonStyle]}
+                                title={"Next"} />
+                        }
+                    </>
+                    :
                     selectedTab == 'Review' ?
                         speciallistDetail.reviews.all_reviews.map((item, index) => {
                             return (
@@ -330,14 +342,7 @@ const SpeciallistDetail = ({ route, navigation }) => {
             }
 
 
-            {
-                selected &&
-                <Button
-                    onPress={toggleDateTimeModal}
-                    buttonStyle={[styles.buttonStyle]}
-                    title={"Next"} />
-            }
-
+      
 
         </View>
     )
