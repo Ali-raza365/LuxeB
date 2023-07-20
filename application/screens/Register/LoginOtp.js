@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import OTPTextView from 'react-native-otp-textinput';
 import { useSelector } from 'react-redux';
 import { AppBar, Button } from '../../components';
 import actions from '../../store/actions';
 import { COLORS, FONT_BOLD, FS, HP, WP } from '../../theme/config';
+import { GetFCMToken } from '../../utils/GetFCMToken';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 export default function LoginOtp({ navigation }) {
 
@@ -15,19 +17,43 @@ export default function LoginOtp({ navigation }) {
 
     let otpInput = useRef(null);
     const onPress = async () => {
-        if (otpCode == '')
-            Alert.alert('OTP Code is Required')
-        else if (otpCode.length != 4)
-            Alert.alert('OTP Code is inVaild')
-        else {
-            console.log({ phoneNumber })
-            let detail = {
-                phone: phoneNumber,
-                otp: otpCode
+        try {
+            if (otpCode == '')
+                Alert.alert('OTP Code is Required')
+            else if (otpCode.length != 4)
+                Alert.alert('OTP Code is inVaild')
+            else {
+                console.log({ phoneNumber })
+                let fcmDetails = await GetFCMToken()
+                let detail = {
+                    phone: phoneNumber,
+                    otp: otpCode,
+                    device_id: fcmDetails?.deviceId,
+                    device_name: fcmDetails?.deviceName,
+                    device_fcm_token: fcmDetails?.fcmToken,
+                    os_type: fcmDetails?.osType
+                }
+                setloading(true)
+                await actions.OnVerifyLoginOtp(detail, navigation)
+                setloading(false)
             }
-            setloading(true)
-            await actions.OnVerifyLoginOtp(detail, navigation)
+        } catch (error) {
             setloading(false)
+            const handleCopy = () => {
+                Clipboard.setString(error?.message);
+              };
+
+            Alert.alert("Error",error?.message, [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'Copy',
+                    onPress: handleCopy,
+                },
+            ]);
         }
     };
 

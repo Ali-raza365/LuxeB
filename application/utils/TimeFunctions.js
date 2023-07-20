@@ -174,6 +174,24 @@ export function getFullMonthName(date) {
     return date.toLocaleString('en-US', options);
 }
 
+
+export function HoursMinsStriing(minutes) {
+    // console.log(minutes)
+    var hours = Math.floor(minutes / 60);  // Calculate the number of whole hours
+    var minutesRemaining = minutes % 60;  // Calculate the remaining minutes
+    var timeString = "";
+    if (hours > 0) {
+        timeString += hours + " Hours";
+        if (minutesRemaining > 0) {
+            timeString +=  " "+ minutesRemaining + " mins";
+        }
+    } else {
+        timeString += minutesRemaining + " Mins";
+    }
+
+    return timeString;
+}
+
 export function isCurrentDate(d) {
     const currentDate = new Date(); // Create a date instance for the current date
     const date = new Date(d)

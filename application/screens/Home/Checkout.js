@@ -1,13 +1,15 @@
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS, FONT_BOLD, HP, WP } from '../../theme/config'
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MatComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PaymentCard from './components/PaymentCard';
-import { AppBar, Button } from '../../components';
+import { AppBar, Button, Loader } from '../../components';
 import { useSelector } from 'react-redux';
-import { _formatDateMonth } from '../../utils/TimeFunctions';
+import { HoursMinsStriing, _formatDate, _formatDateMonth } from '../../utils/TimeFunctions';
+import actions from '../../store/actions';
+import SuccessModal from './components/SuccessModal';
 
 const Checkout = ({ navigation }) => {
 
@@ -21,18 +23,29 @@ const Checkout = ({ navigation }) => {
     const [PaymentMethod, setPaymentMethod] = useState({});
     const [bookingAddress, setBookingAddress] = useState('');
     const [billingAddress, setBillingAddress] = useState('');
+    const [duration, setduration] = useState(0);
+    const [specialInstruction, setSpecialInstruction] = useState('')
+    const [voucherCode, setVoucherCode] = useState('');
+    const [voucherAmt, setVoucherAmt] = useState(null);
+    const [loading, setloading] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
+
+
 
     useEffect(() => {
         let services = [],
             sub_total = 0;
+        let total_duration = 0;
         speciallistDetail.services.map((service) => {
             service.sub_services.map(subService => {
                 if (subService?.isSelected) {
                     services.push(subService)
                     sub_total = sub_total + (Number(subService?.price || 0) * Number(subService?.quantity || 1))
+                    total_duration = total_duration + (Number(subService?.duration || 0) * Number(subService?.quantity || 1))
                 }
             })
         })
+        setduration(total_duration)
         setServiceArr(services)
         setSubTotal(sub_total)
         console.log({ services })
@@ -47,14 +60,86 @@ const Checkout = ({ navigation }) => {
         setPaymentMethod(Method)
     }, [userDetail])
 
-    console.log(speciallistDetail?.bookingDate)
+    // console.log(speciallistDetail?.bookingDate)
 
+    const onBookAppointment = async () => {
+        try {
+            setloading(true)
+            const customer_id = userDetail?.id;
+            const total = ((subTotal + bookingFee) - (voucherAmt || 0)).toFixed(2)
+            let detail = {
+                "date": _formatDate(speciallistDetail?.bookingDate),
+                "start_time": speciallistDetail?.bookingTimeStart,
+                "end_time": speciallistDetail?.bookingTimeEnd,
+                "therapist": speciallistDetail?.id,
+                "duration": duration,
+                "sub_total": subTotal,
+                "booking_fee": bookingFee,
+                "total": total,
+                "customer": customer_id,
+                "booking_address": bookingAddress?.id,
+                "billing_address": billingAddress?.id,
+                "special_instruction": specialInstruction,
+                "payment_method": PaymentMethod?.id,
+                "appointment_details": [...serviceArr.map((item) => {
+                    return {
+                        "price": item?.price,
+                        "sub_service": item?.sub_service?.id,
+                        "quantity": item?.quantity
+                    }
+                })
+                ]
+            }
+            const res = await actions.onbookAppointment(detail)
+            if (res?.message) {
+                Alert.alert(res?.message)
+            } else if (res) {
+                setShowSuccessModal(true)
+            }
+            setloading(false)
+            console.log(detail,"Book appointment Details")
+        } catch (error) {
+            setloading(false)
+            Alert.alert(error?.message)
+        }
+    }
+
+    const onApplyVoucher = async () => {
+        try {
+            if (voucherCode != '') {
+                setloading(true)
+                const customer_id = userDetail?.id
+                const total = subTotal + bookingFee
+                const detail = { customer_id: customer_id, voucher_code: voucherCode, total_amount: total }
+                const res = await actions.onApplyVoucher(detail)
+                if (res?.message) {
+                    Alert.alert(res?.message)
+                } else if (res) {
+                    if (res?.discount_type == 'percentage') {
+                        const percentageAmt = ((parseFloat(res?.discount_value) || 0) / total) * 100;
+                        setVoucherAmt(parseFloat(percentageAmt).toFixed(2) || 0)
+                    } else {
+                        setVoucherAmt(parseFloat(res?.discount_value).toFixed(2) || 0)
+                    }
+                }
+                setloading(false)
+            }
+        } catch (error) {
+            Alert.alert(error?.message)
+            setloading(false)
+        }
+
+    }
 
 
     return (
         <View style={styles.container}>
             <AppBar type='light' backgroundColor={COLORS.blackColor} />
-
+            <Loader isVisible={loading} />
+            <SuccessModal
+                isVisible={showSuccessModal}
+                onClose={() => {}} 
+                />
             <ScrollView
                 contentContainerStyle={{ margin: WP(5), paddingBottom: WP(40) }}
             >
@@ -71,7 +156,7 @@ const Checkout = ({ navigation }) => {
                     </View>
                     <View style={styles.row}>
                         <Text style={styles.ValueText}>{_formatDateMonth(speciallistDetail?.bookingDate)} </Text>
-                        <Text style={[styles.ValueText, { width: '40%' }]}>{speciallistDetail?.bookingTime || ''} PM</Text>
+                        <Text style={[styles.ValueText, { width: '40%' }]}>{speciallistDetail?.bookingTimeStart || ''} PM</Text>
                     </View>
 
 
@@ -81,7 +166,7 @@ const Checkout = ({ navigation }) => {
                     </View>
                     <View style={styles.row}>
                         <Text style={styles.ValueText}>{speciallistDetail?.name || ''} </Text>
-                        <Text style={[styles.ValueText, { width: '40%' }]}>3 Hours 15 mins</Text>
+                        <Text style={[styles.ValueText, { width: '40%' }]}>{HoursMinsStriing(duration || 0)}</Text>
                     </View>
                 </View>
 
@@ -95,7 +180,7 @@ const Checkout = ({ navigation }) => {
                         serviceArr && serviceArr?.map((item, index) => {
                             return (
                                 <View key={index}>
-                                    <View  style={[styles.row, { marginTop: WP(1) }]}>
+                                    <View style={[styles.row, { marginTop: WP(1) }]}>
                                         <Text style={styles.ValueText}>{item?.sub_service?.sub_service_name || ''}</Text>
                                         <Text style={[styles.ValueText]}>x{item?.quantity || '1'}</Text>
                                     </View>
@@ -116,9 +201,16 @@ const Checkout = ({ navigation }) => {
                         <Text style={styles.infoText}>Booking fee</Text>
                         <Text style={[styles.infoText]}>{currency} {bookingFee || 0}</Text>
                     </View>
+                    {voucherAmt ?
+                        <View style={[styles.row]}>
+                            <Text style={[styles.infoText, { color: COLORS.greenColor }]}>Discount</Text>
+                            <Text style={[styles.infoText, { color: COLORS.greenColor }]}>{currency} {voucherAmt || 0}</Text>
+                        </View>
+                        : null
+                    }
                     <View style={[styles.row, { marginTop: WP(1) }]}>
                         <Text style={styles.ValueText}>Total</Text>
-                        <Text style={[styles.ValueText]}>{currency} {subTotal + bookingFee || 0}</Text>
+                        <Text style={[styles.ValueText]}>{currency} {((subTotal + bookingFee) - (voucherAmt || 0)).toFixed(2)}</Text>
                     </View>
                 </View>
 
@@ -162,9 +254,12 @@ const Checkout = ({ navigation }) => {
                 <View style={styles._boxContainer}>
                     <Text style={styles.ValueText}>Special Instructions</Text>
                     <TextInput
-                        style={{  textAlign: 'left', marginTop: WP(3), borderBottomWidth: 1, fontSize: WP(4.5) }}
+                        style={{ textAlign: 'left', marginTop: WP(3), borderBottomWidth: 1, fontSize: WP(4.5) }}
                         placeholder='Parking, address clarification, special requests for your booking, etc '
                         multiline
+                        onChangeText={(val) => setSpecialInstruction(val)}
+                        value={specialInstruction}
+
                     />
                 </View>
 
@@ -174,12 +269,17 @@ const Checkout = ({ navigation }) => {
                     <TextInput
                         style={{ height: HP(5), textAlign: 'left', marginTop: WP(3), borderBottomWidth: 1, fontSize: WP(4.5) }}
                         placeholder='Enter Promotional or Gift code'
+                        onChangeText={(val) => setVoucherCode(val)}
+                        value={voucherCode}
+                        editable={!voucherAmt}
+
                     />
 
                     <Button
                         title={'Apply'}
-                        onPress={() => { }}
-                        buttonStyle={{ marginTop: WP(5),}}
+                        disable={voucherAmt}
+                        onPress={onApplyVoucher}
+                        buttonStyle={{ marginTop: WP(5), }}
                         textStyle={{ color: COLORS.whiteColor, fontSize: WP(4) }}
 
                     />
@@ -187,7 +287,7 @@ const Checkout = ({ navigation }) => {
 
                 <Button
                     title={'Book Now'}
-                    onPress={() => { }}
+                    onPress={onBookAppointment}
                 />
 
             </ScrollView >
@@ -206,8 +306,8 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         letterSpacing: 1,
         paddingVertical: WP(4),
-        fontFamily:FONT_BOLD,
-        color:COLORS.blackColor,
+        fontFamily: FONT_BOLD,
+        color: COLORS.blackColor,
     },
     _boxContainer: {
         padding: WP(5),

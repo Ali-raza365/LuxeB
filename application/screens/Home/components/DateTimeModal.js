@@ -25,7 +25,8 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
     const [loading, setLoading] = useState(false)
     const [dates, setDates] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState(timeSlot || '');
-    const [duration, setduration] = useState(0)
+    const [duration, setduration] = useState(0);
+    const [therapistAvailabilityDetail, setTherapistAvailabilityDetail] = useState([])
     const timeArr = ["7:00", "7:30", "8:00", "8:30", "9:00", "9:30", "10:00"];
 
 
@@ -81,18 +82,19 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
         speciallistDetail.services.map((service) => {
             service.sub_services.map(subService => {
                 if (subService?.isSelected) {
-                    total_duration = total_duration + Number(subService?.duration || 0)
+                    total_duration = total_duration + (Number(subService?.duration || 0) * Number(subService?.quantity || 1))
                 }
             })
         })
         setduration(total_duration)
     }, [speciallistDetail])
 
-
     useEffect(() => {
-        onSelectBookingDate(new Date())
-    }, [isVisible == true])
-
+        if (isVisible) {
+            setBookingDate(null);
+            onSelectBookingDate(selectedDate);
+        }
+    }, [isVisible]);
 
     const onSelectBookingDate = async (date, time) => {
         try {
@@ -107,10 +109,9 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
             if (response?.message) {
                 Alert.alert(response?.message)
             } else if (response) {
-                setLoading(false)
+                setTherapistAvailabilityDetail(response?.[0] || [])
                 setSelectedDate(date);
                 setBookingDate(date);
-                dispatch(setSpeciallistDetail({ ...speciallistDetail, bookingDate: date }))
                 setTimeSlots(response?.[0]?.time_slots || [])
                 const timeSlot = response?.[0]?.time_slots?.find((slot) => {
                     return slot?.is_selectable && slot?.time_slot == selectedSlot
@@ -119,6 +120,7 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
                     setSelectedSlot(selectedSlot)
                 } else setSelectedSlot("")
             }
+            setLoading(false)
         } catch (error) {
             setLoading(false)
             Alert.alert(error?.message)
@@ -128,9 +130,21 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
     const onSelectBookingTime = (slot) => {
         if (slot?.is_selectable) {
             setSelectedSlot(slot?.time_slot)
-            onSelectBookingDate(bookingDate, slot?.time_slot)
-            dispatch(setSpeciallistDetail({ ...speciallistDetail, bookingTime: slot?.time_slot }))
         }
+    }
+
+    const onNextBtnClick = () => {
+        onBackButtonPress();
+        const time = therapistAvailabilityDetail?.suggestion_time_slots.find((item) => item.from == selectedSlot)
+        const detail = {
+            ...speciallistDetail,
+            bookingDate: bookingDate,
+            bookingTimeStart: time?.from,
+            bookingTimeEnd: time?.to
+        }
+        dispatch(setSpeciallistDetail(detail))
+        console.log(detail)
+        navigation.push('checkout')
     }
 
     useEffect(() => {
@@ -227,8 +241,8 @@ export default function DateTimeModal({ timeSlot, therapist, isVisible, onBackBu
 
 
                     <Button
-                        disable={!selectedSlot}
-                        onPress={() => { onBackButtonPress(); navigation.push('checkout') }}
+                        disable={!(selectedSlot&& bookingDate)}
+                        onPress={onNextBtnClick}
                         buttonStyle={{ alignSelf: 'center' }}
                         title={"Next"} />
                 </View>

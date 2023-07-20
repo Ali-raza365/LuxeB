@@ -9,5 +9,6 @@ export const IMAGES = {
     slider1:require('../assets/images/slider1.png'),
     slider2:require('../assets/images/slider2.png'),
     slider3:require('../assets/images/slider3.png'),
+    check:require('../assets/images/check.png'),
     
 }

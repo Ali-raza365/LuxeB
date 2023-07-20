@@ -1,9 +1,9 @@
 
 import { useNavigation } from "@react-navigation/native";
-import { GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API, SAVE_PAYMENT_METHOD_API, SET_DEFAULT_PAYMENT_METHOD_API } from "../../api/apis";
+import { APPLY_VOUCHER_API, BOOK_APPOINTMENT_API, GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API, SAVE_PAYMENT_METHOD_API, SET_DEFAULT_PAYMENT_METHOD_API } from "../../api/apis";
 import { apiGet, apiPost } from "../../utils/axios";
 import { _formatDate } from "../../utils/TimeFunctions";
-import { saveServicesCategories, saveTherapistsList, setSelectedService, setSpeciallistDetail } from "../reducers/ServicesReducer";
+import { saveServicesCategories, saveTherapistsList, setFetchingTherapistsLoading, setSelectedService, setSpeciallistDetail } from "../reducers/ServicesReducer";
 import store from "../Store";
 import { Alert } from "react-native";
 import actions from ".";
@@ -40,6 +40,7 @@ export function fetchSliderItems() {
 export function onServiceSelect(data, service, navigation) {
     return new Promise((resolve, reject) => {
         navigation.navigate('servicedetail')
+        store.dispatch(setFetchingTherapistsLoading())
         apiPost(GET_THERAPISTS_BY_SERVICE_API, data).then((res) => {
             store.dispatch(setSelectedService(service))
             if (res?.message) {
@@ -115,6 +116,34 @@ export function onSpeciallistClick(item, navigation, timeSlot) {
 }
 
 
+
+export function onApplyVoucher(data) {
+    return new Promise((resolve, reject) => {
+        apiPost(APPLY_VOUCHER_API, data).then((res) => {
+            if (!!res) {
+                resolve(res)
+                return
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+
+export function onbookAppointment(data) {
+    return new Promise((resolve, reject) => {
+        apiPost(BOOK_APPOINTMENT_API, data).then((res) => {
+            if (!!res) {
+                resolve(res)
+                return
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
 
 
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppBar, Button, LabelInput } from '../../components';
@@ -7,6 +7,7 @@ import { COLORS, FONT_BOLD, FS, HP, WP } from '../../theme/config';
 import PhoneInput from "react-native-phone-number-input";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import actions from '../../store/actions';
+import { GetFCMToken } from '../../utils/GetFCMToken';
 
 export default function LoginPhoneNumber({ navigation }) {
 
@@ -34,6 +35,7 @@ export default function LoginPhoneNumber({ navigation }) {
 
         // _gotoBottomTabs(navigation);
     };
+
 
     return (
         <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>

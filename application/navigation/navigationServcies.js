@@ -19,6 +19,13 @@ export const _gotoBottomTabs = (navigation) => {
     })
 }
 
+export const _gotoBookingTabs = (navigation) => {
+    navigation.reset({
+        index: 0,
+        routes: [{ name: 'Calendar' }]
+    })
+}
+
 export const _gotoCreateAccount = (navigation) => {
     navigation.navigate('auth',{screen:'createAccount'})
 }

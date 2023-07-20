@@ -82,7 +82,8 @@ export function OnVerifyLoginOtp(data, navigation) {
             resolve(res)
         }).catch((error) => {
             reject(error)
-            Alert.alert(error?.message)
+            // Alert.alert(error?.message)
+         
         })
     })
 }

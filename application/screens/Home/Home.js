@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, ImageBackground, Pressable, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import { AppBar, CardBox } from '../../components';
-import { COLORS, HP, RADIUS, SPACING_PERCENT, TEXT_SIZES, WP, isIOS } from '../../theme/config';
-import ImageCarousel from '../../components/ImageCarousel';
-import { IMAGES } from '../../constants/ImagePath';
-import actions from '../../store/actions';
-import { API_BASE_URL } from '../../api/apis';
-import { _formatDate } from '../../utils/TimeFunctions';
+import { FlatList, Image, Pressable, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
+import { API_BASE_URL } from '../../api/apis';
+import { AppBar } from '../../components';
+import ImageCarousel from '../../components/ImageCarousel';
+import actions from '../../store/actions';
+import { COLORS, HP, RADIUS, SPACING_PERCENT, TEXT_SIZES, WP, isIOS } from '../../theme/config';
+import { _formatDate } from '../../utils/TimeFunctions';
 import { clearToken } from '../../utils/axios';
 
 const Home = ({ navigation }) => {
@@ -101,7 +96,6 @@ const Home = ({ navigation }) => {
             alert(error.message)
         }
     }
-
 
     const fetchDistricts = async () => {
         try {

@@ -12,13 +12,16 @@ import { API_BASE_URL } from '../../api/apis';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FilterModal from './components/FilterModal';
 import { _formatDate } from '../../utils/TimeFunctions';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 
 const ServiceDetail = ({ navigation }) => {
 
     const [filterValue, setFilterValue] = useState("")
     const therapistData = useSelector(store => store.service.therapistsList);
+    const therapist_loading = useSelector(store => store.service.therapistsLoading);
     const service = useSelector(store => store.service.selectedService);
+
     const [showfilterModal, setShowfilterModal] = useState(false);
     const [timeSlot, settimeSlot] = useState('');
     const userLocation = useSelector(store => store.user.userLocation);
@@ -89,6 +92,7 @@ const ServiceDetail = ({ navigation }) => {
     const renderItem = ({ item, index }) => {
         return (
             <Pressable onPress={() => onSpeciallistClick(item)} style={styles.listContainer}>
+                <Loader isVisible={loading} />
                 <View style={styles.listTopView}>
                     <View style={styles.listLeftView}>
                         <View style={styles.listHeaderContainer}>
@@ -147,7 +151,7 @@ const ServiceDetail = ({ navigation }) => {
     return (
         <View style={styles._container}>
             <AppBar type='light' backgroundColor={COLORS.blackColor} />
-            <Loader isVisible={loading} />
+            {/* <Loader isVisible={loading} /> */}
 
             <FilterModal
                 isVisible={showfilterModal}
@@ -179,6 +183,13 @@ const ServiceDetail = ({ navigation }) => {
 
             <View >
                 <FlatList
+                    refreshControl={
+                        <RefreshControl
+                            tintColor={COLORS.blackColor}
+                            refreshing={therapist_loading}
+                            onRefresh={() => onFilterTabClik(filterValue)}
+                        />
+                    }
                     data={therapistData || []}
                     renderItem={renderItem}
                     keyExtractor={(_, index) => index.toString()}
