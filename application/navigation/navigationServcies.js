@@ -20,24 +20,25 @@ export const _gotoBottomTabs = (navigation) => {
 }
 
 export const _gotoBookingTabs = (navigation) => {
-    navigation.reset({
-        index: 0,
-        routes: [{ name: 'Calendar' }]
-    })
+    // navigation.reset({
+    //     index: 0,
+    //     routes: [{ name: 'homenavigator', screen:"bookingstack" }],
+    //   });
+    navigation.replace("bottomnavigator", { screen: 'bookingstack' })
 }
 
 export const _gotoCreateAccount = (navigation) => {
-    navigation.navigate('auth',{screen:'createAccount'})
+    navigation.navigate('auth', { screen: 'createAccount' })
 }
 
 
 
 export const _gotophoneNumber = (navigation) => {
-    navigation.navigate('auth',{screen:'phoneNumber'})
+    navigation.navigate('auth', { screen: 'phoneNumber' })
 }
 
 export const _gotoAskForLocation = (navigation) => {
-    navigation.navigate('auth',{screen:'askForLocation'})
+    navigation.navigate('auth', { screen: 'askForLocation' })
 }
 export const _gotoVoucherTabs = (navigation) => {
     navigation.navigate('vouchertabs')

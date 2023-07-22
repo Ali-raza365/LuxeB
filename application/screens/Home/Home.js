@@ -115,7 +115,7 @@ const Home = ({ navigation }) => {
         try {
             const data = {
                 service_id: service?.id,
-                sub_district: userLocation?.sub_district,
+                sub_district: userLocation?.sub_district?.id,
                 date: _formatDate(new Date()),
             }
             await actions.onServiceSelect(data, service, navigation)

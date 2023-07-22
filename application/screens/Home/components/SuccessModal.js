@@ -7,7 +7,7 @@ import { IMAGES } from '../../../constants/ImagePath'
 import { COLORS, FONT_SEMIBOLD, FS, SPACING_PERCENT, WP } from '../../../theme/config'
 import { _gotoBookingTabs } from '../../../navigation/navigationServcies'
 
-export default function SuccessModal({ isVisible, onClose, }) {
+export default function SuccessModal({ isVisible, onClose }) {
 
     const navigation = useNavigation()
 
@@ -25,7 +25,7 @@ export default function SuccessModal({ isVisible, onClose, }) {
 
                 <View style={Styles._calendarContainer}>
                     <Button
-                        onPress={() => { onClose(), _gotoBookingTabs(navigation) }}
+                        onPress={() => { _gotoBookingTabs(navigation) }}
                         buttonStyle={{ alignSelf: 'center', }}
                         title={"View Appointments"} />
                 </View>

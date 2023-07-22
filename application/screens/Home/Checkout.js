@@ -77,10 +77,10 @@ const Checkout = ({ navigation }) => {
                 "booking_fee": bookingFee,
                 "total": total,
                 "customer": customer_id,
-                "booking_address": bookingAddress?.id,
-                "billing_address": billingAddress?.id,
+                "booking_address": bookingAddress?.address,
+                "billing_address": billingAddress?.address,
                 "special_instruction": specialInstruction,
-                "payment_method": PaymentMethod?.id,
+                "payment_method": PaymentMethod?.last4,
                 "appointment_details": [...serviceArr.map((item) => {
                     return {
                         "price": item?.price,
@@ -97,7 +97,7 @@ const Checkout = ({ navigation }) => {
                 setShowSuccessModal(true)
             }
             setloading(false)
-            console.log(detail,"Book appointment Details")
+            console.log(detail, "Book appointment Details")
         } catch (error) {
             setloading(false)
             Alert.alert(error?.message)
@@ -116,7 +116,7 @@ const Checkout = ({ navigation }) => {
                     Alert.alert(res?.message)
                 } else if (res) {
                     if (res?.discount_type == 'percentage') {
-                        const percentageAmt = ((parseFloat(res?.discount_value) || 0) / total) * 100;
+                        const percentageAmt = (Number(res?.discount_value || 0) / 100) * total;
                         setVoucherAmt(parseFloat(percentageAmt).toFixed(2) || 0)
                     } else {
                         setVoucherAmt(parseFloat(res?.discount_value).toFixed(2) || 0)
@@ -138,8 +138,8 @@ const Checkout = ({ navigation }) => {
             <Loader isVisible={loading} />
             <SuccessModal
                 isVisible={showSuccessModal}
-                onClose={() => {}} 
-                />
+                onClose={() => { setShowSuccessModal(false) }}
+            />
             <ScrollView
                 contentContainerStyle={{ margin: WP(5), paddingBottom: WP(40) }}
             >

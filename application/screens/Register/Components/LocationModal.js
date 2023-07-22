@@ -1,19 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { Alert, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Modal from "react-native-modal"
-import EvilIcons from "react-native-vector-icons/EvilIcons"
-import { COLORS, DAYS, HP, SPACING_PERCENT, TEXT_SIZES, WP } from '../../../theme/config'
-import { _formatDate, getFullMonthName, isCurrentDate } from '../../../utils/TimeFunctions'
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { BottomSheetDropdown, BottomSheetInput, Button, Loader } from '../../../components'
 import { useNavigation } from '@react-navigation/native'
-import actions from '../../../store/actions'
+import React, { useState } from 'react'
+import { Alert, StyleSheet, Text, View } from 'react-native'
+import Modal from "react-native-modal"
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useSelector } from 'react-redux'
-import { getItem } from '../../../utils/axios'
+import { BottomSheetDropdown, BottomSheetInput, Button } from '../../../components'
+import actions from '../../../store/actions'
+import { COLORS, HP, SPACING_PERCENT, WP } from '../../../theme/config'
 
 export default function LocationModal({  coordinate, isVisible, onBackButtonPress, onBackdropPress }) {
 

@@ -55,7 +55,7 @@ export default function BottomNavigator() {
                 }}
             />
             <Tab.Screen
-                name="Calendar"
+                name="bookingstack"
                 component={BookingStack}
                 options={{
                     tabBarLabel: 'Calendar',

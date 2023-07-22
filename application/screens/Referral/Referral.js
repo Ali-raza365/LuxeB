@@ -1,28 +1,69 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Linking, StyleSheet, Text, View } from 'react-native'
+import React, { useCallback, useState } from 'react'
 import { COLORS, FONT_BOLD, FS, WP } from '../../theme/config'
 import { AppBar, Button } from '../../components'
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Share from 'react-native-share';
 
 const Referral = () => {
+
+    const [referralCode, setReferralCode] = useState('Maria1392')
+
+
+    const CopyReferralCode = () => {
+        try {
+            Clipboard.setString(referralCode || '');
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const shareToFacebook = async () => {
+        const shareOptions = {
+            social: Share.Social.FACEBOOK,
+            message: referralCode,
+        };
+        try {
+            const ShareResponse = await Share.shareSingle(shareOptions);
+            console.log(ShareResponse);
+        } catch (error) {
+            console.log("Error =>", error);
+        }
+    };
+
+    const shareToWhatsApp = async () => {
+        const shareOptions = {
+            title: 'Referral Code',
+            message: referralCode,
+            social: Share.Social.WHATSAPP,
+        };
+        try {
+            const ShareResponse = await Share.open(shareOptions);
+            console.log(ShareResponse);
+        } catch (error) {
+            console.log("Error =>", error);
+        }
+    };
+
+
     return (
         <View style={styles.container}>
             <AppBar type='light' backgroundColor={COLORS.blackColor} />
             <Text style={styles.heading}>Become a{'\n'} LuxeBeauty Ambassador {'\n'}and be rewarded with free{'\n'} treatment credit!</Text>
             <Text style={styles.infoText}>Below is your unique Ambassador Code which gives your friends $15 off their first treatment! {'\n'} {'\n'}For every friend you refer who books using your unique, you’ll receive $15 LuxeBeauty Credit. It’s a win win!</Text>
-            <Text style={styles.codeText}>Maria1392</Text>
-            <Button 
-                    onPress={() => { }}
-                    title={'Copy Code'} buttonStyle={{ padding: WP(4) }} />
+            <Text style={styles.codeText}>{referralCode}</Text>
+            <Button
+                onPress={CopyReferralCode}
+                title={'Copy Code'} buttonStyle={{ padding: WP(4) }} />
             <View style={styles.shareContainer}>
                 <Text style={styles.shareText}>Share my code</Text>
                 <View style={styles.row} >
-                    <Fontisto onPress={() => {}} name="facebook" size={FS(2.5)} color={COLORS.blackColor} />
-                    <Fontisto onPress={() => {}} name="twitter" size={FS(2.5)} color={COLORS.blackColor} />
-                    <Fontisto onPress={() => {}} name="google-plus" size={FS(3)} color={COLORS.blackColor} />
-                    <Fontisto onPress={() => {}} name="whatsapp" size={FS(2.5)} color={COLORS.blackColor} />
-                    <Ionicons onPress={() => {}} name="md-add" size={FS(2.5)} color={COLORS.blackColor} />
+                    <Fontisto onPress={() => { shareToFacebook() }} name="facebook" style={{ padding: 10, }} size={FS(2.5)} color={COLORS.blackColor} />
+                    <Fontisto onPress={shareToWhatsApp} name="twitter" size={FS(2.5)} style={{ padding: 10, }} color={COLORS.blackColor} />
+                    <Fontisto onPress={shareToWhatsApp} name="google-plus" size={FS(3)} style={{ padding: 10, }} color={COLORS.blackColor} />
+                    <Fontisto onPress={shareToWhatsApp} name="whatsapp" size={FS(2.5)} style={{ padding: 10, }} color={COLORS.blackColor} />
+                    <Ionicons onPress={shareToWhatsApp} name="md-add" size={FS(2.5)} style={{ padding: 10, }} color={COLORS.blackColor} />
                 </View>
             </View>
         </View>
@@ -46,7 +87,7 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         lineHeight: 25,
         color: COLORS.blackColor,
-        fontFamily:FONT_BOLD,
+        fontFamily: FONT_BOLD,
     },
     infoText: {
         paddingVertical: 45,
@@ -75,9 +116,9 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding:WP(5),
-        paddingHorizontal:WP(7),
-        alignItems:'center',
+        padding: WP(5),
+        paddingHorizontal: WP(5),
+        alignItems: 'center',
     }
 
 })

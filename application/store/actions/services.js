@@ -1,9 +1,9 @@
 
 import { useNavigation } from "@react-navigation/native";
-import { APPLY_VOUCHER_API, BOOK_APPOINTMENT_API, GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API, SAVE_PAYMENT_METHOD_API, SET_DEFAULT_PAYMENT_METHOD_API } from "../../api/apis";
+import { APPLY_VOUCHER_API, BOOK_APPOINTMENT_API, GET_APPOINTMENT_API, GET_APPOINTMENT_DETAIL_API, GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API, SAVE_PAYMENT_METHOD_API, SET_DEFAULT_PAYMENT_METHOD_API } from "../../api/apis";
 import { apiGet, apiPost } from "../../utils/axios";
 import { _formatDate } from "../../utils/TimeFunctions";
-import { saveServicesCategories, saveTherapistsList, setFetchingTherapistsLoading, setSelectedService, setSpeciallistDetail } from "../reducers/ServicesReducer";
+import { saveAppointmentDetail, saveAppointmentsList, saveServicesCategories, saveTherapistsList, setFetchingTherapistsLoading, setSelectedService, setSpeciallistDetail } from "../reducers/ServicesReducer";
 import store from "../Store";
 import { Alert } from "react-native";
 import actions from ".";
@@ -144,6 +144,41 @@ export function onbookAppointment(data) {
         })
     })
 }
+
+
+export function fetchAppointments(data) {
+    return new Promise((resolve, reject) => {
+        // apiGet(GET_APPOINTMENT_API+'?customer_id:14').then((res) => {
+        apiPost(GET_APPOINTMENT_API, data).then((res) => {
+            console.log(res)
+            if (!!res) {
+                store.dispatch(saveAppointmentsList(res))
+                resolve(res)
+                return;
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+
+export function fetchAppointmentDetail(data) {
+    return new Promise((resolve, reject) => {
+        apiPost(GET_APPOINTMENT_DETAIL_API, data).then((res) => {
+            if (!!res) {
+                store.dispatch(saveAppointmentDetail(res))
+                resolve(res)
+                return
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+
+
 
 
 

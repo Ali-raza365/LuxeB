@@ -1,27 +1,55 @@
-import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Alert, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 import { COLORS, FONT_BOLD, FS, WP } from '../../../theme/config';
 import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
+import { API_BASE_URL } from '../../../api/apis';
+import { Loader } from '../../../components';
+import actions from '../../../store/actions';
 
 const BookingListView = ({ item, navigation }) => {
+    const [loading, setLoading] = useState(false)
+
+    const onClickBookking = async (item) => {
+        try {
+            setLoading(true)
+            const data = {
+                appointment_id: item?.id,
+            }
+            const res = await actions.fetchAppointmentDetail(data)
+            if (res?.message) {
+                Alert.alert(res?.message)
+            } else if (res) {
+                navigation.navigate('bookingdetail')
+            }
+            setLoading(false)
+        } catch (error) {
+            console.log("error riased in on services api", error)
+            alert(error?.message)
+            setLoading(false)
+        }
+    }
+
+
+
     return (
         <TouchableOpacity
-            onPress={() => navigation.navigate('bookingdetail')}
+            onPress={() => onClickBookking(item)}
             style={styles.ListContainer}>
+            <Loader isVisible={loading} />
             <View style={styles.reviewInfoContainer}>
-                <Text style={styles.reviewHeading}>faisal</Text>
+                <Text style={styles.reviewHeading}>{item?.therapist?.name || ""}</Text>
                 <View style={styles.row}>
                     <MatComIcons name="map-marker-outline" size={WP(4.5)} color={COLORS.blackColor} />
-                    <Text style={styles.reviewText} >{item?.review_text || 'South Bank University SE1 OAA'}</Text>
+                    <Text style={styles.reviewText} >{item?.booking_address || ''}</Text>
                 </View>
                 <View style={[styles.row, { borderBottomWidth: 0, paddingTop: 0, marginTop: 0 }]}>
                     <Feather name="clock" size={WP(4.5)} color={COLORS.blackColor} />
-                    <Text style={styles.reviewText} >{item?.review_text || '  9:00 AM - 12:00 PM'}</Text>
+                    <Text style={styles.reviewText} >  {item?.start_time + " - " + item?.end_time}</Text>
                 </View>
             </View>
             <View style={styles.reviewImageContainer}>
-                <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: "https://i.pinimg.com/564x/8f/fc/25/8ffc25b311fd7222ff60cf49d99189df.jpg" }} />
+                <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: API_BASE_URL + item?.therapist?.profile_image }} />
             </View>
         </TouchableOpacity>
     )
@@ -50,7 +78,7 @@ const styles = StyleSheet.create({
         fontSize: FS(2.2),
         fontWeight: '700',
         color: COLORS.blackColor,
-        fontFamily:FONT_BOLD,
+        fontFamily: FONT_BOLD,
     },
     reviewText: {
         fontSize: WP(2.8),

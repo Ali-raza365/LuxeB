@@ -4,46 +4,52 @@ import { COLORS, WP, FS, HP, FONT_BOLD } from '../../theme/config'
 import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import { AppBar } from '../../components';
+import { useSelector } from 'react-redux';
+import { API_BASE_URL } from '../../api/apis';
 
 const BookingDetail = () => {
 
     let item = null;
+
+    const detail = useSelector(store => store.service.appointmentDetail);
+    const currency = useSelector(state => state.user.currency);
+
 
     return (
         <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: WP(20) }}
             style={styles.container}
-            >
+        >
             <AppBar type='light' backgroundColor={COLORS.blackColor} />
             <View style={styles.ListContainer}>
                 <View style={styles.reviewInfoContainer}>
-                    <Text style={styles.reviewHeading}>faisal</Text>
+                    <Text style={styles.reviewHeading}>{detail?.therapist?.name || ''}</Text>
                     <View style={styles.reviewRow}>
                         <MatComIcons name="map-marker-outline" size={WP(5.5)} color={COLORS.blackColor} />
-                        <Text style={styles.reviewText} >{item?.review_text || 'South Bank University SE1 OAA'}</Text>
+                        <Text style={styles.reviewText} >  {detail?.booking_address || ''}</Text>
                     </View>
                     <View style={[styles.reviewRow, { borderBottomWidth: 0, paddingTop: 0, marginTop: 0 }]}>
                         <Feather name="clock" size={WP(5.5)} color={COLORS.blackColor} />
-                        <Text style={styles.reviewText} >{item?.review_text || '  9:00 AM - 12:00 PM'}</Text>
+                        <Text style={styles.reviewText} >  {detail?.start_time + " - " + detail?.end_time}</Text>
                     </View>
                 </View>
                 <View style={styles.reviewImageContainer}>
-                    <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: "https://i.pinimg.com/564x/8f/fc/25/8ffc25b311fd7222ff60cf49d99189df.jpg" }} />
+                    <Image resizeMode='cover' style={{ width: '100%', height: '100%' }} source={{ uri: API_BASE_URL + detail?.therapist?.profile_image }} />
                 </View>
             </View>
 
             <View style={styles.tabContainer}>
                 <View style={styles.tabChipView}>
-                    <Text style={[styles.tabBubbleText, { color: '#6DA544' }]} >Booked</Text>
+                    <Text style={[styles.tabBubbleText, { color: '#6DA544' }]} >{detail?.booking_status || ''}</Text>
                     <Text style={styles.tabText}>Booking</Text>
                 </View>
                 <View style={styles.tabChipView}>
-                    <Text style={[styles.tabBubbleText, { backgroundColor: 'rgba(254, 168, 1, 0.3)', color: '#FEA801' }]} >Pending</Text>
+                    <Text style={[styles.tabBubbleText, { backgroundColor: 'rgba(254, 168, 1, 0.3)', color: '#FEA801' }]} >{detail?.appointment_status || ""}</Text>
                     <Text style={styles.tabText}>Appointment Request</Text>
                 </View>
                 <View style={styles.tabChipView}>
-                    <Text style={[styles.tabBubbleText, { backgroundColor: 'rgba(254, 168, 1, 0.3)', color: '#FEA801' }]} >On Hold</Text>
+                    <Text style={[styles.tabBubbleText, { backgroundColor: 'rgba(254, 168, 1, 0.3)', color: '#FEA801' }]} >{detail?.payment_status || ""}</Text>
                     <Text style={styles.tabText}>Payment</Text>
                 </View>
             </View>
@@ -53,46 +59,40 @@ const BookingDetail = () => {
                 <View style={styles.headerView}>
                     <Text style={styles.headerText}>Service</Text>
                 </View>
-                <View style={[styles.row, { marginTop: WP(4) }]}>
-                    <Text style={styles.ValueText}>Acupuncture</Text>
-                    <Text style={[styles.ValueText]}>x1</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.infoText}>$ 50</Text>
-                </View>
-                <View style={[styles.row, { marginTop: WP(1) }]}>
-                    <Text style={styles.ValueText}>Chinese Anti-aging Facial</Text>
-                    <Text style={[styles.ValueText]}>x2</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.infoText}>$ 100</Text>
-                </View>
-                <View style={[styles.row, { marginTop: WP(1) }]}>
-                    <Text style={styles.ValueText}>Facial Acupuncture add-on </Text>
-                    <Text style={[styles.ValueText,]}>x1</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.infoText}>$ 50</Text>
-                </View>
+                {
+                    detail?.appointment_details && detail.appointment_details?.map((item, index) => {
+                        return (
+                            <View key={index}>
+                                <View style={[styles.row, { marginTop: WP(4) }]}>
+                                    <Text style={styles.ValueText}>{item?.sub_service?.sub_service_name || ""}</Text>
+                                    <Text style={[styles.ValueText]}>x{item?.quantity}</Text>
+                                </View>
+                                <View style={styles.row}>
+                                    <Text style={styles.infoText}>{currency} {item?.price}</Text>
+                                </View>
+                            </View>
+                        )
+                    })
+                }
                 <View style={{ borderWidth: 1, borderColor: COLORS.grey, marginVertical: WP(3), }} />
                 <View style={[styles.row, { marginTop: WP(1) }]}>
                     <Text style={styles.ValueText}>Subtotal</Text>
-                    <Text style={[styles.ValueText]}>$ 200</Text>
+                    <Text style={[styles.ValueText]}>{currency} {detail?.sub_total || ''}</Text>
                 </View>
                 <View style={[styles.row]}>
                     <Text style={styles.infoText}>Booking fee</Text>
-                    <Text style={[styles.infoText]}>$ 2.99</Text>
+                    <Text style={[styles.infoText]}>{currency} {detail?.booking_fee || ''}</Text>
                 </View>
                 <View style={[styles.row, { marginTop: WP(1) }]}>
                     <Text style={styles.ValueText}>Total</Text>
-                    <Text style={[styles.ValueText]}>$ 202.99</Text>
+                    <Text style={[styles.ValueText]}>{currency} {detail?.total || ''}</Text>
                 </View>
             </View>
 
             {/* Special Instructions */}
             <View style={[styles._boxContainer, { marginTop: 0, borderBottomWidth: 0 }]}>
                 <Text style={[styles.ValueText, { paddingBottom: WP(2) }]}>Special Instructions</Text>
-                <Text style={styles.infoText} >Parking, address clarification, special requests for your booking, etc '</Text>
+                <Text style={styles.infoText} >{detail?.special_instruction || ''}</Text>
             </View>
 
         </ScrollView>
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         fontSize: FS(3),
         fontWeight: '700',
         color: COLORS.blackColor,
-        fontFamily:FONT_BOLD,
+        fontFamily: FONT_BOLD,
     },
     reviewText: {
         fontSize: WP(3.7),

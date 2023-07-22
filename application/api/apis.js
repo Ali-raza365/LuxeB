@@ -25,4 +25,8 @@ export const SET_DEFAULT_PAYMENT_METHOD_API = getApiUrl('/api/customer/setDefaul
 export const APPLY_VOUCHER_API = getApiUrl('/api/customer/applyVoucher/');
 export const BOOK_APPOINTMENT_API = getApiUrl('/api/customer/bookAppointment/');
 
+export const GET_APPOINTMENT_API = getApiUrl('/api/customer/getAppointments/');
+export const GET_APPOINTMENT_DETAIL_API = getApiUrl('/api/customer/getAppointmentDetails/');
+
+
 

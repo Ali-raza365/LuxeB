@@ -25,7 +25,7 @@ const ServiceDetail = ({ navigation }) => {
     const [showfilterModal, setShowfilterModal] = useState(false);
     const [timeSlot, settimeSlot] = useState('');
     const userLocation = useSelector(store => store.user.userLocation);
-    const [filterLoc, setFilterLoc] = useState(userLocation?.sub_district);
+    const [filterLoc, setFilterLoc] = useState(userLocation?.sub_district?.id);
     const [filterDate, setFilterDate] = useState(new Date());
     const [loading, setLoading] = useState(false)
 

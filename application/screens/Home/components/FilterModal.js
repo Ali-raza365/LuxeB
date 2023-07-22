@@ -34,13 +34,13 @@ export default function FilterModal({ type, onChangeLoc, onChangeDate, isVisible
 
     const setdefaultLocation = async () => {
         try {
-            const currDistric = districtsArr.find((dist) => dist.id == userLocation?.district);
+            const currDistric = districtsArr.find((dist) => dist.id == userLocation?.district?.id);
             setDistrict(currDistric);
             const data = { district_id: currDistric?.id }
             const subDistrictRes = await actions.fetchSubDistricts(data)
             if (subDistrictRes) {
                 setSubDistrictsArr(subDistrictRes);
-                const currSubDistric = subDistrictRes.find((dist) => dist.id == userLocation?.sub_district);
+                const currSubDistric = subDistrictRes.find((dist) => dist.id == userLocation?.sub_district?.id);
                 setSubDistrict(currSubDistric)
             }
         } catch (error) {
