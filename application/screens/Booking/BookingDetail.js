@@ -83,6 +83,14 @@ const BookingDetail = () => {
                     <Text style={styles.infoText}>Booking fee</Text>
                     <Text style={[styles.infoText]}>{currency} {detail?.booking_fee || ''}</Text>
                 </View>
+                {
+                    detail?.discount ?
+                    <View style={[styles.row]}>
+                    <Text style={[styles.infoText, { color: COLORS.greenColor }]}>Discount</Text>
+                    <Text style={[styles.infoText, { color: COLORS.greenColor }]}>{currency} {detail?.discount || 0}</Text>
+                </View>
+                        : null
+                }
                 <View style={[styles.row, { marginTop: WP(1) }]}>
                     <Text style={styles.ValueText}>Total</Text>
                     <Text style={[styles.ValueText]}>{currency} {detail?.total || ''}</Text>

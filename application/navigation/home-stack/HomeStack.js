@@ -72,7 +72,6 @@ const HomeStack = () => {
                     headerTitle: 'Specialist',
                     headerRightContainerStyle: { paddingRight: WP(4) },
                     headerLeftContainerStyle: { paddingLeft: WP(4) },
-                    headerRight: () => (<AntDesign name="hearto" size={FS(3)} color={COLORS.blackColor} />),
                     headerStyle: {
                         backgroundColor: COLORS.whiteColor,
                     }

@@ -28,5 +28,7 @@ export const BOOK_APPOINTMENT_API = getApiUrl('/api/customer/bookAppointment/');
 export const GET_APPOINTMENT_API = getApiUrl('/api/customer/getAppointments/');
 export const GET_APPOINTMENT_DETAIL_API = getApiUrl('/api/customer/getAppointmentDetails/');
 
+export const FAVOURIITIES_API = getApiUrl('/api/customer/favoriteTherapist/');
+
 
 

@@ -36,6 +36,8 @@ import Profile from "./profile/Profile";
 import AvailableVoucher from "./profile/AvailableVoucher";
 import PaymentMethods from "./profile/PaymentMethods";
 import Addresses from "./profile/Addresses";
+import FavouritieSpeciallists from "./profile/FavouritieSpeciallists";
+
 
 
 export {
@@ -72,5 +74,6 @@ export {
     AvailableVoucher,
     PaymentMethods,
     Addresses,
+    FavouritieSpeciallists,
 };
 

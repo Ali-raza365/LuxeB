@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import OTPTextView from 'react-native-otp-textinput';
 import { useSelector } from 'react-redux';
 import { AppBar, Button } from '../../components';
 import actions from '../../store/actions';
-import { COLORS, FONT_BOLD, FS, HP, WP } from '../../theme/config';
+import { COLORS, FONT_BOLD, FS, HP, SPACING_PERCENT, WP } from '../../theme/config';
 import { GetFCMToken } from '../../utils/GetFCMToken';
 import Clipboard from '@react-native-clipboard/clipboard';
 
@@ -13,7 +13,10 @@ export default function LoginOtp({ navigation }) {
 
     const { phoneNumber } = useSelector(store => store.user)
     const [otpCode, setOtpCode] = useState('');
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [timer, setTimer] = useState(60);
+    const [enableRendOtp, setEnableResndOtp] = useState(false)
+
 
     let otpInput = useRef(null);
     const onPress = async () => {
@@ -41,9 +44,9 @@ export default function LoginOtp({ navigation }) {
             setloading(false)
             const handleCopy = () => {
                 Clipboard.setString(error?.message);
-              };
+            };
 
-            Alert.alert("Error",error?.message, [
+            Alert.alert("Error", error?.message, [
                 {
                     text: 'Cancel',
                     onPress: () => console.log('Cancel Pressed'),
@@ -56,6 +59,49 @@ export default function LoginOtp({ navigation }) {
             ]);
         }
     };
+
+
+    const onResndOTP = async () => {
+        try {
+                let detail = { phone: phoneNumber, }
+                const res = await actions.OnLoginUser(detail)
+                if (res?.message) {
+                    Alert.alert(res?.message)
+                    setTimer(60)
+                    setEnableResndOtp(false)
+                } else if (res) {
+            }
+        } catch (error) {
+            Alert.alert(error.message)
+        }
+    };
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        return formattedTime;
+    };
+
+    useEffect(() => {
+        let interval;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prevTimer) => prevTimer - 1);
+            }, 1000);
+        }
+        return () => {
+            clearInterval(interval);
+        };
+    }, [timer]);
+
+    useEffect(() => {
+        if (timer === 0) {
+            setEnableResndOtp(true)
+        }
+    }, [timer]);
+
+
 
     return (
         <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
@@ -82,10 +128,14 @@ export default function LoginOtp({ navigation }) {
                                         // offTintColor={COLORS.}
                                         inputCount={4}
                                     />
+                                    {enableRendOtp ? null : <Text style={styles.timerSty} >{formatTime(timer)}</Text>}
                                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                                         <Text style={{ color: COLORS.blackColor }}>Don’t receive the OTP? </Text>
-                                        <Text style={{ fontWeight: '500', color: COLORS.blackColor, textDecorationLine: 'underline' }}>Resend OTP</Text>
+                                        <Text
+                                        onPress={()=>{enableRendOtp ? onResndOTP() : null}}
+                                        style={{ fontWeight: '500', color: enableRendOtp ? COLORS.blackColor : COLORS.lightGrey, textDecorationLine: 'underline' }}>Resend OTP</Text>
                                     </View>
+
 
                                 </View>
                             </View>
@@ -160,4 +210,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0,
         backgroundColor: COLORS.whiteColor
     },
+    timerSty: {
+        textAlign: 'center',
+        paddingVertical: WP(SPACING_PERCENT / 2),
+        fontSize: FS(2.2),
+        fontWeight: '500',
+        color: COLORS.darkGrey,
+    }
 });

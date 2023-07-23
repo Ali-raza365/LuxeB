@@ -1,12 +1,13 @@
 
 import { useNavigation } from "@react-navigation/native";
-import { APPLY_VOUCHER_API, BOOK_APPOINTMENT_API, GET_APPOINTMENT_API, GET_APPOINTMENT_DETAIL_API, GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API, SAVE_PAYMENT_METHOD_API, SET_DEFAULT_PAYMENT_METHOD_API } from "../../api/apis";
-import { apiGet, apiPost } from "../../utils/axios";
+import { APPLY_VOUCHER_API, BOOK_APPOINTMENT_API, FAVOURIITIES_API, GET_APPOINTMENT_API, GET_APPOINTMENT_DETAIL_API, GET_SERVICES_CATEGOIES_API, GET_SLIDER_API, GET_THERAPISTS_AVAILIBLE_API, GET_THERAPISTS_BY_SERVICE_API, GET_THERAPISTS_DETAIL_API, SAVE_PAYMENT_METHOD_API, SET_DEFAULT_PAYMENT_METHOD_API } from "../../api/apis";
+import { apiDelete, apiGet, apiPost, getHeaders } from "../../utils/axios";
 import { _formatDate } from "../../utils/TimeFunctions";
 import { saveAppointmentDetail, saveAppointmentsList, saveServicesCategories, saveTherapistsList, setFetchingTherapistsLoading, setSelectedService, setSpeciallistDetail } from "../reducers/ServicesReducer";
 import store from "../Store";
 import { Alert } from "react-native";
 import actions from ".";
+import axios from "axios";
 
 export function fetchServicesCategories() {
     return new Promise((resolve, reject) => {
@@ -178,13 +179,52 @@ export function fetchAppointmentDetail(data) {
     })
 }
 
+export function fetchFavoriteSpeciallists(id) {
+    return new Promise((resolve, reject) => {
+        apiGet(FAVOURIITIES_API + `?customer_id=${id}`,).then((res) => {
+            if (!!res) {
+                resolve(res)
+                return
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
 
+export function onFavSpeciallists(data) {
+    return new Promise((resolve, reject) => {
+        apiPost(FAVOURIITIES_API, data).then((res) => {
+            if (!!res) {
+                resolve(res)
+                return
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
 
-
-
-// setItem('userData', res.data).then((returnValue)=>{
-//     store.dispatch(saveUserData(res?.data))
-//     resolve(res)
-// }).catch((error)=>{
-//     resolve(error)
-// })
+export function onUnFavSpeciallists(data) {
+    return new Promise(async (resolve, reject) => {
+        const getTokenHeader = await getHeaders();
+        axios({
+            method: 'Delete',
+            url: FAVOURIITIES_API,
+            params: data,
+            headers: {
+                ...getTokenHeader
+            }
+        }).then((res) => {
+            if (!!res) {
+                resolve(res)
+                return
+            }
+            resolve(res)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}

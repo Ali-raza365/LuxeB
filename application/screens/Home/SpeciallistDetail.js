@@ -1,4 +1,4 @@
-import { Image, Pressable, FlatList, StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { Image, Pressable, FlatList, StyleSheet, TouchableOpacity, Text, View, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS, FS, HP, WP } from '../../theme/config'
 import MatComIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -6,11 +6,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import StarRating from 'react-native-star-rating';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
-import { AppBar, Button } from '../../components';
+import { AppBar, Button, Loader } from '../../components';
 import DateTimeModal from './components/DateTimeModal';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSpeciallistDetail } from '../../store/reducers/ServicesReducer';
 import { API_BASE_URL } from '../../api/apis';
+import actions from '../../store/actions';
 
 
 
@@ -25,11 +26,14 @@ const SpeciallistDetail = ({ route, navigation }) => {
     const [selected, setSelected] = useState(false);
     const [serviceQuanity, setServiceQuanity] = useState(1);
     const [showDateTimeModal, setShowDateTimeModal] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const toggleDateTimeModal = () => {
         setShowDateTimeModal(!showDateTimeModal)
     }
 
     const speciallistDetail = useSelector(state => state.service.speciallistDetail);
+    const userDetail = useSelector(store => store.user.userDetail);
     const currency = useSelector(state => state.user.currency);
 
     const incrementQuantity = (subServiceId) => {
@@ -174,6 +178,37 @@ const SpeciallistDetail = ({ route, navigation }) => {
 
 
 
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <AntDesign onPress={onFavBtnClick} name="hearto" size={FS(3)} color={COLORS.blackColor} />
+            )
+        })
+    }, [])
+
+    const onFavBtnClick = async () => {
+        try {
+            setLoading(true)
+            const data = {
+                customer: userDetail?.id,
+                therapist: speciallistDetail?.id
+            }
+            const res = await actions.onFavSpeciallists(data)
+            if (res?.message) {
+                Alert.alert(res?.message)
+            } else if (res) {
+
+            }
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+            console.log("error riased in on Fav speciallist api", error)
+        }
+    }
+
+
+
+
     const CollapsibleViewHeader = ({ item }) => {
         return (
             <View style={styles.listContainer}>
@@ -192,7 +227,7 @@ const SpeciallistDetail = ({ route, navigation }) => {
 
             <AppBar type='dark' backgroundColor={COLORS.whiteColor} />
 
-
+            <Loader isVisible={loading} />
             <DateTimeModal
                 onBackButtonPress={toggleDateTimeModal}
                 onBackdropPress={toggleDateTimeModal}
@@ -342,7 +377,7 @@ const SpeciallistDetail = ({ route, navigation }) => {
             }
 
 
-      
+
 
         </View>
     )

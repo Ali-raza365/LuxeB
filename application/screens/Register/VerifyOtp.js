@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppBar, Button } from '../../components';
 import { _gotoAskForLocation, _gotoBottomTabs } from '../../navigation/navigationServcies';
-import { COLORS, FS, HP, WP } from '../../theme/config';
+import { COLORS, FS, HP, SPACING_PERCENT, WP } from '../../theme/config';
 import OTPTextView from 'react-native-otp-textinput';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useSelector } from 'react-redux';
@@ -14,6 +14,10 @@ export default function VerifyOtp({ navigation }) {
     const [otpCode, setOtpCode] = useState('');
     let otpInput = useRef(null);
     const { signup_name, signup_phone } = useSelector(store => store.user)
+    const [loading, setloading] = useState(false);
+    const [timer, setTimer] = useState(60);
+    const [enableRendOtp, setEnableResndOtp] = useState(false)
+
 
     const onPress = async () => {
         if (otpCode == '')
@@ -29,6 +33,53 @@ export default function VerifyOtp({ navigation }) {
             await actions.OnVerifySignUpOtp(detail, navigation)
         }
     };
+
+
+
+    const onResndOTP = async () => {
+        try {
+            let detail = {
+                phone: signup_phone,
+                name: signup_name,
+            }
+                const res = await actions.OnSignUpUser(detail)
+                if (res) {
+                    setTimer(60)
+                    setEnableResndOtp(false)
+                } else if (res) {
+            }
+        } catch (error) {
+            // Alert.alert(error.message)
+        }
+    };
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        return formattedTime;
+    };
+
+    useEffect(() => {
+        let interval;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prevTimer) => prevTimer - 1);
+            }, 1000);
+        }
+        return () => {
+            clearInterval(interval);
+        };
+    }, [timer]);
+
+    useEffect(() => {
+        if (timer === 0) {
+            setEnableResndOtp(true)
+        }
+    }, [timer]);
+
+
+
 
     return (
         <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
@@ -55,9 +106,12 @@ export default function VerifyOtp({ navigation }) {
                                         // offTintColor={COLORS.}
                                         inputCount={4}
                                     />
+                                    {enableRendOtp ? null : <Text style={styles.timerSty} >{formatTime(timer)}</Text>}
                                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                                         <Text style={{ color: COLORS.blackColor }}>Don’t receive the OTP? </Text>
-                                        <Text style={{ fontWeight: '500', color: COLORS.blackColor, textDecorationLine: 'underline' }}>Resend OTP</Text>
+                                        <Text
+                                        onPress={()=>{enableRendOtp ? onResndOTP() : null}}
+                                        style={{ fontWeight: '500', color: enableRendOtp ? COLORS.blackColor : COLORS.lightGrey, textDecorationLine: 'underline' }}>Resend OTP</Text>
                                     </View>
 
                                 </View>
@@ -131,4 +185,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0,
         backgroundColor: COLORS.whiteColor
     },
+    timerSty: {
+        textAlign: 'center',
+        paddingVertical: WP(SPACING_PERCENT / 2),
+        fontSize: FS(2.2),
+        fontWeight: '500',
+        color: COLORS.darkGrey,
+    }
 });

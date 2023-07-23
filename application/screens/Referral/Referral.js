@@ -5,10 +5,15 @@ import { AppBar, Button } from '../../components'
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Share from 'react-native-share';
+import { useSelector } from 'react-redux';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const Referral = () => {
 
-    const [referralCode, setReferralCode] = useState('Maria1392')
+    const userDetail = useSelector(store => store.user.userDetail || '');
+    const [referralCode, setReferralCode] = useState(userDetail?.referral_code)
+
+
 
 
     const CopyReferralCode = () => {

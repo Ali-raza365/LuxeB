@@ -71,6 +71,7 @@ const Profile = ({ navigation }) => {
 
             <View style={{ borderWidth: 1, borderColor: COLORS.grey, marginVertical: WP(3), }} />
 
+            <Text onPress={()=>navigation.navigate('favspeciallists')} style={styles.headingText}>Favourites</Text>
             <Text onPress={() => navigation.navigate('addresses')} style={styles.headingText}>Addresses</Text>
             <Text onPress={onPaymentMethodsClick} style={styles.headingText}>Payment Methods</Text>
             <Text onPress={onVoucherClick} style={styles.headingText}>Vouchers</Text>
@@ -138,6 +139,8 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: COLORS.blackColor,
         fontFamily:FONT_BOLD,
-
+        textDecorationLine:'underline',
+        textDecorationStyle:'double',
+        textDecorationColor:COLORS.grey
     },
 })

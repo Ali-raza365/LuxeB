@@ -32,7 +32,7 @@ const UpComingBookings = ({ navigation }) => {
 
     const filterBookingData = useCallback(() => {
         // Filter the bookings array to get only items with status "pending"
-        return allAppointments.filter(booking => booking.booking_status === 'pending');
+        return allAppointments.filter(booking => booking.booking_status === 'booked');
     }, [allAppointments]);
 
 

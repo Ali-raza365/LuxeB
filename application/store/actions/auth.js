@@ -14,7 +14,9 @@ export function OnSignUpUser(data, navigation) {
                 Alert.alert(res?.error)
             } else {
                 store.dispatch(saveSignUpCredentials(data))
-                navigation.navigate('verifyotp')
+                if (navigation) {
+                    navigation.navigate('verifyotp')
+                }
                 resolve(res)
                 return;
             }
@@ -49,7 +51,9 @@ export function OnLoginUser(data, navigation) {
         apiPost(LOGIN_API, data).then((res) => {
             if (res) {
                 store.dispatch(savePhoneNumber(data?.phone || ''))
-                navigation.navigate('loginotp')
+                if (navigation) {
+                    navigation.navigate('loginotp')
+                }
                 resolve(res)
                 return;
             }
@@ -83,7 +87,7 @@ export function OnVerifyLoginOtp(data, navigation) {
         }).catch((error) => {
             reject(error)
             // Alert.alert(error?.message)
-         
+
         })
     })
 }

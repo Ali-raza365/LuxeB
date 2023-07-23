@@ -20,9 +20,9 @@ const Checkout = ({ navigation }) => {
     const [serviceArr, setServiceArr] = useState([]);
     const [subTotal, setSubTotal] = useState(0);
     const [bookingFee, setBookingFee] = useState(2.99);
-    const [PaymentMethod, setPaymentMethod] = useState({});
-    const [bookingAddress, setBookingAddress] = useState('');
-    const [billingAddress, setBillingAddress] = useState('');
+    const [PaymentMethod, setPaymentMethod] = useState(null);
+    const [bookingAddress, setBookingAddress] = useState(null);
+    const [billingAddress, setBillingAddress] = useState(null);
     const [duration, setduration] = useState(0);
     const [specialInstruction, setSpecialInstruction] = useState('')
     const [voucherCode, setVoucherCode] = useState('');
@@ -67,29 +67,30 @@ const Checkout = ({ navigation }) => {
             setloading(true)
             const customer_id = userDetail?.id;
             const total = ((subTotal + bookingFee) - (voucherAmt || 0)).toFixed(2)
-            let detail = {
-                "date": _formatDate(speciallistDetail?.bookingDate),
-                "start_time": speciallistDetail?.bookingTimeStart,
-                "end_time": speciallistDetail?.bookingTimeEnd,
-                "therapist": speciallistDetail?.id,
-                "duration": duration,
-                "sub_total": subTotal,
-                "booking_fee": bookingFee,
-                "total": total,
-                "customer": customer_id,
-                "booking_address": bookingAddress?.address,
-                "billing_address": billingAddress?.address,
-                "special_instruction": specialInstruction,
-                "payment_method": PaymentMethod?.last4,
-                "appointment_details": [...serviceArr.map((item) => {
-                    return {
-                        "price": item?.price,
-                        "sub_service": item?.sub_service?.id,
-                        "quantity": item?.quantity
-                    }
-                })
-                ]
-            }
+                let detail = {
+                    "date": _formatDate(speciallistDetail?.bookingDate),
+                    "start_time": speciallistDetail?.bookingTimeStart,
+                    "end_time": speciallistDetail?.bookingTimeEnd,
+                    "therapist": speciallistDetail?.id,
+                    "duration": duration,
+                    "sub_total": subTotal,
+                    "booking_fee": bookingFee,
+                    "total": total,
+                    "discount": voucherAmt,
+                    "customer": customer_id,
+                    "booking_address": bookingAddress?.address,
+                    "billing_address": billingAddress?.address,
+                    "special_instruction": specialInstruction,
+                    "payment_method": PaymentMethod?.last4,
+                    "appointment_details": [...serviceArr.map((item) => {
+                        return {
+                            "price": item?.price,
+                            "sub_service": item?.sub_service?.id,
+                            "quantity": item?.quantity
+                        }
+                    })
+                    ]
+                }
             const res = await actions.onbookAppointment(detail)
             if (res?.message) {
                 Alert.alert(res?.message)
@@ -224,13 +225,20 @@ const Checkout = ({ navigation }) => {
                         </View>
                         <MatComIcon onPress={() => navigation.navigate("selectpaymentmethod")} name="pencil-outline" size={WP(7.5)} color={COLORS.gary300} />
                     </View>
-                    <Text style={styles.paymentHeading}>Default Payment Methods</Text>
-                    <PaymentCard
-                        selected={PaymentMethod}
-                        item={PaymentMethod}
-                    />
-                    <Text style={{ textAlign: 'center', fontSize: WP(4.5), marginVertical: WP(5) }} >or</Text>
+                    {
+                        PaymentMethod ?
+                            <>
+                                <Text style={styles.paymentHeading}>Default Payment Methods</Text>
+                                <PaymentCard
+                                    selected={PaymentMethod}
+                                    item={PaymentMethod}
+                                />
+                                <Text style={{ textAlign: 'center', fontSize: WP(4.5), marginTop: WP(5) }} >or</Text>
+                            </>
+                            : null
+                    }
                     <Button
+                        buttonStyle={{ marginTop: WP(5) }}
                         onPress={() => { navigation.push('addPaymentMethod') }}
                         title={'Add New Payment Method'}
                     />
